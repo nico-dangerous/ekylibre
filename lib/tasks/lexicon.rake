@@ -19,20 +19,22 @@ namespace :lexicon do
     Rake::Task['lexicon:create'].invoke
   end
 
- # desc "import the geometries from a shapefile as a postgis multipolygone in lexicon.vulnerable_areas,
- #        geometry srid will be converted to 4326"
- # task import_vulnerable_area: :environment do
- #   raise "arguments cannot be empty" if args.any?{|k,e| e.nil?}
- #   RGeo::Shapefile::Reader.open(args.path, srid: args.srid) do |file|
- #     file.each do |record|
- #       geometry = Charta::Geometry.new(record.geometry)
- #       geometry4326 = geometry.transform(4326)
- #       vulnerable_area = VulnerableArea.new
- #       vulnerable_area.geom = geometry4326
- #       vulnerable_area.save
- #     end
- #     file.rewind
- # record = file.next
- #   end
- # end
+  desc "import the geometries from a shapefile as a postgis multipolygone in lexicon.vulnerable_areas,
+         geometry srid will be converted to 4326 \n
+        usage : rake lexicon:import_vulnerable_area PATH=... SRID=..."
+  task import_vulnerable_area: :environment do
+    path = ENV['SHAPEFILE']
+    srid = ENV['SRID']
+
+    RGeo::Shapefile::Reader.open(path, srid: srid) do |file|
+      file.each do |record|
+        geometry = Charta::Geometry.new(record.geometry)
+        geometry.srid=(srid)
+        geometry4326 = geometry.transform(:WGS84)
+        vulnerable_area = VulnerableArea.create(name: "toto", geom: geometry4326.to_rgeo)
+      end
+      file.rewind
+      record = file.next
+    end
+  end
 end
