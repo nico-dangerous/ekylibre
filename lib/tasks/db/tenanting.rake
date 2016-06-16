@@ -17,6 +17,7 @@ end
 
 Rake::Task['db:create'].enhance do
   Rake::Task['db:extensions'].invoke
+  Rake::Task['lexicon:import'].invoke
 end
 
 Rake::Task['db:drop'].enhance do
