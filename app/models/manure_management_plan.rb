@@ -59,6 +59,10 @@ class ManureManagementPlan < Ekylibre::Record::Base
 
   after_save :compute
 
+  scope :of_campaign, lambda{ |campaign|
+    where(:campaign_id => campaign.id)
+  }
+
   def compute
     zones.map(&:compute)
   end

@@ -92,7 +92,12 @@ class LandParcel < Easement
   end
 
   def estimated_soil_nature
-    # TODO: Find estimated soil nature through analysis in this zone
-    nil
+    unless shape.nil?
+      analyse = Analysis.contained_in(shape).of_nature("soil_analysis").most_recent
+      unless analyse.empty?
+        analyse.first.soil_nature
+      end
+    end
   end
+
 end

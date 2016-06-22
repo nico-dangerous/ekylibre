@@ -8,7 +8,6 @@ module Lexicon
         geometry = Charta::Geometry.new(record.geometry)
         geometry.srid=(srid)
         geometry=geometry.transform(:WGS84).to_ewkt
-        #record.attributes.each_with_index { |key,value|  attributs[key] = value}
         attributs = record.attributes
         shapes << {"shape" => geometry, "attributes" => attributs}
       end
@@ -27,9 +26,8 @@ module Lexicon
 
       #Insert row
       yaml.each_value do |data|
-        #add quote around value to insert
+        #add quotes around value to insert
         data = data.each_pair.map { |key, value| [key, "'#{value}'"] }.to_h
-
         ActiveRecord::Base.connection.execute "INSERT INTO lexicon.#{name} (#{columns.join(', ')}) VALUES (#{data.values.join(',')});"
       end
     end

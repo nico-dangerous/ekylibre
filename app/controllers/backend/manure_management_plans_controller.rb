@@ -60,5 +60,53 @@ module Backend
       t3e @manure_management_plan
       respond_with(@manure_management_plan, include: [:campaign, :recommender, { zones: { methods: [:soil_nature_name, :cultivation_variety_name], include: [{ support: { include: :storage } }, :activity, :production] } }])
     end
+
+    def check_soil_natures
+      @missing_soil_natures = []
+      LandParcel.all.each do |landparcel|
+        soil_nature = landparcel.estimated_soil_nature
+        if soil_nature.nil?
+          @missing_soil_natures  << landparcel
+        end
+      end
+      #Ask for soil nature
+
+    end
+
+
+    def create
+      #check if manure_management_plan already exists
+      manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+      if manure_management_plan.nil?
+        #check soil natures
+
+        manure_management_plan = ManureManagementPlan.create(:campaign => current_campaign)
+        @missing_soil_natures = []
+        LandParcel.all.each do |landparcel|
+
+          soil_nature = landparcel.estimated_soil_nature
+          if soil_nature.nil?
+            @missing_soil_natures  << landparcel
+          end
+          activity_production = landparcel.activity_productions
+          cultivable_zone = activity_production.cultivable_zone
+
+          manure_management_plan.save
+
+          manure_management_plan.zones.create(:plan => manure_management_plan,
+                                          :campaign => current_campaign,
+                                          :cultivable_zone => cultivable_zone,
+                                          :activity_production => activity_production,
+                                          :soil_nature => soil_nature
+          )
+        end
+        manure_management_plan.save
+        manure_management_plan_zones = manure_management_plan.zones
+        unless @missing_soil_natures .empty?
+          render :register_soil_nature
+        end
+
+      end
+    end
   end
 end

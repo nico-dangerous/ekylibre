@@ -74,6 +74,18 @@ class Analysis < Ekylibre::Record::Base
     where(sampled_at: started_at..stopped_at)
   }
 
+  scope :contained_in, lambda { |shape|
+    where("ST_Contains(#{Charta.new_geometry(shape).geom},geolocation)")
+  }
+
+  scope :of_nature, lambda { |nature|
+    where('nature' => nature )
+  }
+
+  scope :most_recent, lambda{
+    order(created_at: :desc).limit(1)
+  }
+
   before_validation do
     self.sampled_at ||= Time.zone.now
   end
