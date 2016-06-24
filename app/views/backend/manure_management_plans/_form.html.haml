@@ -1,15 +1,25 @@
+-#= field_set do
+-#  = f.input :name
+-#  = f.referenced_association :campaign
+-#  = f.referenced_association :recommender
+-#  - if f.object.new_record?
+-#    = f.input :default_computation_method, collection: Calculus::ManureManagementPlan.method_selection
+-#  = f.input :opened_at
+-#  = f.input :selected
+-#  = f.input :annotation
+-#  = f.custom_fields
+-#
+-#:ruby
+-#  f.object.build_missing_zones
+-#
+-#= render "zones_form", f: f
+
+=f.object.errors.inspect
+
 = field_set do
   = f.input :name
-  = f.referenced_association :campaign
   = f.referenced_association :recommender
-  - if f.object.new_record?
-    = f.input :default_computation_method, collection: Calculus::ManureManagementPlan.method_selection
-  = f.input :opened_at
-  = f.input :selected
   = f.input :annotation
   = f.custom_fields
-
-:ruby
-  f.object.build_missing_zones
-
+  = f.input :campaign_id, as: :hidden, value: f.object.campaign.id
 = render "zones_form", f: f

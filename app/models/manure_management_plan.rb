@@ -86,6 +86,22 @@ class ManureManagementPlan < Ekylibre::Record::Base
     end
   end
 
+  def self.check_makable(campaign)
+    missing_info = {}
+    #params must contain campaign
+    activities_prod = ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming")
+
+    #check Budget
+    missing_budgets = {}
+    activities_prod.each do |activity_production|
+      missing_budgets[activity_production] = activity_production.budgets.of_campaign(campaign).to_a.select{|budget| not budget.is_done?}
+    end
+    missing_info["budget"]=missing_budgets
+    #check Assol
+    #check soil nature
+    return missing_info
+  end
+
   def mass_density_unit
     :quintal_per_hectare
   end

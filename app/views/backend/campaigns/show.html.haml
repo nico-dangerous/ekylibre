@@ -4,14 +4,22 @@
   -# t.edit resource
   - availables = Activity.availables.where.not(id: activities)
   - if availables.any?
+
     = t.menu :open, icon: nil do |menu|
       - availables.order(:name).each do |a|
         - menu.item a.name, { action: :open, activity_id: a.id }, method: :post, title: a.name
       - menu.separator
       - menu.item :manage_activities.tl, { controller: :activities, action: :index }, as: 'main'
+    - if (mmp=@campaign.selected_manure_management_plan).nil?
+      - if ManureManagementPlan.check_makable(@campaign)
+        =  link_to "Manuring", {controller: :manure_management_plans, action: :new}
+      - else
+        Ah, pas possible, pas possible
+    - else
+      =  link_to "Manuring", {controller: :manure_management_plans, action: :show, id: @campaign.selected_manure_management_plan.id  }
+
   - else
     = tool_to :manage_activities.tl, { controller: :activities, action: :index }
-
 - content_for :heading_toolbar do
   = campaign_selector(resource)
 
