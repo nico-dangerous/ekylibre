@@ -63,6 +63,8 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   validates_numericality_of :absorbed_nitrogen_at_opening, :expected_yield, :humus_mineralization, :intermediate_cultivation_residue_mineralization, :irrigation_water_nitrogen, :maximum_nitrogen_input, :meadow_humus_mineralization, :mineral_nitrogen_at_opening, :nitrogen_at_closing, :nitrogen_input, :nitrogen_need, :organic_fertilizer_mineral_fraction, :previous_cultivation_residue_mineralization, :soil_production, allow_nil: true
   validates_presence_of :activity_production, :computation_method, :plan
   # ]VALIDATORS]
+  validates :soil_nature, presence: true
+
 
   delegate :locked?, :opened_at, to: :plan
   delegate :name, to: :cultivable_zone

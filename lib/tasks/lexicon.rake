@@ -8,6 +8,8 @@ namespace :lexicon do
   task create: :environment do
     ActiveRecord::Base.connection.execute 'CREATE SCHEMA IF NOT EXISTS lexicon;'
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.regulary_zones(id serial, name varchar, nature varchar, shape geometry(MULTIPOLYGON,4326));'
+    ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.departements(id serial, name varchar, nature varchar, shape geometry(MULTIPOLYGON,4326));'
+
   end
 
   desc "delete lexicon schema and all its data"
@@ -34,11 +36,14 @@ namespace :lexicon do
 
   desc ""
   task shapefile_to_yaml: :environment do
-    path = ENV['SHAPEFILE']
-    filename = ENV['FILENAME']
-    srid = ENV['SRID']
-    nature = ENV['NATURE']
-    name_attr = ENV['NAME_ATTR']
-    Lexicon.shapefile_to_yaml(path,filename,srid,nature,name_attr)
-   end
+    path = ENV['SHAPEFILE'] # File to read
+    filename = ENV['FILENAME'] #File to write in
+    srid = ENV['SRID']  #SRID from shapefile read
+    nature = ENV['NATURE'] # nature column
+    name_attr = ENV['NAME_ATTR'] #the attribute from the shapefile for name column
+    prefix = ENV["PREFIX"]
+
+    Lexicon.shapefile_to_yaml(path,filename,srid,nature,name_attr,prefix)
+  end
+
 end

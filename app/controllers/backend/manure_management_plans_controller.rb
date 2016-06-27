@@ -54,28 +54,21 @@ module Backend
       t.column :nitrogen_input
     end
 
-    # Show one animal with params_id
-=begin
-    def show
-      return unless @manure_management_plan = find_and_check
-      t3e @manure_management_plan
-      respond_with(@manure_management_plan, include: [:campaign, :recommender, { zones: { methods: [:soil_nature_name, :cultivation_variety_name], include: [{ support: { include: :storage } }, :activity, :production] } }])
-    end
-=end
-
     def new
       #check if manure_management_plan already exists
-      @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign)
+      @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
+                                                         :opened_at => current_campaign.created_at,
+                                                         :default_computation_method => "something")
 
        ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
          @manure_management_plan.zones.new(
-            :campaign => current_campaign,
             :activity_production => activity_production,
             :soil_nature => activity_production.support.estimated_soil_nature,
             :cultivation_variety => activity_production.cultivation_variety,
-            :administrative_area => activity_production.support.administrative_area,
-        )
-        end
+            :administrative_area => Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area).name,
+            :computation_method => "another thing"
+         )
+       end
     end
 
   end

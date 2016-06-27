@@ -87,18 +87,20 @@ class ManureManagementPlan < Ekylibre::Record::Base
   end
 
   def self.check_makable(campaign)
-    missing_info = {}
     #params must contain campaign
     activities_prod = ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming")
 
-    #check Budget
-    missing_budgets = {}
+    missing_budgets = []
     activities_prod.each do |activity_production|
-      missing_budgets[activity_production] = activity_production.budgets.of_campaign(campaign).to_a.select{|budget| not budget.is_done?}
+      missing_budgets << activity_production.budgets.of_campaign(campaign).select{|budget| budget.revenues.empty?}
     end
-    missing_info["budget"]=missing_budgets
-    #check Assol
+    missing_info = {budget: missing_budgets.reject(&:empty?),
+                    cultivation_variety: activities_prod.select{ |act| act.cultivation_variety.nil?} }
+    activities_prod.select{ |act| act.cultivation_variety.nil?}
+
+    missing_info["valid"] = missing_info[:budget].empty? && missing_info[:cultivation_variety].empty?
     #check soil nature
+
     return missing_info
   end
 

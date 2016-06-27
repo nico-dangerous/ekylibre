@@ -21,5 +21,7 @@
   = f.referenced_association :recommender
   = f.input :annotation
   = f.custom_fields
-  = f.input :campaign_id, as: :hidden, value: f.object.campaign.id
+  = f.input :campaign_id, as: :hidden, value: f.object.campaign_id
+  = f.input :default_computation_method, as: :hidden, value: f.object.default_computation_method
+  = f.input :opened_at, as: :hidden, value: f.object.opened_at
 = render "zones_form", f: f

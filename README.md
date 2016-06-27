@@ -58,6 +58,11 @@ We encourage you to contribute to Ekylibre.
 * [Google+](https://plus.google.com/106303796269953490281/about)
 * [YouTube](http://www.youtube.com/channel/UC_yYJGkq-aqC-So8DlXtM5g)
 
+## Data URL
+
+* zones-vulnerables : http://services.sandre.eaufrance.fr/telechargement/geo/ZON/ZoneVuln/FXX/ZoneVuln-shp.zip
+* departements : 
+
 ## License
 
 Ekylibre is released under the [GNU/AGPLv3](http://opensource.org/licenses/AGPL-3.0) license.

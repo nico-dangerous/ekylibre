@@ -88,7 +88,9 @@ class LandParcel < Easement
 
   def administrative_area
     # TODO: Find best administrative area with its shape
-    nil
+    unless shape.nil?
+      Departement.contains(shape).first.name
+    end
   end
 
   def estimated_soil_nature
@@ -99,5 +101,6 @@ class LandParcel < Easement
       end
     end
   end
+
 
 end

@@ -4,7 +4,9 @@ module Lexicon
   def shapefile_to_shapes(path,srid)
     shapes = []
     RGeo::Shapefile::Reader.open(path, srid: srid) do |file|
+
       file.each do |record|
+
         geometry = Charta::Geometry.new(record.geometry)
         geometry.srid=(srid)
         geometry=geometry.transform(:WGS84).to_ewkt
@@ -33,12 +35,15 @@ module Lexicon
     end
   end
 
-  def shapefile_to_yaml(path , filename , srid , nature , name_attr)
+  def shapefile_to_yaml(path, filename, srid, nature, name_attr, prefix_name='')
+    #path = shapefile_path
+    #filename = yaml file
+    # XXX remove prefix_name
     shape_hash={}
     shapefile_to_shapes(path,srid).each_with_index do |value, index|
       row = {}
-      byebug
-      row[index.to_s] = {"name" => value["attributes"][name_attr],
+
+      row[index.to_s] = {"name" => prefix_name + value["attributes"][name_attr],
                          "nature" => nature,
                          "shape" => value["shape"]}
       shape_hash.merge!(row)

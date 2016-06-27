@@ -100,10 +100,6 @@ class ActivityBudget < Ekylibre::Record::Base
     list
   end
 
-  def is_done?
-    revenues_amount >= expenses_amount
-  end
-
   # Duplicate current budget in given activity and campaign
   def duplicate!(activity, campaign)
     budget = ActivityBudget.find_or_create_by!(activity: activity, campaign: campaign)
