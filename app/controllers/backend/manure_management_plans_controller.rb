@@ -18,6 +18,8 @@
 
 module Backend
   class ManureManagementPlansController < Backend::BaseController
+
+    helper ManureManagementPlanHelper
     manage_restfully redirect_to: "{action: :edit, id: 'id'.c}".c
 
     respond_to :pdf, :odt, :docx, :xml, :json, :html, :csv
@@ -56,9 +58,14 @@ module Backend
 
     def new
       #check if manure_management_plan already exists
+      mmp = ManureManagementPlan.of_campaign(current_campaign)
+      unless mmp.nil?
+        redirect_to :edit
+      end
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
                                                          :opened_at => current_campaign.created_at,
-                                                         :default_computation_method => "something")
+                                                         :default_computation_method => "something",
+                                                          :name => "MMP " + current_campaign["harvest_year"].to_s)
 
        ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
          @manure_management_plan.zones.new(
@@ -66,9 +73,24 @@ module Backend
             :soil_nature => activity_production.support.estimated_soil_nature,
             :cultivation_variety => activity_production.cultivation_variety,
             :administrative_area => Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area).name,
-            :computation_method => "another thing"
+            :computation_method => :percentage
          )
        end
+    end
+
+    def create
+      @manure_management_plan = ManureManagementPlan.new(permitted_params)
+      if @manure_management_plan.save
+        redirect_to :edit
+      else
+        render :new
+      end
+    end
+
+    def edit
+      @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+      t3e @manure_management_plan.attributes
+      render :edit
     end
 
   end

@@ -57,7 +57,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
     locked?
   end
 
-  after_save :compute
+  # after_save :compute
 
   scope :of_campaign, lambda{ |campaign|
     where(:campaign_id => campaign.id)
@@ -102,6 +102,15 @@ class ManureManagementPlan < Ekylibre::Record::Base
     #check soil nature
 
     return missing_info
+  end
+
+  def shape
+    union = Charta.empty_geometry
+
+    zones.each do |zone|
+      union = union.merge(zone.support_shape)
+    end
+    union
   end
 
   def mass_density_unit

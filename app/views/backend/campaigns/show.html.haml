@@ -16,7 +16,7 @@
       - else
         Ah, pas possible, pas possible
     - else
-      =  link_to "Manuring", {controller: :manure_management_plans, action: :show, id: @campaign.selected_manure_management_plan.id  }
+      =  link_to "Manuring", {controller: :manure_management_plans, action: :edit, id: @campaign.selected_manure_management_plan.id  }
 
   - else
     = tool_to :manage_activities.tl, { controller: :activities, action: :index }

@@ -59,10 +59,11 @@ We encourage you to contribute to Ekylibre.
 * [YouTube](http://www.youtube.com/channel/UC_yYJGkq-aqC-So8DlXtM5g)
 
 ## Data URL
+# Shapefiles
 
 * zones-vulnerables : http://services.sandre.eaufrance.fr/telechargement/geo/ZON/ZoneVuln/FXX/ZoneVuln-shp.zip
-* departements : 
-
+* departements : https://wxs-telechargement.ign.fr/oikr5jryiph0iwhw36053ptm/telechargement/inspire/GEOFLA_THEME-DEPARTEMENTS_2015_2$GEOFLA_2-1_DEPARTEMENT_SHP_LAMB93_FXX_2015-12-01/file/GEOFLA_2-1_DEPARTEMENT_SHP_LAMB93_FXX_2015-12-01.7z
+* departements osm : http://osm13.openstreetmap.fr/~cquest/openfla/export/departements-20140306-5m-shp.zip
 ## License
 
 Ekylibre is released under the [GNU/AGPLv3](http://opensource.org/licenses/AGPL-3.0) license.

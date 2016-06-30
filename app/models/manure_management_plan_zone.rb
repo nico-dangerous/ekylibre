@@ -68,6 +68,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
 
   delegate :locked?, :opened_at, to: :plan
   delegate :name, to: :cultivable_zone
+  delegate :support_shape, to: :activity_production
 
   scope :selecteds, -> { joins(:plan).merge(ManureManagementPlan.selecteds) }
 

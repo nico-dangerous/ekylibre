@@ -124,12 +124,14 @@ module Backend
         else
           area_unit = options[:area_unit] || :hectare
           content = []
-          # content << { label: klass.human_attribute_name(label_method), value: record.send(label_method) }
-          content << { label: Nomen::Indicator.find(:net_surface_area).human_name,
-                       value: record.net_surface_area.in(area_unit).round(3).l }
-          content << content_tag(:div, class: 'btn-group') do
-            link_to(:show.tl, { controller: controller, action: :show, id: record.id }, class: 'btn btn-default') +
-              link_to(:edit.tl, { controller: controller, action: :edit, id: record.id }, class: 'btn btn-default')
+          if records.respond_to?(:net_surface_area)
+           # content << { label: klass.human_attribute_name(label_method), value: record.send(label_method) }
+            content << { label: Nomen::Indicator.find(:net_surface_area).human_name,
+                         value: record.net_surface_area.in(area_unit).round(3).l }
+            content << content_tag(:div, class: 'btn-group') do
+              link_to(:show.tl, { controller: controller, action: :show, id: record.id }, class: 'btn btn-default') +
+                link_to(:edit.tl, { controller: controller, action: :edit, id: record.id }, class: 'btn btn-default')
+            end
           end
           feature = { popup: { content: content, header: true } }
         end

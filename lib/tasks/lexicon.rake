@@ -1,4 +1,5 @@
 require 'lexicon'
+require 'open-uri'
 
 namespace :lexicon do
   include Lexicon
@@ -36,6 +37,7 @@ namespace :lexicon do
 
   desc ""
   task shapefile_to_yaml: :environment do
+
     path = ENV['SHAPEFILE'] # File to read
     filename = ENV['FILENAME'] #File to write in
     srid = ENV['SRID']  #SRID from shapefile read

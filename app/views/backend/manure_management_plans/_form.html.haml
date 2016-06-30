@@ -14,10 +14,10 @@
 -#
 -#= render "zones_form", f: f
 
-=f.object.errors.inspect
+= f.object.errors.inspect
 
 = field_set do
-  = f.input :name
+  = f.input :name, as: :hidden, value: f.object.name
   = f.referenced_association :recommender
   = f.input :annotation
   = f.custom_fields

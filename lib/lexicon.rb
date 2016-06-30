@@ -38,7 +38,6 @@ module Lexicon
   def shapefile_to_yaml(path, filename, srid, nature, name_attr, prefix_name='')
     #path = shapefile_path
     #filename = yaml file
-    # XXX remove prefix_name
     shape_hash={}
     shapefile_to_shapes(path,srid).each_with_index do |value, index|
       row = {}
