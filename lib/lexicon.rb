@@ -21,7 +21,7 @@ module Lexicon
 
   def fill_table_from_yaml(yaml_filename)
     #the table name is the filename without extension
-    name = File.basename(yaml_filename,".yml").downcase
+    name = File.basename(yaml_filename,".yml").split('.').last.downcase
     yaml = YAML::load(File.open(yaml_filename))
     unless yaml.empty?
       columns = yaml[yaml.keys.first].keys
@@ -29,25 +29,27 @@ module Lexicon
       #Insert row
       yaml.each_value do |data|
         #add quotes around value to insert
-        data = data.each_pair.map { |key, value| [key, "'#{value}'"] }.to_h
+        data = data.each_pair.map { |key, value| [key, ActiveRecord::Base.connection.quote(value)] }.to_h
         ActiveRecord::Base.connection.execute "INSERT INTO lexicon.#{name} (#{columns.join(', ')}) VALUES (#{data.values.join(',')});"
       end
     end
   end
 
-  def shapefile_to_yaml(path, filename, srid, nature, name_attr, prefix_name='')
+  def shapefile_to_yaml(input_filename, output_filename, nature, name_attr, prefix_name='',srid = 4326)
     #path = shapefile_path
     #filename = yaml file
+
     shape_hash={}
-    shapefile_to_shapes(path,srid).each_with_index do |value, index|
+    shapefile_to_shapes(input_filename,srid).each_with_index do |value, index|
       row = {}
 
       row[index.to_s] = {"name" => prefix_name + value["attributes"][name_attr],
-                         "nature" => nature,
+                         "type" => nature,
                          "shape" => value["shape"]}
       shape_hash.merge!(row)
     end
-    f=File.new("#{filename}","w").puts(shape_hash.to_yaml)
+
+    f=File.new("#{output_filename}","w").puts(shape_hash.to_yaml)
   end
 
 end

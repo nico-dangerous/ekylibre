@@ -69,7 +69,12 @@ module Backend
     end
 
     def shape_field_tag(name, value = nil, options = {})
-      geometry = Charta.new_geometry(value)
+      if Charta::GeoJSON.new(value).valid?
+        geometry=value
+      else
+        geometry = Charta.new_geometry(value).to_json_object(true)
+      end
+
       box ||= {}
       options[:box] ||= {}
       options[:data][:map_editor] ||= {}
@@ -90,7 +95,8 @@ module Backend
 
       options[:data][:map_editor][:back] ||= MapBackground.availables.collect(&:to_json_object)
 
-      options.deep_merge!(data: { map_editor: { edit: geometry.to_json_object } }) unless value.nil?
+      options.deep_merge!(data: { map_editor: { edit: geometry} }) unless value.nil?
+
       text_field_tag(name, value, options.deep_merge(data: { map_editor: { box: box.jsonize_keys } }))
     end
 

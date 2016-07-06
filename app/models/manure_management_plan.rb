@@ -60,8 +60,14 @@ class ManureManagementPlan < Ekylibre::Record::Base
   # after_save :compute
 
   scope :of_campaign, lambda{ |campaign|
-    where(:campaign_id => campaign.id)
+    if campaign.is_a?(Fixnum)
+      where(:campaign_id => campaign)
+    else
+      where(:campaign_id => campaign.id)
+    end
   }
+
+
 
   def compute
     zones.map(&:compute)
@@ -104,13 +110,39 @@ class ManureManagementPlan < Ekylibre::Record::Base
     return missing_info
   end
 
-  def shape
-    union = Charta.empty_geometry
+  def shapes
+    #Makes union from manure_management_plan_zones' shapes for the manure_management_plan campaign
+    zones = ManureManagementPlan.of_campaign(campaign_id).first.zones
+    sql ="SELECT ST_Union(AP.support_shape) FROM demo.manure_management_plans as MMP
+          LEFT JOIN demo.manure_management_plan_zones MMPZ ON MMP.id = MMPZ.plan_id
+          LEFT JOIN demo.activity_productions AP ON AP.id = MMPZ.activity_production_id
+          where MMP.campaign_id = #{campaign.id}"
 
-    zones.each do |zone|
-      union = union.merge(zone.support_shape)
-    end
-    union
+    union = (ActiveRecord::Base.connection.execute sql).values.first.first
+  end
+
+  def get_expanded_watercourses_shape(buffer_size = 5)
+    #return the shape corresponding to watercourses in lexicon, with a buffer of buffer_size meters
+    return nil
+  end
+
+  def get_regulary_zones_shape
+    #return the shape for regulary zones in lexion
+    RegularyZone
+    return nil
+  end
+
+  def unify_shapes(shapes = [])
+    #return the union for an array of shapes
+    return nil
+  end
+
+  def build_non_spreadable_zone
+    shapes = []
+    shapes << get_expanded_watercourses_shape
+    shapes << get_regulary_zones_shape
+
+    return unify_shapes(shapes)
   end
 
   def mass_density_unit

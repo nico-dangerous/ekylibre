@@ -58,9 +58,9 @@ module Backend
 
     def new
       #check if manure_management_plan already exists
-      mmp = ManureManagementPlan.of_campaign(current_campaign)
+      mmp = ManureManagementPlan.of_campaign(current_campaign).first
       unless mmp.nil?
-        redirect_to :edit
+        redirect_to action: :edit, id: mmp.id
       end
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
                                                          :opened_at => current_campaign.created_at,

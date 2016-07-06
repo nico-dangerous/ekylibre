@@ -76,6 +76,18 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     locked?
   end
 
+  scope :of_campaign, lambda{ |campaign|
+    if campaign.is_a?(Fixnum)
+      where(:campaign_id => campaign)
+    else
+      where(:campaign_id => campaign.id)
+    end
+  }
+
+  def shape
+    support_shape
+  end
+
   def estimate_expected_yield
     if computation_method
       self.expected_yield = Calculus::ManureManagementPlan.estimate_expected_yield(parameters).to_f(plan.mass_density_unit)
@@ -136,4 +148,5 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
     item
   end
+
 end

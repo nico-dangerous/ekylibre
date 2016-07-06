@@ -577,7 +577,6 @@ Rails.application.routes.draw do
 
     resources :manure_management_plans, concerns: [:list, :unroll] do
       member do
-        get :spe
         get :list_zones
       end
     end
