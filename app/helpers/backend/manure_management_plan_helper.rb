@@ -59,6 +59,7 @@ module Backend
     end
 
     def features_to_feature_collection(features)
+      rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
       rgeo_coder.encode(RGeo::GeoJSON::FeatureCollection.new (features))
     end
 
@@ -66,7 +67,9 @@ module Backend
       features_to_feature_collection(objects_to_features(objects,properties))
     end
 
-
+    def manure_feature_collection(mmp)
+      objects_to_feature_collection(mmp.zones)
+    end
 
 =begin
     def manure_management_plan_feature_collection(campaign, properties = [])

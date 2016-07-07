@@ -68,11 +68,13 @@ module Backend
                                                           :name => "MMP " + current_campaign["harvest_year"].to_s)
 
        ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
+         admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
+         admin_area_name = admin_area.name unless admin_area.nil?
          @manure_management_plan.zones.new(
             :activity_production => activity_production,
             :soil_nature => activity_production.support.estimated_soil_nature,
             :cultivation_variety => activity_production.cultivation_variety,
-            :administrative_area => Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area).name,
+            :administrative_area => admin_area_name,
             :computation_method => :percentage
          )
        end

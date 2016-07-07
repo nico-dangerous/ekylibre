@@ -20,7 +20,7 @@ namespace :lexicon do
   desc "call tasks drop and create"
   task reset: :environment do
     Rake::Task['lexicon:drop'].invoke
-    Rake::Task['lexicon:create'].invoke
+    Rake::Task['lexicon:import'].invoke
   end
 
   desc "Depends from lexicon create, load all yml file from db/lexicon directories, and
@@ -30,6 +30,7 @@ namespace :lexicon do
   task import: :create do
     path =  File.join("{db,plugins/*/db}","lexicon","*.yml")
     Dir.glob(path).each do |filename|
+      puts filename
       Lexicon.fill_table_from_yaml(filename)
     end
   end

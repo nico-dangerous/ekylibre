@@ -1,21 +1,23 @@
 .form-map
   :ruby
 
-    haml_io.write shape_field_tag("manure_management_plan", to_feature_collection(RegulatoryZone.build_non_spreadable_zone,@manure_management_plan.attributes.keys), {class: :hajimari_step_form,
+    haml_io.write shape_field_tag("manure_management_plan", nil, {class: :hajimari_step_form,
                                                     box: {width: '70%'},
                                                     data: {
-                                                           map_editor:
-                                                                      { allowAttributesPopup: true,
-                                                                        customClass:'manure-map',
-                                                                        overlaySelector: {ghostLayer: :cap_parcels.tl, editionLayer: :cultivable_zones.tl},
-                                                                        defaultLabel: :unnamed.tl,
-                                                                        defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
-                                                                        showStyle: {fillOpacity: 0.7},
-                                                                        useFeatures: true,
-                                                                        multi_level: true,
-                                                                        controls:{ measure: { show: false, localization: 'i18n.iso2'.t },
-                                                                                   importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
-                                                                                   }
+                                                      map_editor: {
+                                                        allowAttributesPopup: true,
+                                                  #      :series => [:cultivable_zones, manure_feature_collection(@manure_management_plan), {}],
+                                                        customClass:'manure-map',
+                                                        overlaySelector: {ghostLayer: :cap_parcels.tl, editionLayer: :cultivable_zones.tl},
+                                                        defaultLabel: :unnamed.tl,
+                                                        defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
+                                                        showStyle: {fillOpacity: 0.7},
+                                                        useFeatures: true,
+                                                        multi_level: true,
+                                                        controls:{
+                                                          measure: { show: false, localization: 'i18n.iso2'.t },
+                                                          importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
+                                                         }
                                                                         },
                                                             actionmenu: { box: {width: '30%'},customClass:'responsive-map'}}
                                                     })

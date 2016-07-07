@@ -89,7 +89,8 @@ class LandParcel < Easement
   def administrative_area
     # TODO: Find best administrative area with its shape
     unless shape.nil?
-      AdministrativeArea.contains(shape).first.name
+      area = Department.contains(shape).first
+      area.name unless area.nil?
     end
   end
 

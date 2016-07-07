@@ -70,12 +70,13 @@ module Backend
     end
 
     def shape_field_tag(name, value = nil, options = {})
-      if Charta::GeoJSON.new(value).valid?
-        geometry=value
-      else
-        geometry = Charta.new_geometry(value).to_json_object(true)
+      unless value.nil?
+        if Charta::GeoJSON.new(value).valid?
+          geometry=value
+        else
+          geometry = Charta.new_geometry(value).to_json_object(true)
+        end
       end
-
       box ||= {}
       options[:box] ||= {}
       options[:data][:map_editor] ||= {}
