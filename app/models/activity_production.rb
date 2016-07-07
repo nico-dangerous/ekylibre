@@ -48,7 +48,7 @@
 #
 
 class ActivityProduction < Ekylibre::Record::Base
-  include Customizable
+  include Customizable, Attachable
   enumerize :support_nature, in: [:cultivation, :fallow_land, :buffer, :border, :none], default: :cultivation
   refers_to :usage, class_name: 'ProductionUsage'
   refers_to :size_indicator, class_name: 'Indicator'
@@ -69,19 +69,19 @@ class ActivityProduction < Ekylibre::Record::Base
   composed_of :size, class_name: 'Measure', mapping: [%w(size_value to_d), %w(size_unit_name unit)]
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_date :started_on, :stopped_on, allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.today + 50.years }
+  validates :started_on, :stopped_on, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.today + 50.years }, type: :date }
   validates_datetime :stopped_on, allow_blank: true, on_or_after: :started_on, if: ->(activity_production) { activity_production.stopped_on && activity_production.started_on }
-  validates_numericality_of :rank_number, allow_nil: true, only_integer: true
-  validates_numericality_of :size_value, allow_nil: true
-  validates_inclusion_of :irrigated, :nitrate_fixing, in: [true, false]
-  validates_presence_of :activity, :rank_number, :size_indicator_name, :size_value, :support, :usage
+  validates :rank_number, numericality: { allow_nil: true, only_integer: true }
+  validates :size_value, numericality: { allow_nil: true }
+  validates :irrigated, :nitrate_fixing, inclusion: { in: [true, false] }
+  validates :activity, :rank_number, :size_indicator_name, :size_value, :support, :usage, presence: true
   # ]VALIDATORS]
-  validates_uniqueness_of :rank_number, scope: :activity_id
-  validates_presence_of :started_on
+  validates :rank_number, uniqueness: { scope: :activity_id }
+  validates :started_on, presence: true
   # validates_presence_of :cultivable_zone, :support_nature, if: :plant_farming?
-  validates_presence_of :support_nature, if: :plant_farming?
-  validates_presence_of :campaign, :stopped_on, if: :annual?
-  validates_presence_of :started_on
+  validates :support_nature, presence: { if: :plant_farming? }
+  validates :campaign, :stopped_on, presence: { if: :annual? }
+  validates :started_on, presence: true
   # validates_numericality_of :size_value, greater_than: 0
   # validates_presence_of :size_unit, if: :size_value?
 
@@ -138,6 +138,7 @@ class ActivityProduction < Ekylibre::Record::Base
     if self.activity
       self.rank_number = (self.activity.productions.maximum(:rank_number) ? self.activity.productions.maximum(:rank_number) : 0) + 1
     end
+    true
   end
 
   before_validation do
@@ -155,27 +156,44 @@ class ActivityProduction < Ekylibre::Record::Base
                                    .where.not(id: ActivityProduction.select(:support_id))
                                    .order(:id)
           self.support = land_parcels.any? ? land_parcels.first : LandParcel.new
-          support.name = computed_support_name
-          support.initial_shape = support_shape
-          support.initial_born_at = started_on
-          support.variant = ProductNatureVariant.import_from_nomenclature(:land_parcel)
-          support.save!
+        end
+        support.name = computed_support_name
+        support.initial_shape = support_shape
+        support.initial_born_at = started_on
+        support.variant ||= ProductNatureVariant.import_from_nomenclature(:land_parcel)
+        support.save!
+        reading = support.first_reading(:shape)
+        if reading
+          reading.value = support_shape
+          reading.save!
         end
         self.size = support_shape_area.in(size_unit_name)
       elsif animal_farming?
-        unless support
-          self.support = AnimalGroup.new
-          support.name = computed_support_name
-          # FIXME: Need to find better category and population_counting...
-          nature = ProductNature.find_or_create_by!(variety: :animal_group, derivative_of: :animal, name: AnimalGroup.model_name.human, category: ProductNatureCategory.import_from_nomenclature(:cattle_herd), population_counting: :unitary)
-          variant = ProductNatureVariant.find_or_initialize_by(nature: nature, variety: :animal_group, derivative_of: :animal)
+        self.support = AnimalGroup.new unless support
+        support.name = computed_support_name
+        # FIXME: Need to find better category and population_counting...
+        unless support.variant
+          nature = ProductNature.find_or_create_by!(
+            variety: :animal_group,
+            derivative_of: :animal,
+            name: AnimalGroup.model_name.human,
+            category: ProductNatureCategory.import_from_nomenclature(:cattle_herd),
+            population_counting: :unitary
+          )
+          variant = ProductNatureVariant.find_or_initialize_by(
+            nature: nature,
+            variety: :animal_group,
+            derivative_of: :animal
+          )
           variant.name ||= nature.name
           variant.unit_name ||= :unit.tl
           variant.save! if variant.new_record?
           support.variant = variant
-          support.derivative_of = self.activity.cultivation_variety
-          support.save!
         end
+        if self.activity.cultivation_variety
+          support.derivative_of ||= self.activity.cultivation_variety
+        end
+        support.save!
         if size_value.nil?
           errors.add(:size_value, :empty)
         else
@@ -183,29 +201,19 @@ class ActivityProduction < Ekylibre::Record::Base
         end
       end
     end
+    true
   end
 
   before_validation(on: :create) do
     self.state ||= :opened
+    true
   end
 
   validate do
     if plant_farming?
       errors.add(:support_shape, :empty) if self.support_shape && self.support_shape.empty?
     end
-  end
-
-  before_update do
-    # self.support.name = computed_support_name
-    support.initial_born_at = started_on
-    if old_record.support_shape != self.support_shape
-      support.initial_shape = support_shape
-      if self.support_shape
-        # TODO: Update only very first shape reading
-        support.read!(:shape, self.support_shape, at: started_on)
-      end
-    end
-    support.save!
+    true
   end
 
   after_commit do
@@ -217,6 +225,10 @@ class ActivityProduction < Ekylibre::Record::Base
 
   after_destroy do
     Ekylibre::Hook.publish(:activity_production_destroy, activity_production_id: id)
+  end
+
+  protect(on: :destroy) do
+    interventions.any?
   end
 
   def computed_support_name
@@ -413,10 +425,22 @@ class ActivityProduction < Ekylibre::Record::Base
       raise "Harvest yield unit doesn't exist: #{harvest_yield_unit_name.inspect}"
     end
     total_quantity = 0.0.in(size_unit_name)
-    # harvest_interventions = interventions.real.of_category(procedure_category).with_targets(inside_plants)
-    harvest_interventions = Intervention.real.of_category(procedure_category).with_targets(inside_plants)
+
+    target_distribution_plants = Plant.where(id: distributions.pluck(:target_id).compact)
+
+    # get harvest_interventions firstly by distributions and secondly by inside_plants method
+    harvest_interventions = Intervention.real.of_category(procedure_category).with_targets(target_distribution_plants) if target_distribution_plants.any?
+    harvest_interventions ||= Intervention.real.of_category(procedure_category).with_targets(inside_plants)
+
+    coef_area = []
+    global_coef_harvest_yield = []
+
     if harvest_interventions.any?
       harvest_interventions.find_each do |harvest|
+        harvest_working_area = []
+        harvest.targets.each do |target|
+          harvest_working_area << ::Charta.new_geometry(target.working_zone).area.in(:square_meter)
+        end
         harvest.outputs.each do |cast|
           actor = cast.product
           next unless actor && actor.variety
@@ -426,10 +450,16 @@ class ActivityProduction < Ekylibre::Record::Base
             total_quantity += quantity.convert(size_unit_name) if quantity
           end
         end
+        h = harvest_working_area.compact.sum.to_d(surface_unit_name).to_f
+        if h && h > 0.0
+          global_coef_harvest_yield << (h * (total_quantity.to_f / h))
+          coef_area << h
+        end
       end
     end
-    harvest_yield = total_quantity.to_f / net_surface_area.to_d(surface_unit_name).to_f
-    Measure.new(harvest_yield, harvest_yield_unit_name)
+
+    total_weighted_average_harvest_yield = global_coef_harvest_yield.compact.sum / coef_area.compact.sum if coef_area.compact.sum.to_d != 0.0
+    Measure.new(total_weighted_average_harvest_yield.to_f, harvest_yield_unit_name)
   end
 
   # Returns the yield of grain in mass per surface unit
@@ -450,6 +480,13 @@ class ActivityProduction < Ekylibre::Record::Base
 
   # call method in production for instance
   def estimate_yield(options = {})
+    # compute variety for estimate yield
+    if usage == 'grain' || usage == 'seed'
+      options[:variety] ||= 'grain'
+    elsif usage == 'fodder' || usage == 'fiber'
+      options[:variety] ||= 'grass'
+    end
+    # get current campaign
     options[:campaign] ||= campaign
     activity.estimate_yield_from_budget_of(options)
   end

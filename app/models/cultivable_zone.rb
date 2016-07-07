@@ -48,9 +48,9 @@ class CultivableZone < Ekylibre::Record::Base
   has_many :supports, through: :activity_productions
   has_geometry :shape, type: :multi_polygon
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_presence_of :name, :shape, :work_number
+  validates :name, :shape, :work_number, presence: true
   # ]VALIDATORS]
-  validates_presence_of :uuid
+  validates :uuid, presence: true
 
   scope :of_current_activity_productions, -> { where(id: ActivityProduction.select(:cultivable_zone_id).current) }
   scope :of_campaign, ->(campaign) { where(id: ActivityProduction.select(:cultivable_zone_id).of_campaign(campaign)) }
@@ -73,5 +73,14 @@ class CultivableZone < Ekylibre::Record::Base
     islets = CapIslet.shape_matching(shape).order(id: :desc)
     return islets.first.islet_number if islets.any?
     nil
+  end
+
+  after_commit do
+    activity_productions.each(&:update_names)
+    Ekylibre::Hook.publish(:cultivable_zone_change, cultivable_zone_id: id)
+  end
+
+  after_destroy do
+    Ekylibre::Hook.publish(:cultivable_zone_destroy, cultivable_zone_id: id)
   end
 end

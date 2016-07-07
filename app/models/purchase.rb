@@ -65,20 +65,20 @@ class Purchase < Ekylibre::Record::Base
   has_many :products, -> { uniq }, through: :items
   has_many :fixed_assets, through: :items
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_datetime :accounted_at, :confirmed_at, :invoiced_at, :planned_at, allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years }
-  validates_numericality_of :amount, :pretax_amount, allow_nil: true
-  validates_presence_of :amount, :currency, :number, :payee, :pretax_amount, :supplier
+  validates :accounted_at, :confirmed_at, :invoiced_at, :planned_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
+  validates :amount, :pretax_amount, numericality: { allow_nil: true }
+  validates :amount, :currency, :number, :payee, :pretax_amount, :supplier, presence: true
   # ]VALIDATORS]
-  validates_length_of :number, :state, allow_nil: true, maximum: 60
-  validates_presence_of :created_at, :state, :nature
-  validates_uniqueness_of :number
+  validates :number, :state, length: { allow_nil: true, maximum: 60 }
+  validates :created_at, :state, :nature, presence: true
+  validates :number, uniqueness: true
   validates_associated :items
 
   acts_as_numbered
   acts_as_affairable :supplier
   accepts_nested_attributes_for :items, reject_if: proc { |item| item[:variant_id].blank? && item[:variant].blank? }, allow_destroy: true
 
-  delegate :closed, :balance, to: :affair, prefix: true
+  delegate :with_accounting, to: :nature
 
   scope :invoiced_between, lambda { |started_at, stopped_at|
     where(invoiced_at: started_at..stopped_at)
@@ -143,7 +143,7 @@ class Purchase < Ekylibre::Record::Base
   # This callback permits to add journal entries corresponding to the purchase order/invoice
   # It depends on the preference which permit to activate the "automatic bookkeeping"
   bookkeep do |b|
-    b.journal_entry(nature.journal, printed_on: invoiced_on, if: invoice?) do |entry|
+    b.journal_entry(nature.journal, printed_on: invoiced_on, if: (with_accounting && invoice?)) do |entry|
       label = tc(:bookkeep, resource: self.class.model_name.human, number: number, supplier: self.supplier.full_name, products: (description.blank? ? items.collect(&:name).to_sentence : description))
       for item in items
         entry.add_debit(label, item.account, item.pretax_amount) unless item.pretax_amount.zero?
@@ -253,5 +253,9 @@ class Purchase < Ekylibre::Record::Base
 
   def taxes_amount
     amount - pretax_amount
+  end
+
+  def can_generate_parcel?
+    items.any? && delivery_address && (order? || invoice?)
   end
 end

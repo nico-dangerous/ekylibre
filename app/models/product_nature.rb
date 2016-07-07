@@ -77,17 +77,17 @@ class ProductNature < Ekylibre::Record::Base
   serialize :linkage_points_list, SymbolArray
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_datetime :picture_updated_at, allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years }
-  validates_numericality_of :picture_file_size, allow_nil: true, only_integer: true
-  validates_inclusion_of :active, :evolvable, :subscribing, in: [true, false]
-  validates_presence_of :category, :name, :number, :population_counting, :variety
+  validates :picture_updated_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
+  validates :picture_file_size, numericality: { allow_nil: true, only_integer: true }
+  validates :active, :evolvable, :subscribing, inclusion: { in: [true, false] }
+  validates :category, :name, :number, :population_counting, :variety, presence: true
   # ]VALIDATORS]
-  validates_length_of :number, allow_nil: true, maximum: 30
-  validates_length_of :derivative_of, :reference_name, :variety, allow_nil: true, maximum: 120
-  validates_uniqueness_of :number
-  validates_uniqueness_of :name
+  validates :number, length: { allow_nil: true, maximum: 30 }
+  validates :derivative_of, :reference_name, :variety, length: { allow_nil: true, maximum: 120 }
+  validates :number, uniqueness: true
+  validates :name, uniqueness: true
   validates_attachment_content_type :picture, content_type: /image/
-  validates_presence_of :subscription_nature, if: :subscribing?
+  validates :subscription_nature, presence: { if: :subscribing? }
 
   accepts_nested_attributes_for :variants, reject_if: :all_blank, allow_destroy: true
   acts_as_numbered force: false
@@ -101,7 +101,7 @@ class ProductNature < Ekylibre::Record::Base
   scope :purchaseables, -> { joins(:category).merge(ProductNatureCategory.purchaseables).order(:name) }
   scope :stockables_or_depreciables, -> { joins(:category).merge(ProductNatureCategory.stockables_or_depreciables).order(:name) }
   scope :storage, -> { of_expression('can store(matter) or can store_liquid or can store_fluid or can store_gaz') }
-
+  scope :identifiables, -> { of_variety(:animal) + select(&:population_counting_unitary?) }
   # scope :producibles, -> { where(:variety => ["bos", "animal", "plant", "organic_matter"]).order(:name) }
 
   scope :derivative_of, proc { |*varieties| of_derivative_of(*varieties) }
@@ -143,9 +143,6 @@ class ProductNature < Ekylibre::Record::Base
     self.subscription_years_count ||= 0
     self.subscription_months_count ||= 0
     self.subscription_days_count ||= 0
-    if self.number.blank?
-      self.number = ProductNature.maximum(:id).next.to_s.rjust(8, '0')
-    end
   end
 
   validate do
@@ -154,6 +151,10 @@ class ProductNature < Ekylibre::Record::Base
         errors.add(:subscription_months_count, :invalid)
       end
     end
+  end
+
+  def identifiable?
+    of_variety?(:animal) || population_counting_unitary?
   end
 
   def has_indicator?(indicator)

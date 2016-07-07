@@ -85,24 +85,24 @@ class Sale < Ekylibre::Record::Base
   has_many :parcels, dependent: :destroy, inverse_of: :sale
   has_many :items, -> { order('position, id') }, class_name: 'SaleItem', dependent: :destroy, inverse_of: :sale
   has_many :journal_entries, as: :resource
-  has_many :subscriptions, through: :items, class_name: 'Subscription'
+  has_many :subscriptions, through: :items, class_name: 'Subscription', source: 'subscription'
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_datetime :accounted_at, :confirmed_at, :expired_at, :invoiced_at, :payment_at, allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years }
-  validates_numericality_of :amount, :downpayment_amount, :pretax_amount, allow_nil: true
-  validates_inclusion_of :credit, :has_downpayment, :letter_format, in: [true, false]
-  validates_presence_of :amount, :client, :currency, :downpayment_amount, :number, :payer, :payment_delay, :pretax_amount, :state
+  validates :accounted_at, :confirmed_at, :expired_at, :invoiced_at, :payment_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
+  validates :amount, :downpayment_amount, :pretax_amount, numericality: { allow_nil: true }
+  validates :credit, :has_downpayment, :letter_format, inclusion: { in: [true, false] }
+  validates :amount, :client, :currency, :downpayment_amount, :number, :payer, :payment_delay, :pretax_amount, :state, presence: true
   # ]VALIDATORS]
-  validates_length_of :currency, allow_nil: true, maximum: 3
-  validates_length_of :initial_number, :number, :state, allow_nil: true, maximum: 60
-  validates_presence_of :client, :currency, :nature
-  validates_presence_of :invoiced_at, if: :invoice?
+  validates :currency, length: { allow_nil: true, maximum: 3 }
+  validates :initial_number, :number, :state, length: { allow_nil: true, maximum: 60 }
+  validates :client, :currency, :nature, presence: true
+  validates :invoiced_at, presence: { if: :invoice? }
   validates_delay_format_of :payment_delay, :expiration_delay
 
   acts_as_numbered :number, readonly: false
   acts_as_affairable :client, debit: :credit?
   accepts_nested_attributes_for :items, reject_if: proc { |item| item[:variant_id].blank? }, allow_destroy: true
 
-  delegate :closed, :balance, to: :affair, prefix: true
+  delegate :with_accounting, to: :nature
 
   scope :invoiced_between, lambda { |started_at, stopped_at|
     where(invoiced_at: started_at..stopped_at)
@@ -198,7 +198,7 @@ class Sale < Ekylibre::Record::Base
 
   # This callback bookkeeps the sale depending on its state
   bookkeep do |b|
-    b.journal_entry(self.nature.journal, printed_on: invoiced_on, if: (self.nature.with_accounting? && invoice?)) do |entry|
+    b.journal_entry(self.nature.journal, printed_on: invoiced_on, if: (with_accounting && invoice?)) do |entry|
       label = tc(:bookkeep, resource: state_label, number: number, client: client.full_name, products: (description.blank? ? items.pluck(:label).to_sentence : description), sale: initial_number)
       entry.add_debit(label, client.account(:client).id, amount) unless amount.zero?
       for item in items
@@ -269,23 +269,6 @@ class Sale < Ekylibre::Record::Base
   # Check if sale can generate parcel from all the items of the sale
   def can_generate_parcel?
     items.any? && delivery_address && (order? || invoice?)
-  end
-
-  # Generate parcel for preparation
-  def generate_parcel
-    items_attributes = items.map do |item|
-      { sale_item: item, population: item.quantity, variant: item.variant }
-    end
-    attributes = {
-      sale: self,
-      recipient: client,
-      address: delivery_address,
-      nature: :outgoing,
-      delivery_mode: :us,
-      state: :ordered,
-      items_attributes: items_attributes
-    }
-    Parcel.create!(attributes)
   end
 
   # Remove all bad dependencies and return at draft state with no parcels

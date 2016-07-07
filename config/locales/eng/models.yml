@@ -69,13 +69,17 @@ eng:
         odd: "%{attribute} must be odd"
         on_or_after: "%{attribute} must be on or after %{restriction}"
         on_or_before: "%{attribute} must be on or before %{restriction}"
+        overlap_sibling: "%{attribute} overlaps sibling"
         posterior: "The date %{attribute} must be posterior to %{to}"
         record_invalid: "Validations failed: %{errors}"
         taken: "%{attribute} has already been taken"
         too_long: "%{attribute} is too long (maximum is %{count} characters)"
         too_short: "%{attribute} is too short (minimum is %{count} characters)"
+        unitary_in_parcel: "Unitary items can only be sent one by one"
         wrong_length: "%{attribute} is the wrong length (should be %{count} characters)"
       models:
+        bank_statement_item:
+          unvalid_amounts: "The journal entry must be filled either debit or credit but not at the same time."
         cash:
           currency_does_not_match: "The currency of the %{journal} is different from that specified for the cash"
           unvalid_bban: "Unvalid BBAN. One or more elements are incorrect."
@@ -144,6 +148,7 @@ eng:
       animal_group: "Animal group"
       attachment: "Attachment"
       bank_statement: "Bank statement"
+      # bank_statement_item: "Bank statement item"
       bioproduct: "Living product"
       building: "Building"
       building_division: "Room / Zone"
@@ -358,6 +363,7 @@ eng:
     bank_identifier_code: "Bank identifier code"
     bank_name: "Bank name"
     bank_statement: "Bank statement"
+    # bank_statement_letter: "Bank statement letter"
     bank_statements: "Bank statements"
     base_amount: "Base amount"
     boolean_value: "Boolean value"
@@ -368,12 +374,12 @@ eng:
     calibrations: "Calibrations"
     campaign: "Campaign"
     canal: "Canal"
-    cap_islet: "Cap islet"
-    cap_islets: "Cap islets"
-    cap_land_parcel: "Cap land parcel"
-    cap_land_parcels: "Cap land parcels"
-    cap_statement: "Cap statement"
-    cap_statements: "Cap statements"
+    cap_islet: "CAP islet"
+    cap_islets: "CAP islets"
+    cap_land_parcel: "CAP land parcel"
+    cap_land_parcels: "CAP land parcels"
+    cap_statement: "CAP statement"
+    cap_statements: "CAP statements"
     carried: "Carried"
     carrier: "Carrier"
     carrier_linkages: "Carrier linkages"
@@ -625,6 +631,8 @@ eng:
     grading_sizes_unit_name: "Grading sizes unit name"
     gradings: "Gradings" #?
     gravity: "Gravity"
+    gross_mass: "Gross mass" #?
+    gross_yield_value: "Gross yield value" #?
     group: "Group"
     group_parameters: "Group parameters"
     groups: "Groups"
@@ -659,6 +667,8 @@ eng:
     indicator_name: "Indicator name"
     indicators: "Indicators"
     indirect_links: "Indirect links"
+    # initial_balance_credit: "Initial balance credit"
+    # initial_balance_debit: "Initial balance debit"
     initial_born_at: "Initial born at"
     initial_container: "Initial container"
     initial_dead_at: "Initial dead at"
@@ -671,8 +681,10 @@ eng:
     initial_owner: "Initial owner"
     initial_population: "Initial population"
     initial_shape: "Initial shape"
+    # initiated_on: "Initiated on"
     inputs: "Inputs"
     inspection: "Inspection"
+    # inspection_calibration_natures: "Inspection calibration natures"
     # inspection_calibration_scales: "Inspection calibration scales"
     # inspection_calibrations: "Inspection calibrations"
     # inspection_point_natures: "Inspection point natures"
@@ -786,6 +798,7 @@ eng:
     manure_management_plan_zones: "Manure management plan zones"
     marketable: "Marketable"
     marketable_net_mass: "Marketable net mass"
+    marketable_net_yield: "Marketable net yield" #?
     marketable_yield: "Marketable yield"
     mass: "Mass (kg)" #?
     max_zoom: "Max zoom"
@@ -937,11 +950,13 @@ eng:
     product_account: "Product account"
     # product_enjoyment: "Product enjoyment"
     product_enjoyments: "Product enjoyments" #?
+    product_identification_number: "Identification number"
     product_linkages: "Product linkages" #?
     product_localization: "Product localization"
     product_localizations: "Product localizations" #?
     product_memberships: "Product memberships" #?
     product_movement: "Product movement"
+    product_name: "Name"
     product_nature: "Product type"
     product_nature_categories: "Product type categories" #?
     product_nature_category: "Product type category"
@@ -956,7 +971,6 @@ eng:
     product_reading: "Product reading"
     product_reading_tasks: "Product reading tasks" #?
     product_readings: "Product readings" #?
-    # product_shape_reading: "Product shape reading"
     production: "Production" #?
     production_campaign: "Production campaign"
     production_cycle: "Production cycle"
@@ -1088,6 +1102,7 @@ eng:
     sensor: "Sensor"
     sensors: "Sensors"
     sent_at: "Sent at" #?
+    separated_stock: "Do not merge with existing stocks"
     serial: "Serial"
     serial_number: "Serial number"
     sessions: "Sessions"
@@ -1108,7 +1123,6 @@ eng:
     source: "Source"
     source_product: "Source product"
     # source_product_movement: "Source product movement"
-    # source_product_shape_reading: "Source product shape reading"
     spaced_iban: "Spaced IBAN"
     sql_type: "SQL type"
     start: "Start"
@@ -1174,11 +1188,14 @@ eng:
     token: "Token"
     tool: "Tool"
     tools: "Tools"
+    total_cost: "Total cost"
     total_net_mass: "Total net mass"
     town_number: "Town number"
     tracking: "Tracking"
     trackings: "Trackings"
+    # transaction_number: "Transaction number"
     transfered_at: "Transfered at"
+    # transfered_on: "Transfered on"
     transporter: "Transporter"
     transporter_purchase: "Transporter purchase"
     transporter_sales: "Transporter sales"
@@ -1232,6 +1249,7 @@ eng:
     with_accounting: "With accounting"
     with_commission: "With commission"
     with_cultivation: "With cultivation"
+    with_delivery: "With delivery"
     with_deposit: "With deposit"
     with_supports: "With supports"
     with_transport: "With transport" #?

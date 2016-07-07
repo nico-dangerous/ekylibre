@@ -40,7 +40,6 @@ Rails.application.routes.draw do
       get :list_readings
       get :list_members
       get :list_places
-      get :list_target_distributions
       get :take
     end
   end
@@ -180,9 +179,7 @@ Rails.application.routes.draw do
         post :duplicate
       end
       member do
-        get :list_budgets
         get :list_distributions
-        get :list_inspection_point_natures
         get :list_inspections
         get :list_interventions
         get :list_productions
@@ -204,7 +201,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :affairs, concerns: [:list, :affairs]
+    resources :affairs, concerns: [:list, :affairs], only: [:show, :index]
 
     resources :analyses, concerns: [:list, :unroll] do
       member do
@@ -247,9 +244,12 @@ Rails.application.routes.draw do
         get :list_items
       end
       member do
-        match 'point', via: [:get, :post]
+        match :edit_items, via: [:get, :post]
+        match :reconciliation, via: [:get, :post]
       end
     end
+
+    resources :bank_statement_items, only: [:new]
 
     resources :beehives, only: [:update] do
       member do
@@ -293,7 +293,6 @@ Rails.application.routes.draw do
 
     resources :cashes, concerns: [:list, :unroll] do
       member do
-        get :point
         get :list_deposits
         get :list_bank_statements
         get :list_sessions
@@ -476,7 +475,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :identifiers, concerns: [:list, :unroll]
+    resources :identifiers, concerns: [:list]
 
     resources :imports, concerns: [:list] do
       member do
@@ -600,7 +599,7 @@ Rails.application.routes.draw do
 
     resources :matters, concerns: :products
 
-    resources :net_services, concerns: [:list, :unroll] do
+    resources :net_services, concerns: [:list] do
       member do
         get :list_identifiers
       end
@@ -629,7 +628,8 @@ Rails.application.routes.draw do
     resources :parcels, concerns: [:list, :unroll] do
       member do
         post :invoice
-        get :list_items
+        get :list_incoming_items
+        get :list_outgoing_items
         post :ship
 
         post :order
@@ -664,6 +664,8 @@ Rails.application.routes.draw do
 
     resources :product_groups, concerns: :products
 
+    resources :product_localizations, except: [:index, :show]
+
     resources :product_natures, concerns: [:incorporate, :list, :unroll] do
       member do
         get :list_variants
@@ -695,6 +697,7 @@ Rails.application.routes.draw do
       member do
         get :list_items
         get :list_parcels
+        post :generate_parcel
         post :abort
         post :confirm
         post :correct
@@ -799,9 +802,14 @@ Rails.application.routes.draw do
         post :run
       end
     end
-    resources :target_distributions, concerns: [:list]
+    resources :target_distributions, concerns: [:list] do
+      collection do
+        get :distribute
+        get :list_intervention_product_parameters
+      end
+    end
 
-    resources :tasks, concerns: [:list, :unroll] do
+    resources :tasks, concerns: [:list] do
       member do
         post :reset
         post :start

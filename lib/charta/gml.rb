@@ -3,9 +3,13 @@ module Charta
   class GML
     attr_reader :srid
 
-    TAGS = %w[Point LineString Polygon MultiGeometry].freeze
+    TAGS = %w(Point LineString Polygon MultiGeometry).freeze
     OGR_PREFIX = 'ogr'.freeze
     GML_PREFIX = 'gml'.freeze
+    NS = {
+      gml: 'http://www.opengis.net/gml',
+      ogr: 'http://ogr.maptools.org/'
+    }.freeze
 
     def initialize(data, srid = :WGS84)
       srid ||= :WGS84
@@ -19,15 +23,29 @@ module Charta
                # Nokogiri::XML::Document expected
                data
              end
+      up = false
+      # ensure namespaces are defined
+      begin
+        @gml.root.add_namespace_definition('xmlns', '')
+        NS.each do |k, v|
+          if @gml.xpath("//@*[xmlns:#{k}]").empty?
+            @gml.root.namespace_definitions << @gml.root.add_namespace_definition(k.to_s, v)
+            up = true
+          end
+        end
+      rescue
+        false
+      end
+
+      @gml = Nokogiri::XML(@gml.to_xml) if up
 
       boundaries = @gml.css("#{GML_PREFIX}|boundedBy")
       unless boundaries.blank?
         boundaries.each do |node|
-          unless node['srsName'].nil?
-            srid = Charta.find_srid(node['srsName'])
-          end
+          srid = Charta.find_srid(node['srsName']) unless node['srsName'].nil?
         end
       end
+
       @srid = Charta.find_srid(srid)
     end
 
@@ -55,15 +73,24 @@ module Charta
       end
 
       def document_to_ewkt(gml, srid)
-        return 'GEOMETRYCOLLECTION EMPTY' if gml.css("#{OGR_PREFIX}|FeatureCollection").blank?
-        'GEOMETRYCOLLECTION(' + gml.css("#{GML_PREFIX}|featureMember").collect do |feature|
-          TAGS.collect do |tag|
-            next if feature.css("#{GML_PREFIX}|#{tag}").empty?
-            feature.css("#{GML_PREFIX}|#{tag}").collect do |fragment|
-              object_to_ewkt(fragment, srid)
+        # whole document
+        if gml.css("#{OGR_PREFIX}|FeatureCollection").blank? || gml.css("#{GML_PREFIX}|featureMember").blank?
+          # fragment
+          if gml.root.name && TAGS.include?(gml.root.name)
+            object_to_ewkt(gml.root, srid)
+          else
+            'GEOMETRYCOLLECTION EMPTY'
+          end
+        else
+          'GEOMETRYCOLLECTION(' + gml.css("#{GML_PREFIX}|featureMember").collect do |feature|
+            TAGS.collect do |tag|
+              next if feature.css("#{GML_PREFIX}|#{tag}").empty?
+              feature.css("#{GML_PREFIX}|#{tag}").collect do |fragment|
+                object_to_ewkt(fragment, srid)
+              end.compact.join(', ')
             end.compact.join(', ')
-          end.compact.join(', ')
-        end.compact.join(', ') + ')'
+          end.compact.join(', ') + ')'
+        end
       end
       alias geometry_collection_to_ewkt document_to_ewkt
 
@@ -74,13 +101,11 @@ module Charta
       def polygon_to_ewkt(gml, srid)
         return 'POLYGON EMPTY' if gml.css("#{GML_PREFIX}|coordinates").blank?
 
-        wkt = 'POLYGON(' + %w[outerBoundaryIs innerBoundaryIs].collect do |boundary|
+        wkt = 'POLYGON(' + %w(outerBoundaryIs innerBoundaryIs).collect do |boundary|
           next if gml.css("#{GML_PREFIX}|#{boundary}").empty?
-
-          '(' + gml.css("#{GML_PREFIX}|#{boundary}").collect do |hole|
-            hole.css("#{GML_PREFIX}|coordinates").collect{|coords| coords.content.split(/\r\n|\n| /)}.flatten.reject{|a| a.length == 0}.collect { |c| c.split ',' }.collect { |dimension| %Q{#{dimension.first} #{dimension.second}} }
-          end.join(', ') + ')'
-
+          gml.css("#{GML_PREFIX}|#{boundary}").collect do |hole|
+            '(' + hole.css("#{GML_PREFIX}|coordinates").collect { |coords| coords.content.split(/\r\n|\n| /) }.flatten.reject(&:empty?).collect { |c| c.split ',' }.collect { |dimension| %(#{dimension.first} #{dimension.second}) }.join(', ') + ')'
+          end.join(', ')
         end.compact.join(', ') + ')'
 
         unless gml['srsName'].nil? || Charta.find_srid(gml['srsName']).to_s == srid.to_s
@@ -92,7 +117,7 @@ module Charta
 
       def point_to_ewkt(gml, srid)
         return 'POINT EMPTY' if gml.css("#{GML_PREFIX}|coordinates").blank?
-        wkt = 'POINT(' + gml.css("#{GML_PREFIX}|coordinates").collect{|coords| coords.content.split ','}.flatten.join(' ') + ')'
+        wkt = 'POINT(' + gml.css("#{GML_PREFIX}|coordinates").collect { |coords| coords.content.split ',' }.flatten.join(' ') + ')'
 
         unless gml['srsName'].nil? || Charta.find_srid(gml['srsName']).to_s == srid.to_s
           wkt = transform(wkt, Charta.find_srid(gml['srsName']), srid)
@@ -104,7 +129,7 @@ module Charta
       def line_string_to_ewkt(gml, srid)
         return 'LINESTRING EMPTY' if gml.css("#{GML_PREFIX}|coordinates").blank?
 
-        wkt = 'LINESTRING(' + gml.css("#{GML_PREFIX}|coordinates").collect{|coords| coords.content.split(/\r\n|\n| /)}.flatten.reject{|a| a.length == 0}.collect { |c| c.split ',' }.collect { |dimension| %Q{#{dimension.first} #{dimension.second}} }.join(', ') + ')'
+        wkt = 'LINESTRING(' + gml.css("#{GML_PREFIX}|coordinates").collect { |coords| coords.content.split(/\r\n|\n| /) }.flatten.reject(&:empty?).collect { |c| c.split ',' }.collect { |dimension| %(#{dimension.first} #{dimension.second}) }.join(', ') + ')'
 
         unless gml['srsName'].nil? || Charta.find_srid(gml['srsName']).to_s == srid.to_s
           wkt = transform(wkt, Charta.find_srid(gml['srsName']), srid)
@@ -112,7 +137,6 @@ module Charta
 
         wkt
       end
-
     end
   end
 end

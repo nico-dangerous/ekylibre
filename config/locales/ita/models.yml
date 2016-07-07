@@ -71,6 +71,7 @@ ita:
         # on_or_after: "%{attribute} must be on or after %{restriction}"
         # on_or_before: "%{attribute} must be on or before %{restriction}"
         other_than: "devono essere di numero diverso da %{count}" #?
+        # overlap_sibling: "%{attribute} overlaps sibling"
         # posterior: "The date %{attribute} must be posterior to %{to}"
         present: "deve essere lasciato in bianco" #?
         # record_invalid: "Validations failed: %{errors}"
@@ -81,10 +82,13 @@ ita:
         too_short:  #? String excepted (Hash:{:one=>"è troppo corto (il minimo è 1 carattere)", :other=>"è troppo corto (il minimo è %{count} caratteri)"})
           one: "è troppo corto (il minimo è 1 carattere)" #? String excepted (Hash:{:one=>"è troppo corto (il minimo è 1 carattere)", :other=>"è troppo corto (il minimo è %{count} caratteri)"})
           other: "è troppo corto (il minimo è %{count} caratteri)" #? String excepted (Hash:{:one=>"è troppo corto (il minimo è 1 carattere)", :other=>"è troppo corto (il minimo è %{count} caratteri)"})
+        # unitary_in_parcel: "Unitary items can only be sent one by one"
         wrong_length:  #? String excepted (Hash:{:one=>"è della lunghezza sbagliata (deve essere di 1 carattere)", :other=>"è della lunghezza sbagliata (deve essere di %{count} caratteri)"})
           one: "è della lunghezza sbagliata (deve essere di 1 carattere)" #? String excepted (Hash:{:one=>"è della lunghezza sbagliata (deve essere di 1 carattere)", :other=>"è della lunghezza sbagliata (deve essere di %{count} caratteri)"})
           other: "è della lunghezza sbagliata (deve essere di %{count} caratteri)" #? String excepted (Hash:{:one=>"è della lunghezza sbagliata (deve essere di 1 carattere)", :other=>"è della lunghezza sbagliata (deve essere di %{count} caratteri)"})
       models:
+        bank_statement_item:
+          unvalid_amounts: "La voce di diario deve essere compilato o di debito o di credito, ma non allo stesso tempo."
         cash:
           # currency_does_not_match: "The currency of the %{journal} is different from that specified for the cash"
           unvalid_bban: "Caduca BBAN. Uno o più elementi non sono corretti."
@@ -642,6 +646,8 @@ ita:
     # grading_sizes_unit_name: "Grading sizes unit name"
     # gradings: "Gradings"
     gravity: "Gravità"
+    # gross_mass: "Gross mass"
+    # gross_yield_value: "Gross yield value"
     group: "Gruppo"
     group_parameters: "parametri del Gruppo"
     groups: "gruppi"
@@ -799,6 +805,7 @@ ita:
     manure_management_plan_zones: "zone di piano di gestione del letame"
     # marketable: "Marketable"
     # marketable_net_mass: "Marketable net mass"
+    # marketable_net_yield: "Marketable net yield"
     # marketable_yield: "Marketable yield"
     mass: "Massa (kg)"
     # max_zoom: "Max zoom"
@@ -951,11 +958,13 @@ ita:
     product: "Prodotto"
     product_account: "conto del prodotto"
     product_enjoyments: "godimenti del prodotto"
+    # product_identification_number: "Identification number"
     product_linkages: "collegamenti del prodotto"
     product_localization: "la localizzazione del prodotto"
     product_localizations: "localizzazioni del prodotto"
     product_memberships: "appartenenze prodotto"
     product_movement: "il movimento del prodotto"
+    # product_name: "Name"
     product_nature: "Tipologia di prodotto"
     product_nature_categories: "categorie di tipi di prodotto"
     product_nature_category: "Categoria Tipo di prodotto"
@@ -1093,6 +1102,7 @@ ita:
     sensor: "Sensore"
     sensors: "sensori"
     sent_at: "Trasmesso a"
+    # separated_stock: "Do not merge with existing stocks"
     serial: "Seriale"
     serial_number: "Numero di serie"
     sessions: "sessioni"
@@ -1173,6 +1183,7 @@ ita:
     token: "Gettone"
     tool: "Strumento"
     tools: "Utensili"
+    # total_cost: "Total cost"
     # total_net_mass: "Total net mass"
     town_number: "numero di Città"
     tracking: "puntamento"
@@ -1233,6 +1244,7 @@ ita:
     with_accounting: "con la contabilità"
     with_commission: "con commissione"
     with_cultivation: "con la coltivazione"
+    # with_delivery: "With delivery"
     with_deposit: "con deposito"
     with_supports: "Con supporti"
     with_transport: "con i trasporti"

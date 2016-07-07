@@ -10,7 +10,12 @@ module Backend
         geometries = import_shapes(uploaded, format)
       end
 
+      if geometries.is_a?(Hash) && geometries.key?(:error)
+        flash.now[:alert] = geometries[:error].tl
+      end
+
       respond_to do |format|
+        format.json { render json: { alert: flash.alert } } unless flash.now[:alert].nil?
         format.json { render json: geometries.to_json }
       end
     end
@@ -33,9 +38,9 @@ module Backend
 
       when 'geojson'
         geo = (geometry.is_a?(Hash) ? geometry : JSON.parse(geometry)) || {}
-        srid = geo.try(:[], 'crs').try(:[],'properties').try(:[], 'name')
+        srid = geo.try(:[], 'crs').try(:[], 'properties').try(:[], 'name')
 
-        if ::Charta::GeoJSON.valid?(geometry,srid)
+        if ::Charta::GeoJSON.valid?(geometry, srid)
           geojson = (geometry.is_a?(Hash) ? geometry : JSON.parse(geometry)) || {}
 
           single_feature = [geojson] if geojson.key? 'feature'
@@ -54,14 +59,14 @@ module Backend
                 if gfeature.key? 'geometry'
                   if ::Charta::GeoJSON.valid?(gfeature['geometry'])
                     geofeature = {
-                        type: 'Feature',
-                        properties: {
-                            internal_id: (Time.now.to_i.to_s + Time.now.usec.to_s),
-                            name: gfeature.try(:[], 'properties').try(:[], 'name'),
-                            id: gfeature.try(:[], 'properties').try(:[], 'id'),
-                            removable: true
-                        }.reject { |_, v| v.nil? },
-                        geometry: Charta.from_geojson(gfeature['geometry'],srid).transform(:WGS84).to_json_object
+                      type: 'Feature',
+                      properties: {
+                        internal_id: (Time.now.to_i.to_s + Time.now.usec.to_s),
+                        name: gfeature.try(:[], 'properties').try(:[], 'name'),
+                        id: gfeature.try(:[], 'properties').try(:[], 'id'),
+                        removable: true
+                      }.reject { |_, v| v.nil? },
+                      geometry: Charta.from_geojson(gfeature['geometry'], srid).transform(:WGS84).to_json_object
                     }.reject { |_, v| v.nil? }
                   end
                 end
@@ -74,14 +79,19 @@ module Backend
 
         unless geojson_features.nil?
           geojson_features_collection = {
-              type: 'FeatureCollection',
-              features: geojson_features
+            type: 'FeatureCollection',
+            features: geojson_features
           }
         end
 
       else
-        fail 'Invalid format'
+        return { error: 'invalid_format' }
       end
+
+      if geojson_features_collection == ::Charta.empty_geometry.to_json_object
+        return { error: 'invalid_file' }
+      end
+
       geojson_features_collection
     end
   end

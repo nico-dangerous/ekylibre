@@ -59,22 +59,22 @@ class ProductNatureVariant < Ekylibre::Record::Base
   has_picture
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_datetime :picture_updated_at, allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years }
-  validates_numericality_of :picture_file_size, allow_nil: true, only_integer: true
-  validates_inclusion_of :active, in: [true, false]
-  validates_presence_of :category, :nature, :unit_name, :variety
+  validates :picture_updated_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
+  validates :picture_file_size, numericality: { allow_nil: true, only_integer: true }
+  validates :active, inclusion: { in: [true, false] }
+  validates :category, :nature, :unit_name, :variety, presence: true
   # ]VALIDATORS]
-  validates_length_of :derivative_of, :variety, allow_nil: true, maximum: 120
+  validates :derivative_of, :variety, length: { allow_nil: true, maximum: 120 }
   validates_attachment_content_type :picture, content_type: /image/
 
   alias_attribute :commercial_name, :name
 
-  delegate :able_to?, :able_to_each?, :has_indicator?, :matching_model, :indicators, :population_frozen?, :population_modulo, :frozen_indicators, :frozen_indicators_list, :variable_indicators, :variable_indicators_list, :linkage_points, :of_expression, :population_counting_unitary?, :whole_indicators_list, :whole_indicators, :individual_indicators_list, :individual_indicators, to: :nature
+  delegate :able_to?, :identifiable?, :able_to_each?, :has_indicator?, :matching_model, :indicators, :population_frozen?, :population_modulo, :frozen_indicators, :frozen_indicators_list, :variable_indicators, :variable_indicators_list, :linkage_points, :of_expression, :population_counting_unitary?, :whole_indicators_list, :whole_indicators, :individual_indicators_list, :individual_indicators, to: :nature
   delegate :variety, :derivative_of, :name, to: :nature, prefix: true
   delegate :depreciable?, :depreciation_rate, :deliverable?, :purchasable?, :saleable?, :subscribing?, :fixed_asset_depreciation_method, :fixed_asset_depreciation_percentage, :fixed_asset_account, :fixed_asset_allocation_account, :fixed_asset_expenses_account, :product_account, :charge_account, :stock_account, to: :category
 
   accepts_nested_attributes_for :products, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :readings, reject_if: proc { |params| params['measure_value_value'].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :readings, reject_if: proc { |params| params['measure_value_value'].blank? && params['integer_value'].blank? && params['boolean_value'].blank? && params['decimal_value'].blank? }, allow_destroy: true
   accepts_nested_attributes_for :catalog_items, reject_if: :all_blank, allow_destroy: true
   # acts_as_numbered
 
@@ -83,6 +83,7 @@ class ProductNatureVariant < Ekylibre::Record::Base
   scope :purchaseables, -> { joins(:nature).merge(ProductNature.purchaseables) }
   scope :deliverables, -> { joins(:nature).merge(ProductNature.stockables) }
   scope :stockables_or_depreciables, -> { joins(:nature).merge(ProductNature.stockables_or_depreciables).order(:name) }
+  scope :identifiables, -> { where(nature: ProductNature.identifiables) }
 
   scope :derivative_of, proc { |*varieties| of_derivative_of(*varieties) }
 
@@ -281,6 +282,27 @@ class ProductNatureVariant < Ekylibre::Record::Base
     product_model = nature.matching_model
 
     product_model.create!(variant: self, name: product_name + ' ' + born_at.l, initial_owner: Entity.of_company, initial_born_at: born_at, default_storage: default_storage)
+  end
+
+  # Shortcut for creating a new product of the variant
+  def create_product!(attributes = {})
+    attributes[:initial_owner] ||= Entity.of_company
+    attributes[:initial_born_at] ||= Time.zone.now
+    attributes[:born_at] ||= attributes[:initial_born_at]
+    attributes[:name] ||= "#{name} (#{attributes[:initial_born_at].to_date.l})"
+    matching_model.create!(attributes.merge(variant: self))
+  end
+
+  def take(quantity)
+    products.mine.reduce({}) do |result, product|
+      reminder = quantity - result.values.sum
+      result[product] = [product.population, reminder].min if reminder > 0
+      result
+    end
+  end
+
+  def take!(quantity)
+    raise 'errors.not_enough'.t if take(quantity).values.sum < quantity
   end
 
   # Returns last purchase item for the variant

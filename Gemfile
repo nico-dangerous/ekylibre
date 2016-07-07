@@ -13,6 +13,9 @@ gem 'activerecord-postgis-adapter', '>= 3.0.0'
 gem 'apartment', '~> 1.0.0', '< 2.0'
 gem 'apartment-sidekiq'
 
+# Ruby functionalities extension
+gem 'possibly'
+
 # Code manipulation
 gem 'code_string'
 gem 'charlock_holmes'
@@ -33,7 +36,7 @@ gem 'therubyracer', platforms: :ruby
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'turbolinks', '~> 2.0'
 gem 'jquery-turbolinks'
 
 # jQuery UI Javascript framework

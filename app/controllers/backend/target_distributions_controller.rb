@@ -18,7 +18,7 @@
 
 module Backend
   class TargetDistributionsController < Backend::BaseController
-    manage_restfully except: [:show]
+    manage_restfully except: [:create]
 
     list order: { started_at: :desc } do |t|
       t.action :edit
@@ -28,6 +28,30 @@ module Backend
       t.column :activity_production, url: true
       t.column :started_at
       t.column :stopped_at
+    end
+
+    # Lists intervention product parameters of the current product
+    list(:intervention_product_parameters, conditions: { product_id: 'params[:target_id]'.c }, order: 'interventions.started_at DESC') do |t|
+      t.column :intervention, url: true
+      # t.column :roles, hidden: true
+      t.column :name, sort: :reference_name
+      t.column :started_at, through: :intervention, datatype: :datetime
+      t.column :stopped_at, through: :intervention, datatype: :datetime, hidden: true
+      t.column :human_activities_names, through: :intervention
+      # t.column :intervention_activities
+      t.column :human_working_duration, through: :intervention
+      t.column :human_working_zone_area, through: :intervention
+    end
+
+    def create
+      @target_distributions = TargetDistribution.create! (permitted_params.key?(:collection) ? permitted_params[:collection].values : permitted_params).reject { |d| d['activity_production_id'].blank? }
+
+      redirect_to params[:redirect] || backend_campaign_path('current') if @target_distributions
+    end
+
+    def distribute
+      @target_distribution = TargetDistribution.new
+      @targets = InterventionTarget.where.not(product_id: TargetDistribution.select(:target_id))
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518061327) do
+ActiveRecord::Schema.define(version: 20160706132116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -384,20 +384,48 @@ ActiveRecord::Schema.define(version: 20160518061327) do
   add_index "attachments", ["updated_at"], name: "index_attachments_on_updated_at", using: :btree
   add_index "attachments", ["updater_id"], name: "index_attachments_on_updater_id", using: :btree
 
-  create_table "bank_statements", force: :cascade do |t|
-    t.integer  "cash_id",                                              null: false
-    t.datetime "started_at",                                           null: false
-    t.datetime "stopped_at",                                           null: false
-    t.string   "number",                                               null: false
-    t.decimal  "debit",         precision: 19, scale: 4, default: 0.0, null: false
-    t.decimal  "credit",        precision: 19, scale: 4, default: 0.0, null: false
-    t.string   "currency",                                             null: false
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+  create_table "bank_statement_items", force: :cascade do |t|
+    t.integer  "bank_statement_id",                                         null: false
+    t.string   "name",                                                      null: false
+    t.decimal  "debit",              precision: 19, scale: 4, default: 0.0, null: false
+    t.decimal  "credit",             precision: 19, scale: 4, default: 0.0, null: false
+    t.string   "currency",                                                  null: false
+    t.date     "transfered_on",                                             null: false
+    t.date     "initiated_on"
+    t.string   "transaction_number"
+    t.string   "letter"
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.integer  "lock_version",                           default: 0,   null: false
+    t.integer  "lock_version",                                default: 0,   null: false
+  end
+
+  add_index "bank_statement_items", ["bank_statement_id"], name: "index_bank_statement_items_on_bank_statement_id", using: :btree
+  add_index "bank_statement_items", ["created_at"], name: "index_bank_statement_items_on_created_at", using: :btree
+  add_index "bank_statement_items", ["creator_id"], name: "index_bank_statement_items_on_creator_id", using: :btree
+  add_index "bank_statement_items", ["letter"], name: "index_bank_statement_items_on_letter", using: :btree
+  add_index "bank_statement_items", ["name"], name: "index_bank_statement_items_on_name", using: :btree
+  add_index "bank_statement_items", ["transaction_number"], name: "index_bank_statement_items_on_transaction_number", using: :btree
+  add_index "bank_statement_items", ["updated_at"], name: "index_bank_statement_items_on_updated_at", using: :btree
+  add_index "bank_statement_items", ["updater_id"], name: "index_bank_statement_items_on_updater_id", using: :btree
+
+  create_table "bank_statements", force: :cascade do |t|
+    t.integer  "cash_id",                                                       null: false
+    t.date     "started_on",                                                    null: false
+    t.date     "stopped_on",                                                    null: false
+    t.string   "number",                                                        null: false
+    t.decimal  "debit",                  precision: 19, scale: 4, default: 0.0, null: false
+    t.decimal  "credit",                 precision: 19, scale: 4, default: 0.0, null: false
+    t.string   "currency",                                                      null: false
+    t.datetime "created_at",                                                    null: false
+    t.datetime "updated_at",                                                    null: false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.integer  "lock_version",                                    default: 0,   null: false
     t.jsonb    "custom_fields"
+    t.decimal  "initial_balance_debit",  precision: 19, scale: 4, default: 0.0, null: false
+    t.decimal  "initial_balance_credit", precision: 19, scale: 4, default: 0.0, null: false
   end
 
   add_index "bank_statements", ["cash_id"], name: "index_bank_statements_on_cash_id", using: :btree
@@ -1704,10 +1732,12 @@ ActiveRecord::Schema.define(version: 20160518061327) do
     t.integer  "updater_id"
     t.integer  "lock_version",                                        default: 0,   null: false
     t.decimal  "real_balance",              precision: 19, scale: 4,  default: 0.0, null: false
+    t.string   "bank_statement_letter"
   end
 
   add_index "journal_entry_items", ["account_id"], name: "index_journal_entry_items_on_account_id", using: :btree
   add_index "journal_entry_items", ["bank_statement_id"], name: "index_journal_entry_items_on_bank_statement_id", using: :btree
+  add_index "journal_entry_items", ["bank_statement_letter"], name: "index_journal_entry_items_on_bank_statement_letter", using: :btree
   add_index "journal_entry_items", ["created_at"], name: "index_journal_entry_items_on_created_at", using: :btree
   add_index "journal_entry_items", ["creator_id"], name: "index_journal_entry_items_on_creator_id", using: :btree
   add_index "journal_entry_items", ["entry_id"], name: "index_journal_entry_items_on_entry_id", using: :btree
@@ -2074,28 +2104,28 @@ ActiveRecord::Schema.define(version: 20160518061327) do
   add_index "outgoing_payments", ["updater_id"], name: "index_outgoing_payments_on_updater_id", using: :btree
 
   create_table "parcel_items", force: :cascade do |t|
-    t.integer  "parcel_id",                                                                                                              null: false
+    t.integer  "parcel_id",                                                                                                            null: false
     t.integer  "sale_item_id"
     t.integer  "purchase_item_id"
     t.integer  "source_product_id"
     t.integer  "product_id"
     t.integer  "analysis_id"
     t.integer  "variant_id"
-    t.boolean  "parted",                                                                                                 default: false, null: false
-    t.decimal  "population",                                                                    precision: 19, scale: 4
-    t.geometry "shape",                           limit: {:srid=>4326, :type=>"multi_polygon"}
-    t.integer  "source_product_shape_reading_id"
-    t.integer  "product_shape_reading_id"
+    t.boolean  "parted",                                                                                               default: false, null: false
+    t.decimal  "population",                                                                  precision: 19, scale: 4
+    t.geometry "shape",                         limit: {:srid=>4326, :type=>"multi_polygon"}
     t.integer  "product_enjoyment_id"
     t.integer  "product_ownership_id"
     t.integer  "product_localization_id"
-    t.datetime "created_at",                                                                                                             null: false
-    t.datetime "updated_at",                                                                                                             null: false
+    t.datetime "created_at",                                                                                                           null: false
+    t.datetime "updated_at",                                                                                                           null: false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.integer  "lock_version",                                                                                           default: 0,     null: false
+    t.integer  "lock_version",                                                                                         default: 0,     null: false
     t.integer  "product_movement_id"
     t.integer  "source_product_movement_id"
+    t.string   "product_identification_number"
+    t.string   "product_name"
   end
 
   add_index "parcel_items", ["analysis_id"], name: "index_parcel_items_on_analysis_id", using: :btree
@@ -2107,12 +2137,10 @@ ActiveRecord::Schema.define(version: 20160518061327) do
   add_index "parcel_items", ["product_localization_id"], name: "index_parcel_items_on_product_localization_id", using: :btree
   add_index "parcel_items", ["product_movement_id"], name: "index_parcel_items_on_product_movement_id", using: :btree
   add_index "parcel_items", ["product_ownership_id"], name: "index_parcel_items_on_product_ownership_id", using: :btree
-  add_index "parcel_items", ["product_shape_reading_id"], name: "index_parcel_items_on_product_shape_reading_id", using: :btree
   add_index "parcel_items", ["purchase_item_id"], name: "index_parcel_items_on_purchase_item_id", using: :btree
   add_index "parcel_items", ["sale_item_id"], name: "index_parcel_items_on_sale_item_id", using: :btree
   add_index "parcel_items", ["source_product_id"], name: "index_parcel_items_on_source_product_id", using: :btree
   add_index "parcel_items", ["source_product_movement_id"], name: "index_parcel_items_on_source_product_movement_id", using: :btree
-  add_index "parcel_items", ["source_product_shape_reading_id"], name: "index_parcel_items_on_source_product_shape_reading_id", using: :btree
   add_index "parcel_items", ["updated_at"], name: "index_parcel_items_on_updated_at", using: :btree
   add_index "parcel_items", ["updater_id"], name: "index_parcel_items_on_updater_id", using: :btree
   add_index "parcel_items", ["variant_id"], name: "index_parcel_items_on_variant_id", using: :btree
@@ -2144,6 +2172,8 @@ ActiveRecord::Schema.define(version: 20160518061327) do
     t.integer  "updater_id"
     t.integer  "lock_version",      default: 0,     null: false
     t.jsonb    "custom_fields"
+    t.boolean  "with_delivery",     default: false, null: false
+    t.boolean  "separated_stock"
   end
 
   add_index "parcels", ["address_id"], name: "index_parcels_on_address_id", using: :btree

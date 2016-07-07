@@ -75,23 +75,25 @@ class Activity < Ekylibre::Record::Base
     has_many :budgets, class_name: 'ActivityBudget'
     has_many :distributions, class_name: 'ActivityDistribution'
     has_many :productions, class_name: 'ActivityProduction'
+    has_many :inspections, class_name: 'Inspection'
     has_many :inspection_point_natures, class_name: 'ActivityInspectionPointNature'
     has_many :inspection_calibration_scales, class_name: 'ActivityInspectionCalibrationScale'
+    has_many :inspection_calibration_natures, class_name: 'ActivityInspectionCalibrationNature', through: :inspection_calibration_scales, source: :natures
   end
   has_many :supports, through: :productions
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates_inclusion_of :measure_grading_net_mass, :measure_grading_sizes, :suspended, :use_countings, :use_gradings, :with_cultivation, :with_supports, in: [true, false]
-  validates_presence_of :family, :name, :nature, :production_cycle
+  validates :measure_grading_net_mass, :measure_grading_sizes, :suspended, :use_countings, :use_gradings, :with_cultivation, :with_supports, inclusion: { in: [true, false] }
+  validates :family, :name, :nature, :production_cycle, presence: true
   # ]VALIDATORS]
-  validates_inclusion_of :family, in: family.values
-  validates_presence_of :cultivation_variety, if: :with_cultivation
-  validates_presence_of :support_variety, if: :with_supports
-  validates_uniqueness_of :name
+  validates :family, inclusion: { in: family.values }
+  validates :cultivation_variety, presence: { if: :with_cultivation }
+  validates :support_variety, presence: { if: :with_supports }
+  validates :name, uniqueness: true
   # validates_associated :productions
-  validates_presence_of :production_campaign, if: :perennial?
-  validates_presence_of :grading_net_mass_unit, if: :measure_grading_net_mass
-  validates_presence_of :grading_sizes_indicator, :grading_sizes_unit, if: :measure_grading_sizes
+  validates :production_campaign, presence: { if: :perennial? }
+  validates :grading_net_mass_unit, presence: { if: :measure_grading_net_mass }
+  validates :grading_sizes_indicator, :grading_sizes_unit, presence: { if: :measure_grading_sizes }
 
   scope :actives, -> { availables.where(id: ActivityProduction.where(state: :opened).select(:activity_id)) }
   scope :availables, -> { where.not('suspended') }
@@ -214,17 +216,23 @@ class Activity < Ekylibre::Record::Base
 
   # return estimate yield from first budget in revenus item for given variety
   def estimate_yield_from_budget_of(options = {})
-    options[:unit] ||= :quintal
+    # set default parameter if theres no one given
+    options[:unit] ||= :quintal_per_hectare
     options[:variety] ||= 'grain'
+
+    activity_working_unit = size_unit_name
+    target_variety = Nomen::Variety[options[:variety]]
+
     selected_budget = budget_of(options[:campaign])
     if selected_budget
       r = []
       selected_budget.revenues.each do |item|
-        if item.variant && item.variant.variety == options[:variety]
-          r << item.quantity.in(item.variant.unit).convert(options[:unit]) if item.variant.unit && item.quantity
+        item_unit = "#{item.variant_unit}_per_#{activity_working_unit}" if activity_working_unit
+        if item.variant && item.variant_unit && Nomen::Variety[item.variant.variety] <= target_variety
+          r << item.quantity.in(item_unit).convert(options[:unit])
         end
-        return r.compact.sum
       end
+      return r.compact.sum
     else
       return nil
     end
