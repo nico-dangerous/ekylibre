@@ -39,7 +39,8 @@ module Backend
     end
 =end
 
-    def to_feature_collection(objects, properties = [])
+
+    def objects_to_features(objects, properties = [])
       # Take an array of objects and an array of key used to extracts the properties to
       # put in the feature
       # you can't pass a property with the key :"shape"
@@ -54,8 +55,18 @@ module Backend
 
         features << RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),index,properties_values)
       end
+      features
+    end
+
+    def features_to_feature_collection(features)
       rgeo_coder.encode(RGeo::GeoJSON::FeatureCollection.new (features))
     end
+
+    def objects_to_feature_collection(objects, properties = [])
+      features_to_feature_collection(objects_to_features(objects,properties))
+    end
+
+
 
 =begin
     def manure_management_plan_feature_collection(campaign, properties = [])

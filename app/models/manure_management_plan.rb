@@ -121,30 +121,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
     union = (ActiveRecord::Base.connection.execute sql).values.first.first
   end
 
-  def get_expanded_watercourses_shape(buffer_size = 5)
-    #return the shape corresponding to watercourses in lexicon, with a buffer of buffer_size meters
-    return nil
-  end
-
-  def get_regulary_zones_shape
-    #return the shape for regulary zones in lexion
-    RegularyZone
-    return nil
-  end
-
-  def unify_shapes(shapes = [])
-    #return the union for an array of shapes
-    return nil
-  end
-
-  def build_non_spreadable_zone
-    shapes = []
-    shapes << get_expanded_watercourses_shape
-    shapes << get_regulary_zones_shape
-
-    return unify_shapes(shapes)
-  end
-
   def mass_density_unit
     :quintal_per_hectare
   end

@@ -8,7 +8,7 @@ namespace :lexicon do
       and create the lexicon's tables"
   task create: :environment do
     ActiveRecord::Base.connection.execute 'CREATE SCHEMA IF NOT EXISTS lexicon;'
-    ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.vulnerable_zones(id serial, name varchar, type varchar, shape geometry(GEOMETRY,4326));'
+    ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.regulatory_zones(id serial, name varchar, type varchar, shape geometry(GEOMETRY,4326));'
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.administrative_areas(id serial, name varchar, type varchar, shape geometry(MULTIPOLYGON,4326));'
   end
 

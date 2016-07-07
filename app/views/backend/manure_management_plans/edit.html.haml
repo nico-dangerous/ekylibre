@@ -1,7 +1,7 @@
 .form-map
   :ruby
 
-    haml_io.write shape_field_tag("manure_management_plan", to_feature_collection(@manure_management_plan.zones,@manure_management_plan.attributes.keys), {class: :hajimari_step_form,
+    haml_io.write shape_field_tag("manure_management_plan", to_feature_collection(RegulatoryZone.build_non_spreadable_zone,@manure_management_plan.attributes.keys), {class: :hajimari_step_form,
                                                     box: {width: '70%'},
                                                     data: {
                                                            map_editor:
