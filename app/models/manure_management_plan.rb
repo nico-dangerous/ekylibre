@@ -67,8 +67,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
     end
   }
 
-
-
   def compute
     zones.map(&:compute)
   end
@@ -108,17 +106,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
     #check soil nature
 
     return missing_info
-  end
-
-  def shapes
-    #Makes union from manure_management_plan_zones' shapes for the manure_management_plan campaign
-    zones = ManureManagementPlan.of_campaign(campaign_id).first.zones
-    sql ="SELECT ST_Union(AP.support_shape) FROM demo.manure_management_plans as MMP
-          LEFT JOIN demo.manure_management_plan_zones MMPZ ON MMP.id = MMPZ.plan_id
-          LEFT JOIN demo.activity_productions AP ON AP.id = MMPZ.activity_production_id
-          where MMP.campaign_id = #{campaign.id}"
-
-    union = (ActiveRecord::Base.connection.execute sql).values.first.first
   end
 
   def mass_density_unit

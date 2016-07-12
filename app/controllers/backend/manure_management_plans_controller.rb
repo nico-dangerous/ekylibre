@@ -59,31 +59,32 @@ module Backend
     def new
       #check if manure_management_plan already exists
       mmp = ManureManagementPlan.of_campaign(current_campaign).first
-      unless mmp.nil?
-        redirect_to action: :edit, id: mmp.id
-      end
+      redirect_to action: :edit, id: mmp.id unless mmp.nil?
+      need_soil_nature_form = false
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
-                                                         :opened_at => current_campaign.created_at,
+                                                         :opened_at => Time.new(current_campaign.harvest_year,2,1).to_datetime,
                                                          :default_computation_method => "something",
+                                                         :recommender_id => current_user.person_id,
                                                           :name => "MMP " + current_campaign["harvest_year"].to_s)
-
        ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
          admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
          admin_area_name = admin_area.name unless admin_area.nil?
-         @manure_management_plan.zones.new(
+         zone = @manure_management_plan.zones.new(
             :activity_production => activity_production,
             :soil_nature => activity_production.support.estimated_soil_nature,
             :cultivation_variety => activity_production.cultivation_variety,
             :administrative_area => admin_area_name,
             :computation_method => :percentage
          )
+         if zone.soil_nature.nil? then need_soil_nature_form = true end
        end
+      render :create unless need_soil_nature_form
     end
 
     def create
       @manure_management_plan = ManureManagementPlan.new(permitted_params)
       if @manure_management_plan.save
-        redirect_to :edit
+        redirect_to action: :edit, id: @manure_management_plan.id
       else
         render :new
       end

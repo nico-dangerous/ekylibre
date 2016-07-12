@@ -12,7 +12,7 @@
       - menu.item :manage_activities.tl, { controller: :activities, action: :index }, as: 'main'
     - if (@campaign.selected_manure_management_plan).nil?
       - if tmp = ManureManagementPlan.check_makable(@campaign)["valid"]
-        =  link_to  "Manuring", {controller: :manure_management_plans, action: :new}, data: {class: :button}
+        =  link_to  "Manuring", {controller: :manure_management_plans, action: :new}, class: :btn
       - else
         Ah, pas possible, pas possible
     - else

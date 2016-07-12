@@ -14,14 +14,13 @@
 -#
 -#= render "zones_form", f: f
 
-= f.object.errors.inspect
-
-= field_set do
-  = f.input :name, as: :hidden, value: f.object.name
-  = f.referenced_association :recommender
-  = f.input :annotation
-  = f.custom_fields
-  = f.input :campaign_id, as: :hidden, value: f.object.campaign_id
-  = f.input :default_computation_method, as: :hidden, value: f.object.default_computation_method
-  = f.input :opened_at, as: :hidden, value: f.object.opened_at
+.hidden
+  = field_set do
+    = f.input :name, as: :hidden, value: f.object.name
+    = f.referenced_association :recommender, as: :hidden
+    = f.input :annotation, as: :hidden
+    = f.custom_fields
+    = f.referenced_association :campaign, as: :hidden
+    = f.input :default_computation_method, as: :hidden, value: f.object.default_computation_method
+    = f.input :opened_at, as: :hidden, value: f.object.opened_at
 = render "zones_form", f: f

@@ -6,38 +6,24 @@
                                                     data: {
                                                       map_editor: {
                                                         allowAttributesPopup: true,
-                                                  #      :series => [:cultivable_zones, manure_feature_collection(@manure_management_plan), {}],
+                                                        series: true,
+                                                        view: :series,
+                                                        show: {
+                                                          :series => [{title: :cultivable_zone.tl,:data => manure_feature_collection(@manure_management_plan),:options => {center: true, :style => {:color => "#0A0"}}},
+                                                                      {title: :regulatory_zone.tl,:data => regulatory_zones_feature_collection(@manure_management_plan), :options => {:style => {:color => "#A00"} }}
+                                                                      ]
+                                                         },
                                                         customClass:'manure-map',
-                                                        overlaySelector: {ghostLayer: :cap_parcels.tl, editionLayer: :cultivable_zones.tl},
+                                                        overlaySelector: {editionLayer: :cultivable_zones.tl},
                                                         defaultLabel: :unnamed.tl,
                                                         defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
                                                         showStyle: {fillOpacity: 0.7},
                                                         useFeatures: true,
-                                                        multi_level: true,
+                                                        multi_level: false,
                                                         controls:{
                                                           measure: { show: false, localization: 'i18n.iso2'.t },
                                                           importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
                                                          }
-                                                                        },
+                                                        },
                                                             actionmenu: { box: {width: '30%'},customClass:'responsive-map'}}
                                                     })
--#
--# controller_name, nil, {class: :hajimari_step_form,
--#-#box: {width: '70%'},
--#-#                                       data: { 'compute-url':url_for(:action => 'compute'),
--#                                               'firstrun-geojson': @firstrun_geojson,
--#                                               map_editor: {
--#                                                      allowAttributesPopup: true,
--#                                                      customClass:'responsive-map',
--#                                                      overlaySelector:
--#                                                                {ghostLayer: :cap_parcels.tl,
--#                                                                 editionLayer: :cultivable_zones.tl},
--#                                                                 ghost: @parcels_geojson, defaultLabel: :unnamed.tl,
--#                                                                 defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
--#                                                                 showStyle: {fillOpacity: 0.7},
--#                                                                 useFeatures: true,
--#                                                                 controls:{ measure: { show: true, localization: 'i18n.iso2'.t },
--#                                                                   importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
--#                                                                }
--#                                                        }, actionmenu: { box: {width: '30%'},
--#                                                        customClass:'responsive-map'}}})

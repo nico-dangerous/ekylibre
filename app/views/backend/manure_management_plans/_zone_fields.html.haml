@@ -1,7 +1,7 @@
-
-= field_set f.object.activity_production.name do
-  = f.input :soil_nature, as: f.object.soil_nature.nil? ? :select : :hidden
-  = f.association :activity_production, as: :hidden ,value: f.object.activity_production
-  = f.input :cultivation_variety, as: :hidden, value: f.object.cultivation_variety
-  = f.input :administrative_area, as: :hidden, value: f.object.administrative_area
-  = f.input :computation_method, as: :hidden, value: f.object.computation_method
+.foo{:class => ("hidden" unless f.object.soil_nature.nil?)}
+  = field_set f.object.activity_production.name  do
+    = f.input :soil_nature, as: f.object.soil_nature.nil? ? :select : :hidden
+    = f.association :activity_production, as: :hidden ,value: f.object.activity_production
+    = f.input :cultivation_variety, as: :hidden, value: f.object.cultivation_variety
+    = f.input :administrative_area, as: :hidden, value: f.object.administrative_area
+    = f.input :computation_method, as: :hidden, value: f.object.computation_method

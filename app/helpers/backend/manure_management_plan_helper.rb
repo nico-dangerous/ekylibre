@@ -63,12 +63,28 @@ module Backend
       rgeo_coder.encode(RGeo::GeoJSON::FeatureCollection.new (features))
     end
 
-    def objects_to_feature_collection(objects, properties = [])
-      features_to_feature_collection(objects_to_features(objects,properties))
+    def geometry_to_feature(geometry,properties={})
+      rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
+      geojson=geometry_to_geojson(geometry,properties)
+      RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),0,properties)
+    end
+
+    def geometry_to_geojson(geometry, properties = {})
+      Charta.new_geometry(geometry).to_geojson
     end
 
     def manure_feature_collection(mmp)
       objects_to_feature_collection(mmp.zones)
+    end
+
+    def objects_to_feature_collection(objects, properties = [])
+      features_to_feature_collection(objects_to_features(objects,properties))
+    end
+
+    def regulatory_zones_feature_collection(manure_management_plan)
+      geom = RegulatoryZone.build_non_spreadable_zone(manure_management_plan)
+      return nil if geom.nil?
+      features_to_feature_collection  [geometry_to_feature(geom)]
     end
 
 =begin
