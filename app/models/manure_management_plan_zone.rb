@@ -65,7 +65,6 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   # ]VALIDATORS]
   validates :soil_nature, presence: true
 
-
   delegate :locked?, :opened_at, to: :plan
   delegate :name, to: :cultivable_zone
   delegate :support_shape, to: :activity_production

@@ -43,6 +43,7 @@ module Backend
     def objects_to_features(objects, properties = [])
       # Take an array of objects and an array of key used to extracts the properties to
       # put in the feature
+      # properties is an array, the nth object of the objects parameter is related to the nth property from the properties param
       # you can't pass a property with the key :"shape"
       properties.delete_if {|prop| prop.to_s == "shape" }
       rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
@@ -50,10 +51,7 @@ module Backend
       objects.each_with_index  do |object, index |
         geojson = Charta.new_geometry(object.shape).to_geojson
 
-        properties_values = {}
-        properties_values = properties.map {|prop| properties_values["prop"] =[prop, object.attributes[prop]] }.to_h
-
-        features << RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),index,properties_values)
+        features << RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),nil,properties[index])
       end
       features
     end
@@ -64,17 +62,19 @@ module Backend
     end
 
     def geometry_to_feature(geometry,properties={})
+      # XXX find a way to buid geojson features without converting to geojson geometry and decoding to rgeo feature (it takes too much time)
       rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
       geojson=geometry_to_geojson(geometry,properties)
-      RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),0,properties)
+      RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),nil,properties)
     end
 
     def geometry_to_geojson(geometry, properties = {})
       Charta.new_geometry(geometry).to_geojson
     end
 
-    def manure_feature_collection(mmp)
-      objects_to_feature_collection(mmp.zones)
+    def manure_feature_collection(manure_management_plan,properties = {})
+      #Returns a feature collection for cultivable zones using charta
+      objects_to_feature_collection(manure_management_plan.zones, properties)
     end
 
     def objects_to_feature_collection(objects, properties = [])
@@ -82,39 +82,41 @@ module Backend
     end
 
     def regulatory_zones_feature_collection(manure_management_plan)
-      geom = RegulatoryZone.build_non_spreadable_zone(manure_management_plan)
-      return nil if geom.nil?
-      features_to_feature_collection  [geometry_to_feature(geom)]
+      #Returns a geojson feature collections for Regulatory zones using charta,and a info hash,
+      # see :RegulatoryZone.build_non_spreadable_zone
+
+      regulatory_zones_shape, info = *RegulatoryZone.build_non_spreadable_zone(manure_management_plan)
+      return [features_to_feature_collection([geometry_to_feature(regulatory_zones_shape)]), info]
     end
 
-=begin
-    def manure_management_plan_feature_collection(campaign, properties = [])
+    def manure_feature_description(manure_management_plan)
+      old_logger = ActiveRecord::Base.logger
 
-      #used for coloring
-      cultivable_zone_level=0
+      regulatory_zones_shape, info = *regulatory_zones_feature_collection(manure_management_plan)
+      cultivable_zones_properties = []
 
-      manure_management_plan_zones = ManureManagementPlan.of_campaign(campaign).first.zones
 
-      #geoms = (ActiveRecord::Base.connection.execute sql).values.first
+      properties = []
+      manure_management_plan.zones.each do |manure_zone|
+        property = {}
 
-      #create an object to encode/decode geojson from/to RGeo geometry
-      rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
-      features = []
-      manure_management_plan_zones.each_with_index  do |manure_management_plan_zone, index |
-        #encode postgis geometry to geojson
-        geojson = Charta.new_geometry(manure_management_plan_zone.support_shape).to_geojson
-        #store properties attached to geometry
-
-        #decode geojson to RGeo feature
-        properties_values = {}
-        properties_values = properties.map {|prop| properties_values["prop"] =[prop, manure_management_plan_zone.attributes[prop]] }.to_h
-
-        features << RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),index,properties_values)
+        # extracts from info and place it in properties
+        info.each_key { |key|
+          value = info[key].select{ |info_id,value| info_id == manure_zone.id }
+          property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
+        }
+        property[:name] = manure_zone.name
+        property[:variety] = manure_zone.cultivation_variety_name
+        property[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
+        properties << property
       end
 
-      #Create a feature collection from an enumerable of RGeo Feature
-      rgeo_coder.encode(RGeo::GeoJSON::FeatureCollection.new (features))
+
+      ActiveRecord::Base.logger = old_logger
+      data = {:regulatory_zones => regulatory_zones_feature_collection(manure_management_plan),
+              :cultivable_zones => manure_feature_collection(manure_management_plan,properties)
+              }
+
     end
-=end
   end
 end
