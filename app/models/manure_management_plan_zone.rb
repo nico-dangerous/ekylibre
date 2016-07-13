@@ -83,10 +83,6 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
   }
 
-  def shape
-    support_shape
-  end
-
   def estimate_expected_yield
     if computation_method
       self.expected_yield = Calculus::ManureManagementPlan.estimate_expected_yield(parameters).to_f(plan.mass_density_unit)
@@ -100,6 +96,10 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
       end
     end
     save!
+  end
+
+  def shape
+    support_shape
   end
 
   def parameters

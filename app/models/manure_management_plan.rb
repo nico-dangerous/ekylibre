@@ -67,8 +67,21 @@ class ManureManagementPlan < Ekylibre::Record::Base
     end
   }
 
+
+
   def compute
     zones.map(&:compute)
+  end
+
+  def zones_in_vulnerable_area
+    res = []
+    (ActiveRecord::Base.connection.execute("SELECT distinct MMPZ.id
+                                                  FROM MANURE_MANAGEMENT_PLANS as MMP
+                                                  JOIN MANURE_MANAGEMENT_PLAN_ZONES as MMPZ ON MMPZ.plan_id = MMP.id
+                                                  JOIN ACTIVITY_PRODUCTIONS as AP on MMPZ.activity_production_id = AP.id
+                                                  LEFT JOIN REGULATORY_ZONES as RZ on ST_Intersects(RZ.shape,AP.support_shape)
+                                                  WHERE RZ.type = 'VulnerableZone'
+                                                  ;")).values.map{|item| item.first}
   end
 
   def build_missing_zones

@@ -1,6 +1,5 @@
 .form-map
   :ruby
-
     features_description = manure_feature_description(@manure_management_plan)
     haml_io.write shape_field_tag("manure_management_plan", nil, {class: :hajimari_step_form,
                                                     box: {width: '70%'},
@@ -16,7 +15,8 @@
                                                                       :data => features_description[:cultivable_zones],
                                                                       :options => {center: true,
                                                                                    :style => {:color => "#0A0"},
-                                                                                   :popup => [{type: :label, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
+                                                                                   :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
+                                                                                              {type: :label, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
                                                                                               {type: :label, property_label: "attributes.cultivation_variety".t, property_value: :variety},
                                                                                               {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}]}},
                                                                       {title: :regulatory_zone.tl,:data => features_description[:regulatory_zones],:options => {center: true, :style => {:color => "#A00"}}}]

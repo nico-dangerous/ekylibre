@@ -95,8 +95,10 @@ module Backend
       regulatory_zones_shape, info = *regulatory_zones_feature_collection(manure_management_plan)
       cultivable_zones_properties = []
 
+      mmpz_in_vulnerable_area = manure_management_plan.zones_in_vulnerable_area
+      #mmpz_in_vulnerable_area is an array of array of one element, so we convert it into a simple array
 
-      properties = []
+
       manure_management_plan.zones.each do |manure_zone|
         property = {}
 
@@ -105,16 +107,17 @@ module Backend
           value = info[key].select{ |info_id,value| info_id == manure_zone.id }
           property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
         }
+        #Is the mmpz in a vulnerable_zone ?
+        property[:vulnerable_zone] = mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s
         property[:name] = manure_zone.name
         property[:variety] = manure_zone.cultivation_variety_name
         property[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
-        properties << property
+        cultivable_zones_properties << property
       end
 
-
       ActiveRecord::Base.logger = old_logger
-      data = {:regulatory_zones => regulatory_zones_feature_collection(manure_management_plan),
-              :cultivable_zones => manure_feature_collection(manure_management_plan,properties)
+      return {:regulatory_zones => regulatory_zones_feature_collection(manure_management_plan),
+              :cultivable_zones => manure_feature_collection(manure_management_plan,cultivable_zones_properties)
               }
 
     end
