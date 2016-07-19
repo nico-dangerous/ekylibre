@@ -48,9 +48,13 @@ module Backend
       properties.delete_if {|prop| prop.to_s == "shape" }
       rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
       features = []
-      objects.each_with_index  do |object, index |
+      objects.each_with_index  do |object, index|
         geojson = Charta.new_geometry(object.shape).to_geojson
-
+        properties[index].each do |key,value|
+          if value.nil?
+            properties[index][key] = object.send(:key)
+          end
+        end
         features << RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),nil,properties[index])
       end
       features
@@ -90,15 +94,25 @@ module Backend
     end
 
     def manure_feature_description(manure_management_plan)
-      old_logger = ActiveRecord::Base.logger
 
       regulatory_zones_shape, info = *regulatory_zones_feature_collection(manure_management_plan)
       cultivable_zones_properties = []
-
+      georeadings_properties = []
       mmpz_in_vulnerable_area = manure_management_plan.zones_in_vulnerable_area
       #mmpz_in_vulnerable_area is an array of array of one element, so we convert it into a simple array
 
+      georeadings = ManureManagementPlan.manure_georeadings
 
+      #Build georeadings feature properties
+      georeadings.each do |georeading|
+        property = {}
+        property[:id] = georeading.id
+        property[:kind] = georeading.kind
+        property[:name] = georeading.name
+        georeadings_properties << property
+      end
+
+      #Build manure_management_plan feature properties
       manure_management_plan.zones.each do |manure_zone|
         property = {}
 
@@ -114,12 +128,14 @@ module Backend
         property[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
         cultivable_zones_properties << property
       end
-
-      ActiveRecord::Base.logger = old_logger
-      return {:regulatory_zones => regulatory_zones_feature_collection(manure_management_plan),
+      return {
+              :georeadings => objects_to_feature_collection(georeadings,georeadings_properties),
+              :regulatory_zones => regulatory_zones_feature_collection(manure_management_plan),
               :cultivable_zones => manure_feature_collection(manure_management_plan,cultivable_zones_properties)
               }
-
     end
+
+
+
   end
 end

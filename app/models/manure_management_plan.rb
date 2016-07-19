@@ -58,7 +58,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
   end
 
   # after_save :compute
-
   scope :of_campaign, lambda{ |campaign|
     if campaign.is_a?(Fixnum)
       where(:campaign_id => campaign)
@@ -67,7 +66,10 @@ class ManureManagementPlan < Ekylibre::Record::Base
     end
   }
 
-
+  def self.manure_georeadings
+    natures = ManureManagementPlan.manure_georeading_types
+    Georeading.where(kind: natures)
+  end
 
   def compute
     zones.map(&:compute)
@@ -123,5 +125,9 @@ class ManureManagementPlan < Ekylibre::Record::Base
 
   def mass_density_unit
     :quintal_per_hectare
+  end
+
+  def self.manure_georeading_types
+    [:well, :water, :drinkingwater, :bathing_place, :shellfish_waters, :steep_slopes]
   end
 end

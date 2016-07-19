@@ -60,7 +60,8 @@ class ActivityProduction < Ekylibre::Record::Base
   has_many :distributions, class_name: 'TargetDistribution', inverse_of: :activity_production, dependent: :restrict_with_exception
   has_many :budgets, through: :activity
   has_many :manure_management_plan_zones, class_name: 'ManureManagementPlanZone',
-                                          inverse_of: :activity_production
+                                          inverse_of: :activity_production,
+                                          dependent: :destroy
   has_one :selected_manure_management_plan_zone, -> { selecteds },
           class_name: 'ManureManagementPlanZone', inverse_of: :activity_production
   has_one :cap_land_parcel, class_name: 'CapLandParcel', inverse_of: :activity_production, foreign_key: :support_id

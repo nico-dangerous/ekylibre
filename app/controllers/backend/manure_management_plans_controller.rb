@@ -96,5 +96,81 @@ module Backend
       render :edit
     end
 
+    def create_georeading
+      file_saved = false
+
+      geojson = params['shape']
+      unless geojson.blank?
+        rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
+        rgeo_feature = rgeo_coder.decode(geojson)
+
+        id = rgeo_feature.properties["id"]
+        georeading = nil
+        if id.nil?
+
+          georeading = Georeading.new
+          georeading.content = geojson
+          georeading.name = rgeo_feature.properties["name"]
+          georeading.kind = rgeo_feature.properties["kind"] || ManureManagementPlan.manure_georeading_types.first
+          georeading.nature = rgeo_feature.geometry.geometry_type.type_name.lower
+          file_saved = georeading.save
+        end
+        respond_to do |format|
+          if file_saved
+            format.json  { render json: { :id => georeading.id}}
+          else
+            format.json { render json: { error: georeading.errors.full_message }, status: 500 }
+          end
+        end
+      end
+    end
+
+    def update_georeadings
+      saved = true
+      geojson = params['shape']
+      unless geojson.blank?
+
+        rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
+        rgeo_feature_collection = rgeo_coder.decode(geojson)
+        rgeo_feature_collection.each do |rgeo_feature|
+          id = rgeo_feature.properties["id"]
+          next if id.nil?
+          next if (georeading = Georeading.find_by_id(id)).nil?
+          #case already exists
+
+          georeading.content = rgeo_feature.geometry
+          georeading.name = rgeo_feature.properties["name"] unless rgeo_feature.properties["name"].nil?
+          georeading.kind = rgeo_feature.properties["kind"] unless rgeo_feature.properties["kind"].nil?
+          georeading.nature = rgeo_feature.geometry.geometry_type.type_name.lower
+
+          saved = georeading.save && saved
+        end
+      end
+      respond_to do |format|
+        if saved
+          format.json  { render json: { :status => 'success'}}
+        else
+          format.json { render json: { status: 'errors' }, status: 500 }
+        end
+      end
+    end
+
+    def delete_georeadings
+
+      geojson = params['shape']
+      success = false
+
+      unless geojson.blank?
+        rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
+        success = Georeading.delete(rgeo_coder.decode(geojson).properties["id"])
+      end
+      respond_to do |format|
+        if success
+          format.json  { render json: { status: :success}}
+        else
+          format.json { render json: { status: :error }, status: 500 }
+        end
+      end
+    end
   end
 end

@@ -27,6 +27,7 @@
 #  creator_id   :integer
 #  description  :text
 #  id           :integer          not null, primary key
+#  kind         :string
 #  lock_version :integer          default(0), not null
 #  name         :string           not null
 #  nature       :string           not null
@@ -35,6 +36,7 @@
 #  updater_id   :integer
 #
 class Georeading < Ekylibre::Record::Base
+  acts_as_numbered
   enumerize :nature, in: [:point, :linestring, :polygon], predicates: true
   has_geometry :content
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
@@ -46,5 +48,9 @@ class Georeading < Ekylibre::Record::Base
   def net_surface_area
     return 0.0.in_square_meter unless polygon?
     content_area
+  end
+
+  def shape
+    content
   end
 end
