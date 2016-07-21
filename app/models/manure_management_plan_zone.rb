@@ -82,13 +82,16 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
       where(:campaign_id => campaign.id)
     end
   }
+=begin
 
   def estimate_expected_yield
     if computation_method
       self.expected_yield = Calculus::ManureManagementPlan.estimate_expected_yield(parameters).to_f(plan.mass_density_unit)
     end
   end
+=end
 
+=begin
   def compute
     for name, value in Calculus::ManureManagementPlan.compute(parameters)
       if %w(absorbed_nitrogen_at_opening expected_yield humus_mineralization intermediate_cultivation_residue_mineralization irrigation_water_nitrogen maximum_nitrogen_input meadow_humus_mineralization mineral_nitrogen_at_opening nitrogen_at_closing nitrogen_input nitrogen_need organic_fertilizer_mineral_fraction previous_cultivation_residue_mineralization soil_production).include?(name.to_s)
@@ -97,11 +100,13 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
     save!
   end
+=end
 
   def shape
     support_shape
   end
 
+=begin
   def parameters
     hash = {
       available_water_capacity: available_water_capacity,
@@ -127,6 +132,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
     hash
   end
+=end
 
   # TODO: Compute available from parcels or CZ ?
   def available_water_capacity
@@ -146,6 +152,10 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
       return nil
     end
     item
+  end
+
+  def define_computation_method
+    Approach.get_relevant_approach(support_shape)
   end
 
 end

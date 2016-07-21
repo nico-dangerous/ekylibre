@@ -42,8 +42,12 @@ module Lexicon
     shape_hash={}
     shapefile_to_shapes(input_filename,srid).each_with_index do |value, index|
       row = {}
-
-      row[index.to_s] = {"name" => prefix_name + value["attributes"][name_attr],
+      if name_attr.nil?
+        name=''
+      else
+        name = value["attributes"][name_attr]
+      end
+      row[index.to_s] = {"name" => prefix_name + name,
                          "type" => nature,
                          "shape" => value["shape"]}
       shape_hash.merge!(row)

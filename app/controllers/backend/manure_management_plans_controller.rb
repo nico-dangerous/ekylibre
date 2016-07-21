@@ -172,5 +172,13 @@ module Backend
         end
       end
     end
+
+    def compute
+      @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+      @manure_management_plan.zones.each do |zone|
+        method = zone.define_computation_method
+
+      end
+    end
   end
 end

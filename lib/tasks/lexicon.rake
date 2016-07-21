@@ -10,6 +10,7 @@ namespace :lexicon do
     ActiveRecord::Base.connection.execute 'CREATE SCHEMA IF NOT EXISTS lexicon;'
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.regulatory_zones(id serial, name varchar, type varchar, shape geometry(GEOMETRY,4326));'
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.administrative_areas(id serial, name varchar, type varchar, shape geometry(MULTIPOLYGON,4326));'
+    ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.approaches(id serial, name varchar, supply_nature varchar, shape geometry(GEOMETRY,4326));'
   end
 
   desc "delete lexicon schema and all its data"
@@ -28,7 +29,7 @@ namespace :lexicon do
         all items must have the same attributs, and must be referenced, even if null.
         The table created is lexicon.<filename> without extension"
   task import: :create do
-    path =  File.join("{db,plugins/*/db}","lexicon","*.yml")
+    path =  File.join("{db,plugins/**/db}","lexicon","**","*.yml")
     Dir.glob(path).each do |filename|
       puts filename
       Lexicon.fill_table_from_yaml(filename)
