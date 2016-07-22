@@ -31,7 +31,7 @@ eng:
     backend/activity_budgets:
       edit: "Edit budget: %{name}"
       # index: "Activity budgets"
-      new: "New budget: %{name}"
+      new: "New budget"
       show: "Activity budget: %{name}"
     backend/activity_inspection_point_natures:
       # autocomplete: "Autocomplete activity inspection point nature: %{name}"
@@ -81,6 +81,7 @@ eng:
       # new: "New bank statement item"
     backend/bank_statements:
       edit: "Edit bank statement %{number}"
+      import: "Import OFX file"
       index: "Bank statements"
       new: "New bank statement"
       reconciliation: "Reconciliate bank statement %{cash} #%{number} (from %{started_on} to %{stopped_on})"
@@ -230,7 +231,7 @@ eng:
       # show: "Entity link: %{name}"
     backend/equipments:
       edit: "Edit equipment: %{name}"
-      index: "Equipments"
+      index: "Equipment"
       new: "New equipment"
       show: "Equipment: %{name}"
       # take: "Take equipment: %{name}"
@@ -786,7 +787,6 @@ eng:
     accounts_to_load: "Accounts to load"
     active: "Active" #?
     activities: "Activities" #?
-    activities_step: "activities" #?!
     activity: "Activity"
     activity_family: "Family activities" #?
     activity_name: "Activity" #?
@@ -835,14 +835,11 @@ eng:
     add_website: "Add website"
     add_working_period: "Add working period"
     add_x: "Add “%{x}”"
-    add_your_activities: "Add the activities you need. The activities are deducted from your import TELEPAC appropriate."
-    add_your_equipment: "Add Your Equipment. You can also associate a location that you have previously defined (cultivable area or building area)."
     affair: "Affair"
     affair_number: "Affair number" #?
     affairs: "Affairs" #?
     all: "All"
     all_accounts: "All accounts"
-    all_cash_balances: "All cash balances" #?!
     all_columns: "All columns" #?
     all_conditions: "All conditions"
     all_periods: "All financial years"
@@ -853,7 +850,6 @@ eng:
     amounts_in_currency: "Amounts (%{currency})"
     analyses: "Analyses"
     animal_details: "Animal details" #?
-    animal_productions: "Animal productions" #?!
     animals: "Animals"
     archives: "Archives"
     are_you_sure: "Are you sure you want to do this?"
@@ -871,6 +867,7 @@ eng:
     attach_deal: "Add a deal"
     attachment: "Attachment"
     attachments: "Attachments"
+    auto_reconciliate: "Auto reconciliate"
     automatic: "Auto" #?
     available: "Available" #?
     available_columns: "Available columns: %{columns}"
@@ -888,7 +885,6 @@ eng:
     budget_per_working_indicator: "Budget per working indicator"
     budgets: "Budgets" #?
     building: "Building" #?
-    building_divisions: "building areas" #?
     buildings: "buildings" #?
     # by_default: "By default"
     by_year: "By year"
@@ -953,11 +949,12 @@ eng:
     cost_per_net_surface_area: "Cost per net surface area"
     costs: "Costs"
     costs_per_hectare: "Costs per hectare"
+    countings: "Countings"
     counts: "Counts"
     counts_by_nature: "Number of documents to account per type"
     create: "Create"
     create_journal: "— Create journal —"
-    create_or_import_equipments: "Create or import equipments"
+    create_or_import_equipments: "Create or import equipment"
     create_or_import_incoming_parcels: "Create or import incoming parcels"
     create_or_import_interventions: "Create or import interventions"
     create_or_import_workers: "Create or import workers"
@@ -972,7 +969,7 @@ eng:
     cropping_plan_on_cultivable_zones: "Cropping plan on cultivable zones"
     crumbs: "Crumbs" #?
     cultivable_zone: "Cultivable zone" #?
-    cultivable_zones: "Cultivable zones" #?
+    cultivable_zones: "arable areas" #?
     cumul: "Accumulation of tattle and previous balance N°%{number}" #?
     current: "Current" #?
     current_cultivation: "Current cultivation"
@@ -993,7 +990,6 @@ eng:
     deformity_percentage: "Deformity (%)" #?
     deformity_percentage_evolution: "Deformity percentage evolution"
     delete: "Delete"
-    delete_shape: "Delete form" #??
     deliver: "Delivered on" #?
     deliveries: "Deliveries" #?
     delivery: "Delivery" #?
@@ -1031,7 +1027,6 @@ eng:
     duration: "Duration"
     duration_in_hours_and_minutes: "%{hours}h %{minutes}min"
     during: "During"
-    earns: "Earns" #?!
     edit: "Edit"
     edit_budget: "Edit budget"
     ekylibre: "www.ekylibre.org" #?
@@ -1045,7 +1040,8 @@ eng:
     entries_to_point: "Entries pointing to"
     entry_items: "Entry items"
     equipment: "Equipment" #?
-    equipments: "Equipments"
+    equipment_name: "Name of equipment" #?
+    equipments: "Equipment"
     error: "Sorry..."
     error_no_file: "No help is available for this part of the application (%{article}). Help has not yet been written. You can visit online website for more information."
     errors_explanation: "There are errors in the file. If you do not correct them, the incorrect lines will be ignored during the import."
@@ -1094,7 +1090,7 @@ eng:
     group: "Group" #?
     groups: "Groups"
     guide_evolution: "Guide evolution"
-    harvested_at: "Harvested at"
+    harvested_at: "Harvested at" #?
     help: "Help"
     help_center: "Help center"
     hint: "Hint: %{value}" #?
@@ -1105,7 +1101,7 @@ eng:
     identification: "Identification"
     identifiers: "Identifiers"
     illness: "Illness"
-    implanted_at: "Implanted at"
+    implanted_at: "Implanted at" #?
     import: "Import"
     importation_explanation: "Importation explanation"
     inactive: "Inactive" #?
@@ -1119,12 +1115,10 @@ eng:
     indicator_value: "Indicator value"
     indicators: "Indicators"
     indicators_evolutions: "Indicators evolutions"
-    indirect_expenses: "Indirect charges" #?!
     info: "General parameters" #?
     infos: "Product and quantity" #?
     initial_balance_of_bank_statement: "Initial balance of bank statement"
     input_cost: "Input cost"
-    input_cost_per_hectare: "Input cost per hectare" #?!
     inputs: "Inputs"
     inspections: "Inspections"
     internal_error: "Oops, something happened."
@@ -1225,7 +1219,6 @@ eng:
     nature: "Type"
     nature_changed: "Le type des animaux a changé"
     natures: "Types" #?
-    net_margin: "Net margin" #?!
     net_mass: "Net mass"
     net_surface_area: "Net surface area"
     new: "New" #?
@@ -1307,7 +1300,6 @@ eng:
     participations: "Participations"
     parts: "Modules" #?
     password: "Password" #?
-    paths_to_convert: "Paths to convert" #?!
     payable_taxes: "Payable taxes"
     payment_amount: "Amount of payment" #?
     payment_at: "Payment on" #?
@@ -1365,7 +1357,6 @@ eng:
     quandl: "Quandl" #?
     quantity: "Quantity" #?
     query: "Query:" #?
-    raw_margin: "Raw margin" #?!
     reading_tasks: "Reading tasks" #?
     readings: "Readings"
     ready: "Ready"
@@ -1456,8 +1447,6 @@ eng:
     stock_in_ground_by_calibration: "Stocks in ground by calibration"
     stock_of_x: "Stock of %{x}"
     stocks: "Stocks"
-    stocks_by_calibrations: "Stocks by calibrations" #?!
-    stocks_in_ground: "Stock in ground" #?!
     stop: "Stop" #?
     stopped: "Stopped"
     storage: "Storage" #?
@@ -1508,7 +1497,6 @@ eng:
     total: "Total"
     total_amount: "Total amount" #?
     total_cost: "Total cost"
-    total_earn: "Total earn" #?!
     total_in_currency: "Total (%{currency})"
     total_pretax_expenses: "Total pre-tax expenses"
     total_pretax_revenues: "Total pre-tax revenues"

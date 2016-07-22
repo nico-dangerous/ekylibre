@@ -1,5 +1,21 @@
-(($) ->
+#= require_self
+#= require mapeditor/simple
+
+((M, $) ->
   "use strict"
+
+
+  M.layer = (layer, data, options) ->
+    @layerTypes ?= {}
+    if type = @layerTypes[layer.type]
+      return new type(layer, data, options)
+    else
+      console.warn "Invalid layer type: #{layer.type}"
+      return null
+
+  M.registerLayerType = (name, klass) ->
+    @layerTypes ?= {}
+    @layerTypes[name] = klass
 
   # allow to inject jquery objects and interpolate
   L.Map.Modal.prototype.reloadContent = (content) ->
@@ -27,11 +43,28 @@
         width: null
       customClass: ''
       back: []
-      show: null
+      show:
+        layers: {}
+        layerDefaults:
+          simple:
+            color: "#333"
+            fillColor: "#333"
+            weight: 2
+            opacity: 0.8
+            fillOpacity: 0.4
+            legend: true
+          categories:
+            color: "#333"
+            fillColor: "#333"
+            weight: 2
+            opacity: 0.8
+            fillOpacity: 0.4
+            legend: true
       edit: null
       change: null
       view: 'auto'
       useFeatures: false
+      withoutLabel: false
       showStyle:
         color: "#333"
         fillOpacity: 0.4
@@ -127,6 +160,7 @@
       @ghostLayerLabelCluster = L.ghostLabelCluster(type: 'hidden')
       @ghostLayerLabelCluster.addTo @map
 
+
       this.map.on "draw:created", (e) =>
         #Attempt to add a geojson feature
         try
@@ -154,11 +188,11 @@
       this._resize()
       # console.log "resized"
       this._refreshBackgroundLayer()
+      this._refreshGhostLayerGroup()
       # console.log "backgrounded"
       this._refreshReferenceLayerGroup()
       # console.log "shown"
       this._refreshEditionLayerGroup()
-      this._refreshGhostLayerGroup()
 
       # console.log "edited"
       this._refreshView()
@@ -179,7 +213,12 @@
         for field in $newFields
           this.updateFeatureProperties(featureId, $(field).attr('name'), $(field).val())
 
-        layer.invoke('closePopup')
+
+        if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
+          layer.invoke('closePopup')
+        else
+          layer.closePopup()
+
         this.popupizeSerie layer.feature, layer
 
 
@@ -264,18 +303,11 @@
 
     findLayer: (feature_id) ->
       containerLayer = undefined
-      if this.edition?
-        this.edition.eachLayer (layer) =>
-          if (parseInt(layer.feature.properties.internal_id) == feature_id)
-            containerLayer = layer
-            return
-      if this.seriesReferencesLayers?
-        for layerGroup in this.seriesReferencesLayers
-          layerGroup.serie.eachLayer (layer) =>
-            if (parseInt(layer.feature.properties.internal_id) == feature_id)
-              containerLayer = layer
-              return
-      return containerLayer
+      @map.eachLayer (layer) =>
+        if layer.feature and (parseInt(layer.feature.properties.internal_id) == feature_id)
+          containerLayer = layer
+          return
+      containerLayer
 
     findLayerByName: (feature_name) ->
       containerLayer = undefined
@@ -438,17 +470,12 @@
           console.log this.options.back
       this
 
-    addSerie: (serie) ->
-      @options.popupAttributes = serie.options.popup
-      featureCollection = L.geoJson(serie.data, {
-        onEachFeature: (feature, layer) =>
-          feature.properties['internal_id'] = new Date().getTime()
-          feature.properties['popupAttributes'] = @options.popupAttributes || []
-          this.popupizeSerie(feature, layer)
-
-      })
-
-      {title: serie.title || '', serie: featureCollection, options: {center: serie.options.center, style: $.extend(true, {},  this.options.showStyle, serie.options.style || {}) }}
+    # Retuns data from a serie found with the given name
+    _getSerieData: (name) ->
+      if @options.show.series[name]?
+        return @options.show.series[name]
+      else
+        console.error "Cannot find serie #{name}"
 
     _refreshReferenceLayerGroup: ->
       if this.reference?
@@ -458,19 +485,27 @@
         if this.options.useFeatures
 
           if @options.show.series?
-            # reference layer is used only for visualisation (not edition)
-            @seriesReferencesLayers = []
-            for serie in @options.show.series
-              @seriesReferencesLayers.push @addSerie serie
 
-            for layer_group in @seriesReferencesLayers
-              layer_group.serie.setStyle layer_group.options.style
-              layer_group.serie.addTo @map
+            @seriesReferencesLayers = {}
+
+            for layer in @options.show.layers
+
+              data = this._getSerieData(layer.serie)
+              options = $.extend true, {}, @options.show.layerDefaults[layer.type], layer, parent: this
+              renderedLayer = M.layer(layer, data, options)
+              if renderedLayer and renderedLayer.valid()
+                # Build layer group
+                layerGroup = renderedLayer.buildLayerGroup(this, options)
+                layerGroup.name = layer.name
+                layerGroup.renderedLayer = renderedLayer
+                @seriesReferencesLayers[layer.label] = layerGroup
+                @map.addLayer(layerGroup)
+
           else
 
             this.reference = L.geoJson(this.options.show, {
               onEachFeature: (feature, layer) =>
-
+                feature.properties ||= {}
                 #required for cap_land_parcel_clusters as names are set later
                 if not feature.properties.name?
                   feature.properties.name = if feature.properties.id? then "#{this.options.defaultEditionFeaturePrefix}#{feature.properties.id}" else this.defaultLabel
@@ -479,7 +514,7 @@
         else
           this.reference = L.GeoJSON.geometryToLayer(this.options.show)
 
-        if reference?
+        if this.reference?
           this.reference.setStyle this.options.showStyle
           this.reference.addTo this.map
       this
@@ -515,9 +550,9 @@
         this.counter += 1
         feature.properties['level'] = 0 if this.options.multiLevels? and not feature.properties.level?
 
-        label = new L.GhostLabel(className: 'leaflet-ghost-label').setContent(feature.properties.name || feature.properties.id).toCentroidOfBounds(layer.getLatLngs())
-
-        @ghostLabelCluster.bind label, layer
+        unless this.options.withoutLabel
+          label = new L.GhostLabel(className: 'leaflet-ghost-label').setContent(feature.properties.name || feature.properties.id).toCentroidOfBounds(layer.getLatLngs())
+          @ghostLabelCluster.bind label, layer
 
 
       $(this.element).trigger('mapeditor:feature_add', feature)
@@ -535,10 +570,13 @@
 
     _refreshEditionLayerGroup: ->
       if this.edition?
+        #remove overlay
+        @layerSelector.removeLayer this.edition
         this.map.removeLayer this.edition
       if this.options.edit?
         if this.options.useFeatures
 
+          polys = []
           this.edition = L.geoJson(this.options.edit, {
             onEachFeature: (feature, layer) =>
               #nested function cause geojson doesn't seem to pass binding context
@@ -546,7 +584,13 @@
 
             style: (feature) =>
               @featureStyling feature
+            filter: (feature) =>
+              if feature.type == 'MultiPolygon'
+                for coordinates in feature.coordinates
+                  polys.push {type: 'Polygon', coordinates: coordinates}
+              !(feature.type == 'MultiPolygon')
           })
+          this.edition.addData(polys)
         else
           this.edition = L.GeoJSON.geometryToLayer(this.options.edit)
       else
@@ -584,26 +628,6 @@
 
         html += "<i class='active' style='background-color: #{color}' title='#{label}'></i>"
         html += "<span>#{label}</span>"
-        html += "</div>"
-        html += "</div>"
-
-      return html
-
-    buildSeriesLegend: (serieReferenceLayers) ->
-      html = ""
-
-      for layerGroup in serieReferenceLayers
-
-        html += "<div class='leaflet-legend-item'>"
-        html += "<div class='leaflet-legend-body leaflet-categories-scale'>"
-        html += "<span class='leaflet-categories-items'>"
-        html += "<span class='leaflet-categories-item'>"
-
-
-        html += "<i class='active leaflet-categories-sample' style='background-color: #{layerGroup.options.style.color}' title='#{layerGroup.title}'></i>"
-        html += "<span class='leaflet-categories-item_label'>#{layerGroup.title}</span>"
-        html += "</span>"
-        html += "</span>"
         html += "</div>"
         html += "</div>"
 
@@ -730,58 +754,71 @@
         this.map.addControl this.controls.reactiveMeasureControl
 
 
-      if this.options.multiLevels? or @seriesReferencesLayers?
-        this.controls.legend = new L.control(position: "bottomright")
-        this.controls.legend.onAdd = (map) =>
-          L.DomUtil.create('div', 'leaflet-legend-control')
 
-        this.map.addControl this.controls.legend
-        legend = this.controls.legend.getContainer()
+      this.controls.legend = new L.control(position: "bottomright")
+      this.controls.legend.onAdd = (map) =>
+        L.DomUtil.create('div', 'leaflet-legend-control')
 
-        if @seriesReferencesLayers?
-          legend.innerHTML += this.buildSeriesLegend(@seriesReferencesLayers)
+      this.map.addControl this.controls.legend
 
 
-        if this.options.multiLevels?
+      if this.options.multiLevels?
+        legend = @controls.legend.getContainer()
 
-          legend.innerHTML += this.buildMultiLevelLegend(this.edition)
+        legend.innerHTML += this.buildMultiLevelLegend(this.edition)
 
-          $(legend).on 'click', '.leaflet-multilevel-legend', (e) =>
-            e.preventDefault()
-            level = $(e.currentTarget).data('level')
-            if level?
-              this.edition.eachLayer (layer) =>
-                if parseInt(layer.feature.properties.level) == level
-                  shape = $(layer._container)
-                  shape.toggle()
-                  $(e.currentTarget).children('i').toggleClass('active')
+        $(legend).on 'click', '.leaflet-multilevel-legend', (e) =>
+          e.preventDefault()
+          level = $(e.currentTarget).data('level')
+          if level?
+            this.edition.eachLayer (layer) =>
+              if parseInt(layer.feature.properties.level) == level
+                shape = $(layer._container)
+                shape.toggle()
+                $(e.currentTarget).children('i').toggleClass('active')
 
       if @options.overlaySelector?
 
         @map.on "overlayadd", (event) =>
-          console.log 'overlayAdd', event.name
-          if event.name == @options.overlaySelector.ghostLayer
-            @map.eachLayer (layer) =>
-              if layer.options? and layer.options.className == "leaflet-ghost-label"
-                label = $(layer._container)
-                label.show()
+
+          @layersScheduler.schedule event.layer
+
+          # for each layer in the layerGroup
+          event.layer.eachLayer (layer) =>
+            @ghostLabelCluster.bind layer.label, layer unless layer.label is undefined
+          @ghostLabelCluster.refresh()
+
 
         @map.on "overlayremove", (event) =>
-          if event.name == @options.overlaySelector.ghostLayer
-            @map.eachLayer (layer) =>
-              if layer.options? and layer.options.className == "leaflet-ghost-label"
-                label = $(layer._container)
-                label.hide()
 
+          event.layer.eachLayer (layer) =>
+            @ghostLabelCluster.removeLayer target: { label: layer.label } unless layer.label is undefined
+          @ghostLabelCluster.refresh()
+
+        @layersScheduler = L.layersScheduler()
+        @layersScheduler.addTo @map
         selector = @layerSelector || new L.Control.Layers()
-        selector.addOverlay(@ghost, @options.overlaySelector.ghostLayer) if @ghost? and @ghost.getLayers().length > 0
-        selector.addOverlay(@reference, @options.overlaySelector.referenceLayer) if @reference? and @reference.getLayers().length > 0
-        selector.addOverlay(@edition, @options.overlaySelector.editionLayer) if @edition? and @edition.getLayers().length > 0
+
+        if @ghost? and @ghost.getLayers().length
+          selector.addOverlay(@ghost, @options.overlaySelector.ghostLayer)
+          @layersScheduler.insert @ghost._leaflet_id, back: true
+
+        if @reference? and @reference.getLayers().length > 0
+          selector.addOverlay(@reference, @options.overlaySelector.referenceLayer)
+          @layersScheduler.insert @reference._leaflet_id
+
 
         if @seriesReferencesLayers?
-          for layerGroup in @seriesReferencesLayers
-            if layerGroup.serie.getLayers().length > 0
-              selector.addOverlay(layerGroup.serie, layerGroup.title)
+          for label, layer of @seriesReferencesLayers
+            selector.addOverlay(layer, label)
+            @layersScheduler.insert layer._leaflet_id
+            @controls.legend.getContainer().innerHTML += layer.renderedLayer.buildLegend() if layer.renderedLayer.options.legend
+
+
+        if @edition? and @edition.getLayers().length > 0
+          selector.addOverlay(@edition, @options.overlaySelector.editionLayer)
+          @layersScheduler.insert @edition._leaflet_id
+
 
     _saveUpdates: ->
       if this.edition?
@@ -811,4 +848,4 @@
     $("input[data-map-editor]").each ->
       $(this).mapeditor()
 
-) jQuery
+) mapeditor, jQuery

@@ -78,6 +78,10 @@ eng:
         unitary_in_parcel: "Unitary items can only be sent one by one"
         wrong_length: "%{attribute} is the wrong length (should be %{count} characters)"
       models:
+        bank_statement:
+          no_cash_match_ofx: "No cash found for the bank account number given in the file"
+          ofx_file_has_multiple_bank_accounts: "OFX file with multiple bank accounts is not supported"
+          ofx_file_invalid: "OFX file is invalid"
         bank_statement_item:
           unvalid_amounts: "The journal entry must be filled either debit or credit but not at the same time."
         cash:
@@ -440,6 +444,7 @@ eng:
     coordinate: "Coordinate"
     coordinate_columns: "Coordinate columns"
     costs_per_unit: "Costs per %{unit}" #?
+    # counting: "Counting"
     country: "Country"
     created_at: "Created at"
     creator: "Creator"
@@ -477,6 +482,7 @@ eng:
     current_supports: "Current supports"
     custom_field: "Custom field"
     custom_fields: "Custom fields"
+    # custom_fields_columns: "Custom fields columns"
     customized_type: "Customized type"
     daily_nitrogen_production: "Daily nitrogen production"
     dashboards: "Dashboards"
@@ -576,6 +582,7 @@ eng:
     exploitation_name: "Exploitation name"
     exportable: "Exportable"
     exportable_columns: "Exportable columns"
+    # exportable_fields: "Exportable fields"
     external: "External"
     failed_attempts: "Failed attempts"
     family: "Family"

@@ -288,6 +288,8 @@ module Backend
       editor[:controls][:importers] ||= { formats: [:gml, :kml, :geojson], title: :import.tl, okText: :import.tl, cancelText: :close.tl }
       editor[:controls][:importers][:content] ||= @template.importer_form(editor[:controls][:importers][:formats])
 
+      editor[:withoutLabel] = true
+
       geom = @object.send(attribute_name)
       if geom
         editor[:edit] = Charta.new_geometry(geom).to_json_object
@@ -304,8 +306,12 @@ module Backend
         show ||= @object.class.where.not(attribute_name => nil)
         union = Charta.empty_geometry
         if show.any?
-          union = show.geom_union(attribute_name)
-          editor[:show] = union.to_json_object unless union.empty?
+          if show.is_a?(Hash) && show.key?(:series)
+            editor[:show] = show
+          else
+            union = show.geom_union(attribute_name)
+            editor[:show] = union.to_json_object unless union.empty?
+          end
         end
       end
       editor[:back] ||= MapBackground.availables.collect(&:to_json_object)
@@ -464,8 +470,8 @@ module Backend
           # Add variant selector
           fs << variety(scope: variant)
 
-          fs << input(:initial_born_at, label: Product.human_attribute_name(:born_at))
-          fs << input(:initial_dead_at, label: Product.human_attribute_name(:dead_at))
+          fs << input(:born_at)
+          fs << input(:dead_at)
 
           # error message for indicators
           if Rails.env.development?

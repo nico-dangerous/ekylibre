@@ -47,7 +47,7 @@ class BankStatement < Ekylibre::Record::Base
   has_many :items, class_name: 'BankStatementItem', dependent: :destroy, inverse_of: :bank_statement
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :started_on, :stopped_on, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.today + 50.years }, type: :date }
-  validates_datetime :stopped_on, allow_blank: true, on_or_after: :started_on, if: ->(bank_statement) { bank_statement.stopped_on && bank_statement.started_on }
+  validates :stopped_on, timeliness: { allow_blank: true, on_or_after: :started_on }, if: ->(bank_statement) { bank_statement.stopped_on && bank_statement.started_on }
   validates :credit, :debit, :initial_balance_credit, :initial_balance_debit, numericality: { allow_nil: true }
   validates :cash, :credit, :currency, :debit, :initial_balance_credit, :initial_balance_debit, :number, :started_on, :stopped_on, presence: true
   # ]VALIDATORS]
@@ -56,12 +56,15 @@ class BankStatement < Ekylibre::Record::Base
 
   accepts_nested_attributes_for :items, reject_if: proc { |params| params['name'].blank? && params['transfered_on'].blank? && params['debit'].to_f.zero? && params['credit'].to_f.zero? }, allow_destroy: true
 
+  accepts_nested_attributes_for :items, allow_destroy: true
+
   delegate :name, :currency, :account_id, :next_reconciliation_letters, to: :cash, prefix: true
 
   before_validation do
     self.currency = cash_currency if cash
-    self.debit  = items.sum(:debit)
-    self.credit = items.sum(:credit)
+    active_items = items.to_a.delete_if(&:marked_for_destruction?)
+    self.debit  = active_items.map(&:debit).compact.sum
+    self.credit = active_items.map(&:credit).compact.sum
     self.initial_balance_debit ||= 0
     self.initial_balance_credit ||= 0
   end
@@ -82,6 +85,16 @@ class BankStatement < Ekylibre::Record::Base
     if initial_balance_debit != 0 && initial_balance_credit != 0
       errors.add(:initial_balance_credit, :unvalid_amounts)
     end
+  end
+
+  before_save do
+    changed_reconciliated_items = items.select do |item|
+      reconciliated = item.letter.present?
+      debit_or_credit_changed = item.credit_changed? || item.debit_changed?
+      reconciliated && (debit_or_credit_changed || item.marked_for_destruction?)
+    end
+    reconciliated_letters_to_clear = changed_reconciliated_items.map(&:letter).uniq
+    clear_reconciliation_with_letters reconciliated_letters_to_clear
   end
 
   def balance_credit
@@ -152,5 +165,16 @@ class BankStatement < Ekylibre::Record::Base
       end
     end
     false
+  end
+
+  private
+
+  def clear_reconciliation_with_letters(letters)
+    return unless letters.any?
+    JournalEntryItem.where(bank_statement_letter: letters).update_all(
+      bank_statement_id: nil,
+      bank_statement_letter: nil
+    )
+    BankStatementItem.where(letter: letters).update_all(letter: nil)
   end
 end

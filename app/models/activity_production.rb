@@ -71,7 +71,7 @@ class ActivityProduction < Ekylibre::Record::Base
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :started_on, :stopped_on, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.today + 50.years }, type: :date }
-  validates_datetime :stopped_on, allow_blank: true, on_or_after: :started_on, if: ->(activity_production) { activity_production.stopped_on && activity_production.started_on }
+  validates :stopped_on, timeliness: { allow_blank: true, on_or_after: :started_on }, if: ->(activity_production) { activity_production.stopped_on && activity_production.started_on }
   validates :rank_number, numericality: { allow_nil: true, only_integer: true }
   validates :size_value, numericality: { allow_nil: true }
   validates :irrigated, :nitrate_fixing, inclusion: { in: [true, false] }
@@ -114,6 +114,9 @@ class ActivityProduction < Ekylibre::Record::Base
   scope :of_activity_families, lambda { |*families|
     where(activity: Activity.of_families(*families))
   }
+
+  scope :of_intervention, ->(intervention) { where(id: TargetDistribution.select(:activity_production_id).where(target_id: InterventionTarget.select(:product_id).where(intervention_id: intervention.id))) }
+
   scope :current, -> { where(':now BETWEEN COALESCE(started_on, :now) AND COALESCE(stopped_on, :now)', now: Time.zone.now) }
 
   state_machine :state, initial: :opened do
@@ -479,17 +482,20 @@ class ActivityProduction < Ekylibre::Record::Base
                           surface_unit_name: surface_unit_name)
   end
 
-  # call method in production for instance
-  def estimate_yield(options = {})
+  # TODO: Which yield is computed? usage is not very good to determine yields
+  #   because many yields can be computed...
+  def estimate_yield(campaign, options = {})
+    variety = options.delete(:variety)
     # compute variety for estimate yield
     if usage == 'grain' || usage == 'seed'
-      options[:variety] ||= 'grain'
+      variety ||= 'grain'
     elsif usage == 'fodder' || usage == 'fiber'
-      options[:variety] ||= 'grass'
+      variety ||= 'grass'
     end
     # get current campaign
-    options[:campaign] ||= campaign
-    activity.estimate_yield_from_budget_of(options)
+    budget = activity.budget_of(campaign)
+    return nil unless budget
+    budget.estimate_yield(variety, options)
   end
 
   def current_cultivation

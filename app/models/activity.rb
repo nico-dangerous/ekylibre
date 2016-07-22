@@ -76,6 +76,7 @@ class Activity < Ekylibre::Record::Base
     has_many :distributions, class_name: 'ActivityDistribution'
     has_many :productions, class_name: 'ActivityProduction'
     has_many :inspections, class_name: 'Inspection'
+    has_one :counting, class_name: 'PlantDensityAbacus'
     has_many :inspection_point_natures, class_name: 'ActivityInspectionPointNature'
     has_many :inspection_calibration_scales, class_name: 'ActivityInspectionCalibrationScale'
     has_many :inspection_calibration_natures, class_name: 'ActivityInspectionCalibrationNature', through: :inspection_calibration_scales, source: :natures
@@ -126,6 +127,7 @@ class Activity < Ekylibre::Record::Base
   accepts_nested_attributes_for :distributions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :inspection_point_natures, allow_destroy: true
   accepts_nested_attributes_for :inspection_calibration_scales, allow_destroy: true
+  accepts_nested_attributes_for :counting, allow_destroy: true, update_only: true, reject_if: -> (par) { par[:use_countings].blank? }
 
   # protect(on: :update) do
   #   productions.any?
@@ -211,30 +213,6 @@ class Activity < Ekylibre::Record::Base
       end
     else
       distributions.clear
-    end
-  end
-
-  # return estimate yield from first budget in revenus item for given variety
-  def estimate_yield_from_budget_of(options = {})
-    # set default parameter if theres no one given
-    options[:unit] ||= :quintal_per_hectare
-    options[:variety] ||= 'grain'
-
-    activity_working_unit = size_unit_name
-    target_variety = Nomen::Variety[options[:variety]]
-
-    selected_budget = budget_of(options[:campaign])
-    if selected_budget
-      r = []
-      selected_budget.revenues.each do |item|
-        item_unit = "#{item.variant_unit}_per_#{activity_working_unit}" if activity_working_unit
-        if item.variant && item.variant_unit && Nomen::Variety[item.variant.variety] <= target_variety
-          r << item.quantity.in(item_unit).convert(options[:unit])
-        end
-      end
-      return r.compact.sum
-    else
-      return nil
     end
   end
 

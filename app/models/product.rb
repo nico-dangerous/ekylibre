@@ -230,13 +230,13 @@ class Product < Ekylibre::Record::Base
   validate :dead_at_in_interventions, if: ->(product) { product.dead_at? && product.interventions.pluck(:stopped_at).any? }
 
   def born_at_in_interventions
-    first_date = interventions.pluck(:stopped_at).sort.first
-    errors.add(:born_at, :invalid) unless born_at <= first_date
+    first_used_at = interventions.order(started_at: :asc).first.started_at
+    errors.add(:born_at, :on_or_before, restriction: first_used_at.l) if born_at > first_used_at
   end
 
   def dead_at_in_interventions
-    last_date = interventions.pluck(&:stopped_at).sort.last
-    errors.add(:dead_at, :invalid) unless dead_at >= last_date
+    last_used_at = interventions.order(stopped_at: :desc).first.stopped_at
+    errors.add(:dead_at, :on_or_after, restriction: last_used_at.l) if dead_at < last_used_at
   end
 
   accepts_nested_attributes_for :readings, allow_destroy: true, reject_if: lambda { |reading|
@@ -285,12 +285,12 @@ class Product < Ekylibre::Record::Base
       errors.add(:dead_at, :invalid) if dead_at < born_at
     end
     if variant
-      if variety
+      if variety && Nomen::Variety.find(variant_variety)
         unless Nomen::Variety.find(variant_variety) >= variety
           errors.add(:variety, :invalid)
         end
       end
-      if derivative_of
+      if derivative_of && Nomen::Variety.find(variant_derivative_of)
         unless Nomen::Variety.find(variant_derivative_of) >= derivative_of
           errors.add(:derivative_of, :invalid)
         end
@@ -661,6 +661,24 @@ class Product < Ekylibre::Record::Base
       list << variable
     end
     list
+  end
+
+  # Override net_surface_area indicator to compute it from shape if
+  # product has shape indicator unless options :strict is given
+  def net_surface_area(options = {})
+    # TODO: Manage global preferred surface unit or system
+    area_unit = options[:unit] || :hectare
+    if !options.keys.detect { |k| [:gathering, :interpolate, :cast].include?(k) } &&
+       has_indicator?(:shape) && !options[:compute].is_a?(FalseClass)
+      unless options[:strict]
+        options[:at] = born_at if born_at && born_at > Time.zone.now
+      end
+      shape = get(:shape, options)
+      area = shape.area.in(area_unit).round(3) if shape
+    else
+      area = get(:net_surface_area, options)
+    end
+    area || 0.in(area_unit)
   end
 
   # Returns working duration of a product

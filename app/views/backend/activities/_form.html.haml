@@ -17,7 +17,7 @@
     = f.input :size_unit_name
   = f.input :description
   = f.custom_fields
-  = f.input :use_countings
+  = f.input :use_countings, show: '#countings'
   = f.input :use_gradings, show: '#inspections'
 
 = field_set(:inspections) do
@@ -35,6 +35,13 @@
     = f.nested_association(:inspection_point_natures)
 
     = f.nested_association(:inspection_calibration_scales)
+
+= field_set(:countings) do
+  #countings
+    - f.object.build_counting unless f.object.counting
+    = f.simple_fields_for :counting do |g|
+      = render "backend/plant_density_abaci/form", f: g
+
 
 .auxiliary-nature-options
   = field_set(Activity.human_attribute_name(:distributions)) do
