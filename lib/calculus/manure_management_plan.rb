@@ -43,8 +43,3 @@ module Calculus
     end
   end
 end
-
-require 'calculus/manure_management_plan/method'
-require 'calculus/manure_management_plan/external'
-
-Calculus::ManureManagementPlan.register_method :external, 'Calculus::ManureManagementPlan::External'

@@ -22,32 +22,20 @@
 #
 # == Table: manure_management_plan_zones
 #
-#  absorbed_nitrogen_at_opening                    :decimal(19, 4)
-#  activity_production_id                          :integer          not null
-#  administrative_area                             :string
-#  computation_method                              :string           not null
-#  created_at                                      :datetime         not null
-#  creator_id                                      :integer
-#  cultivation_variety                             :string
-#  expected_yield                                  :decimal(19, 4)
-#  humus_mineralization                            :decimal(19, 4)
-#  id                                              :integer          not null, primary key
-#  intermediate_cultivation_residue_mineralization :decimal(19, 4)
-#  irrigation_water_nitrogen                       :decimal(19, 4)
-#  lock_version                                    :integer          default(0), not null
-#  maximum_nitrogen_input                          :decimal(19, 4)
-#  meadow_humus_mineralization                     :decimal(19, 4)
-#  mineral_nitrogen_at_opening                     :decimal(19, 4)
-#  nitrogen_at_closing                             :decimal(19, 4)
-#  nitrogen_input                                  :decimal(19, 4)
-#  nitrogen_need                                   :decimal(19, 4)
-#  organic_fertilizer_mineral_fraction             :decimal(19, 4)
-#  plan_id                                         :integer          not null
-#  previous_cultivation_residue_mineralization     :decimal(19, 4)
-#  soil_nature                                     :string
-#  soil_production                                 :decimal(19, 4)
-#  updated_at                                      :datetime         not null
-#  updater_id                                      :integer
+#  activity_production_id :integer          not null
+#  administrative_area    :string
+#  approach_name          :string
+#  computation_method     :string           not null
+#  created_at             :datetime         not null
+#  creator_id             :integer
+#  cultivation_variety    :string
+#  expected_yield         :decimal(19, 4)
+#  id                     :integer          not null, primary key
+#  lock_version           :integer          default(0), not null
+#  plan_id                :integer          not null
+#  soil_nature            :string
+#  updated_at             :datetime         not null
+#  updater_id             :integer
 #
 class ManureManagementPlanZone < Ekylibre::Record::Base
   belongs_to :plan, class_name: 'ManureManagementPlan', inverse_of: :zones
@@ -60,7 +48,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   refers_to :cultivation_variety, class_name: 'Variety'
   refers_to :administrative_area
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates :absorbed_nitrogen_at_opening, :expected_yield, :humus_mineralization, :intermediate_cultivation_residue_mineralization, :irrigation_water_nitrogen, :maximum_nitrogen_input, :meadow_humus_mineralization, :mineral_nitrogen_at_opening, :nitrogen_at_closing, :nitrogen_input, :nitrogen_need, :organic_fertilizer_mineral_fraction, :previous_cultivation_residue_mineralization, :soil_production, numericality: { allow_nil: true }
+  validates :expected_yield, numericality: { allow_nil: true }
   validates :activity_production, :computation_method, :plan, presence: true
   # ]VALIDATORS]
   validates :soil_nature, presence: true
@@ -152,10 +140,6 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
       return nil
     end
     item
-  end
-
-  def define_computation_method
-    Approach.get_relevant_approach(support_shape)
   end
 
 end

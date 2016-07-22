@@ -176,8 +176,8 @@ module Backend
     def compute
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
       @manure_management_plan.zones.each do |zone|
-        method = zone.define_computation_method
-
+        approach =
+        zone.approach_name =  Approach.get_relevant_approach(zone.support_shape).name
       end
     end
   end

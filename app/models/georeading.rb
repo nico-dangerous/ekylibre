@@ -38,6 +38,7 @@
 class Georeading < Ekylibre::Record::Base
   acts_as_numbered
   enumerize :nature, in: [:point, :linestring, :polygon], predicates: true
+  enumerize :kind, in: [:well, :water, :drinkingwater, :bathing_place, :shellfish_waters, :steep_slopes]
   has_geometry :content
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :content, :name, :nature, presence: true
