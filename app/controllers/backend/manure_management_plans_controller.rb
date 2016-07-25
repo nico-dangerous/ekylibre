@@ -33,8 +33,6 @@ module Backend
       t.column :campaign, url: true
       t.column :recommender, url: true
       t.column :opened_at, hidden: true
-      t.column :default_computation_method, hidden: true
-      t.column :selected, hidden: true
       t.column :annotation
     end
 
@@ -59,14 +57,14 @@ module Backend
     def new
       #check if manure_management_plan already exists
       mmp = ManureManagementPlan.of_campaign(current_campaign).first
+
       redirect_to action: :edit, id: mmp.id unless mmp.nil?
       need_soil_nature_form = false
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
                                                          :opened_at => Time.new(current_campaign.harvest_year,2,1).to_datetime,
-                                                         :default_computation_method => "something",
                                                          :recommender_id => current_user.person_id,
-                                                          :name => "MMP " + current_campaign["harvest_year"].to_s)
-       ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
+                                                         :name => "MMP " + current_campaign["harvest_year"].to_s)
+      ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
          admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
          admin_area_name = admin_area.name unless admin_area.nil?
          zone = @manure_management_plan.zones.new(
@@ -74,10 +72,11 @@ module Backend
             :soil_nature => activity_production.support.estimated_soil_nature,
             :cultivation_variety => activity_production.cultivation_variety,
             :administrative_area => admin_area_name,
-            :computation_method => :percentage
          )
          if zone.soil_nature.nil? then need_soil_nature_form = true end
-       end
+      end
+
+
       render :create unless need_soil_nature_form
     end
 
@@ -109,7 +108,7 @@ module Backend
         if id.nil?
 
           georeading = Georeading.new
-          georeading.content = geojson
+          georeading.content = Charta.new_geometry(geojson)
           georeading.name = rgeo_feature.properties["name"]
           georeading.kind = rgeo_feature.properties["kind"] || ManureManagementPlan.manure_georeading_types.first
           georeading.nature = rgeo_feature.geometry.geometry_type.type_name.lower
@@ -176,8 +175,7 @@ module Backend
     def compute
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
       @manure_management_plan.zones.each do |zone|
-        approach =
-        zone.approach_name =  Approach.get_relevant_approach(zone.support_shape).name
+        zone.approach_name = Approach.get_relevant_approach(zone.support_shape).name
       end
     end
   end

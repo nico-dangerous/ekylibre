@@ -25,7 +25,6 @@
 #  activity_production_id :integer          not null
 #  administrative_area    :string
 #  approach_name          :string
-#  computation_method     :string           not null
 #  created_at             :datetime         not null
 #  creator_id             :integer
 #  cultivation_variety    :string
@@ -49,15 +48,13 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   refers_to :administrative_area
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :expected_yield, numericality: { allow_nil: true }
-  validates :activity_production, :computation_method, :plan, presence: true
+  validates :activity_production, :plan, presence: true
   # ]VALIDATORS]
   validates :soil_nature, presence: true
 
   delegate :locked?, :opened_at, to: :plan
   delegate :name, to: :cultivable_zone
   delegate :support_shape, to: :activity_production
-
-  scope :selecteds, -> { joins(:plan).merge(ManureManagementPlan.selecteds) }
 
   protect do
     locked?

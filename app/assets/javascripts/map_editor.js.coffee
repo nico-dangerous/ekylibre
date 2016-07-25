@@ -137,6 +137,7 @@
     _create: ->
       this.oldElementType = this.element.attr "type"
       this.element.attr "type", "hidden"
+
       $.extend(true, this.options, this.element.data("map-editor"))
 
       this.mapElement = $("<div>", class: "map #{this.options.customClass}")
@@ -206,13 +207,10 @@
         featureId = $(e.currentTarget).closest('.leaflet-popup-content').find('*[data-internal-id]').data('internal-id')
         $newFields = $(e.currentTarget).closest('.popup-content').find('.updateAttributesSerieLabelInput')
 
-
         layer = this.findLayer(featureId)
-        console.log layer
-        console.log featureId
+
         for field in $newFields
           this.updateFeatureProperties(featureId, $(field).attr('name'), $(field).val())
-
 
         if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
           layer.invoke('closePopup')
@@ -220,6 +218,8 @@
           layer.closePopup()
 
         this.popupizeSerie layer.feature, layer
+
+
 
 
       @updateAttributes = (e) =>
@@ -377,7 +377,7 @@
 
       popup += "<input class='updateAttributesSerieInPopup' type='button' value='ok'/>"
       popup += "</div>"
-      console.log layer
+
       layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
 
     colorize: (level) ->
@@ -480,8 +480,7 @@
     _refreshReferenceLayerGroup: ->
       if this.reference?
         this.map.removeLayer this.reference
-
-      if this.options.series?
+      if this.options.show?
         if this.options.useFeatures
 
           if @options.show.series?
@@ -634,7 +633,6 @@
       return html
 
     _refreshView: (view) ->
-
       view ?= this.options.view
       if view is 'auto'
         try
@@ -657,11 +655,6 @@
           this.map.fitBounds this.edition.getLayers()[0].getBounds()
          catch
            this._setDefaultView()
-      else if view is 'series' and this.seriesReferencesLayers?
-        for layergroup in this.seriesReferencesLayers
-          if layergroup.options.center? and layergroup.options.center
-            this.map.fitBounds layergroup.serie.getBounds()
-            break
       else if view is 'default'
         this._setDefaultView()
       else if view.center?

@@ -13,7 +13,10 @@ class RemoveNColumnsFromManureManagementPlanZone < ActiveRecord::Migration
     remove_column :manure_management_plan_zones, :intermediate_cultivation_residue_mineralization, :decimal
     remove_column :manure_management_plan_zones, :irrigation_water_nitrogen, :decimal
     remove_column :manure_management_plan_zones , :soil_production, :decimal
-
+    remove_column :manure_management_plans, :default_computation_method, :string
+    remove_column :manure_management_plans, :selected, :string
     add_column :manure_management_plan_zones, :approach_name, :string
+    remove_column :manure_management_plan_zones, :computation_method, :string
+
   end
 end

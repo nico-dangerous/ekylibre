@@ -4,9 +4,7 @@ module Lexicon
   def shapefile_to_shapes(path,srid)
     shapes = []
     RGeo::Shapefile::Reader.open(path, srid: srid) do |file|
-
       file.each do |record|
-
         geometry = Charta::Geometry.new(record.geometry)
         geometry.srid=(srid)
         geometry=geometry.transform(:WGS84).to_ewkt
@@ -22,10 +20,10 @@ module Lexicon
   def fill_table_from_yaml(yaml_filename)
     #the table name is the filename without extension
     name = File.basename(yaml_filename,".yml").split('.').last.downcase
+
     yaml = YAML::load(File.open(yaml_filename))
     unless yaml.empty?
       columns = yaml[yaml.keys.first].keys
-
       #Insert row
       yaml.each_value do |data|
         #add quotes around value to insert

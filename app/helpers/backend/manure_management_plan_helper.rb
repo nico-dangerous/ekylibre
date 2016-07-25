@@ -66,7 +66,7 @@ module Backend
     end
 
     def geometry_to_feature(geometry,properties={})
-      # XXX find a way to buid geojson features without converting to geojson geometry and decoding to rgeo feature (it takes too much time)
+
       rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
       geojson=geometry_to_geojson(geometry,properties)
       RGeo::GeoJSON::Feature.new(rgeo_coder.decode(geojson),nil,properties)
@@ -90,7 +90,10 @@ module Backend
       # see :RegulatoryZone.build_non_spreadable_zone
 
       regulatory_zones_shape, info = *RegulatoryZone.build_non_spreadable_zone(manure_management_plan)
-      return [features_to_feature_collection([geometry_to_feature(regulatory_zones_shape)]), info]
+       unless regulatory_zones_shape == Charta::GeometryCollection.empty
+         return [features_to_feature_collection([geometry_to_feature(regulatory_zones_shape)]),info]
+       end
+       return :no_data
     end
 
     def manure_feature_description(manure_management_plan)
@@ -99,6 +102,7 @@ module Backend
       cultivable_zones_properties = []
       georeadings_properties = []
       mmpz_in_vulnerable_area = manure_management_plan.zones_in_vulnerable_area
+
       #mmpz_in_vulnerable_area is an array of array of one element, so we convert it into a simple array
 
       georeadings = ManureManagementPlan.manure_georeadings
@@ -115,12 +119,13 @@ module Backend
       #Build manure_management_plan feature properties
       manure_management_plan.zones.each do |manure_zone|
         property = {}
-
-        # extracts from info and place it in properties
-        info.each_key { |key|
-          value = info[key].select{ |info_id,value| info_id == manure_zone.id }
-          property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
-        }
+        unless info.nil?
+          # extracts from info and place it in properties
+          info.each_key { |key|
+            value = info[key].select{ |info_id,value| info_id == manure_zone.id }
+            property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
+          }
+        end
         #Is the mmpz in a vulnerable_zone ?
         property[:vulnerable_zone] = mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s
         property[:name] = manure_zone.name
@@ -130,12 +135,10 @@ module Backend
       end
       return {
               :georeadings => objects_to_feature_collection(georeadings,georeadings_properties),
-              :regulatory_zones => regulatory_zones_feature_collection(manure_management_plan),
+              :regulatory_zones => regulatory_zones_shape,
               :cultivable_zones => manure_feature_collection(manure_management_plan,cultivable_zones_properties)
               }
     end
-
-
-
   end
 end
+

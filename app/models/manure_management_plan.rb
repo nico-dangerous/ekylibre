@@ -22,20 +22,18 @@
 #
 # == Table: manure_management_plans
 #
-#  annotation                 :text
-#  campaign_id                :integer          not null
-#  created_at                 :datetime         not null
-#  creator_id                 :integer
-#  default_computation_method :string           not null
-#  id                         :integer          not null, primary key
-#  lock_version               :integer          default(0), not null
-#  locked                     :boolean          default(FALSE), not null
-#  name                       :string           not null
-#  opened_at                  :datetime         not null
-#  recommender_id             :integer          not null
-#  selected                   :boolean          default(FALSE), not null
-#  updated_at                 :datetime         not null
-#  updater_id                 :integer
+#  annotation     :text
+#  campaign_id    :integer          not null
+#  created_at     :datetime         not null
+#  creator_id     :integer
+#  id             :integer          not null, primary key
+#  lock_version   :integer          default(0), not null
+#  locked         :boolean          default(FALSE), not null
+#  name           :string           not null
+#  opened_at      :datetime         not null
+#  recommender_id :integer          not null
+#  updated_at     :datetime         not null
+#  updater_id     :integer
 #
 class ManureManagementPlan < Ekylibre::Record::Base
   include Attachable
@@ -44,14 +42,12 @@ class ManureManagementPlan < Ekylibre::Record::Base
   has_many :zones, class_name: 'ManureManagementPlanZone', dependent: :destroy, inverse_of: :plan, foreign_key: :plan_id
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :opened_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
-  validates :locked, :selected, inclusion: { in: [true, false] }
-  validates :campaign, :default_computation_method, :name, :opened_at, :recommender, presence: true
+  validates :locked, inclusion: { in: [true, false] }
+  validates :campaign, :name, :opened_at, :recommender, presence: true
   # ]VALIDATORS]
 
   accepts_nested_attributes_for :zones
-  selects_among_all :selected, scope: :campaign_id
 
-  scope :selecteds, -> { where(selected: true) }
 
   protect do
     locked?
@@ -96,7 +92,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
       next if zones.find_by(activity_production: activity_production)
       zone = zones.build(
         activity_production: activity_production,
-        computation_method: default_computation_method,
         administrative_area: activity_production.support.administrative_area,
         cultivation_variety: activity_production.cultivation_variety,
         soil_nature: activity_production.support.soil_nature || activity_production.support.estimated_soil_nature
@@ -105,8 +100,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
     end
   end
 
-  def self.check_makable(campaign)
-    #params must contain campaign
+  def self.budgets_done(campaign)
     activities_prod = ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming")
 
     missing_budgets = []

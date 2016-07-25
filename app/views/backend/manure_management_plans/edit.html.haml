@@ -1,7 +1,6 @@
 .form-map
   :ruby
     features_description = manure_feature_description(@manure_management_plan)
-
     haml_io.write shape_field_tag("manure_management_plan", features_description[:georeadings], {class: :manuring_step_form,
                                                     box: {width: '70%'},
                                                     data: {
@@ -11,31 +10,43 @@
                                                      map_editor: {
                                                         customClass:'manure-map',
                                                         allowAttributesPopup: true,
-                                                        series: true,
-                                                        view: :series,
+                                                        view: {
+                                                            center: Charta.new_geometry(features_description[:cultivable_zones]).centroid
+                                                        },
                                                         show: {
-                                                          :series => [
-                                                                      {title: :cultivable_zone.tl,
-                                                                      :data => features_description[:cultivable_zones],
-                                                                      :options => {center: true,
-                                                                                   :style => {:color => "#0A0"},
-                                                                                   :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
+                                                           series: {
+                                                              cultivable_zone_serie:  features_description[:cultivable_zones],
+                                                              regulatory_zone_serie:  features_description[:regulatory_zones]
+                                                           },
+                                                           layers: [
+                                                             { name: :cultivable_zones,
+                                                              label: :cultivable_zones.tl,
+                                                              serie: :cultivable_zone_serie,
+                                                              type: :simple,
+                                                              fillColor: '#0A0',
+                                                              :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
                                                                                               {type: :label, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
                                                                                               {type: :label, property_label: "attributes.cultivation_variety".t, property_value: :variety},
-                                                                                              {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}]}},
-                                                                      {title: :regulatory_zone.tl,:data => features_description[:regulatory_zones],:options => {center: true, :style => {:color => "#A00"}}}]
-                                                         },
-                                                        overlaySelector: {editionLayer: :georeadings.tl},
-                                                        defaultLabel: :unnamed.tl,
-                                                        defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
-                                                        showStyle: {fillOpacity: 0.7},
-                                                        useFeatures: true,
-                                                        controls:{
-                                                          measure: { show: false, localization: 'i18n.iso2'.t },
-                                                          importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
-                                                         }
-                                                        },
+                                                                                              {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}]},
+
+                                                              { name: :regulatory_zone,
+                                                              label: :regulatory_zone.tl,
+                                                              serie: :regulatory_zone_serie,
+                                                              fillColor: '#A00',
+                                                              type: :simple
+                                                              }
+
+                                                           ]
+                                                           },
+                                                           useFeatures: true,
+                                                           defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
+                                                           overlaySelector: { editionLayer: :georeadings.tl },
+                                                           defaultLabel: :unnamed.tl,
+                                                           controls:{
+                                                            measure: { show: false, localization: 'i18n.iso2'.t },
+                                                            importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
+                                                           }},
                                                             actionmenu: { box: {width: '30%'},customClass:'responsive-map'}}
-                                                    })
+                                                           })
 
 =  link_to "Validate", {controller: :manure_management_plans, action: :compute}, class: :btn

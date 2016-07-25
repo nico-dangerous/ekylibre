@@ -24,26 +24,12 @@
 #
 #  id            :integer          not null
 #  name          :string
+#  questions     :jsonb
 #  shape         :geometry({:srid=>4326, :type=>"geometry"})
 #  supply_nature :string
 #
 
 class Approach < Ekylibre::Record::Base
-
-  def action_zone
-    #Return the insee (String) in which the Approach is used
-    action_zone
-  end
-
-  def supply_nature
-    # return one element (String), can be (N or P or K ...)
-    supply_nature
-  end
-
-  def priority_level
-    # (unsigned Integer) 0 is the highest priority, used for Approach.get_corresponding_approach
-    priority_level
-  end
 
   def self.get_relevant_approach(shape)
     #Return the most relevant model for a given location
@@ -75,7 +61,6 @@ class Approach < Ekylibre::Record::Base
       end
     end
     model = Approach.find_by_id(min_couple[0])
-
      return Object.const_get("Calculus::ManureManagementPlan::"+model.name).new(model)
    end
 end

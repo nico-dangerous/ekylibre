@@ -583,9 +583,6 @@ Rails.application.routes.draw do
         delete :delete_georeadings
         post :create_georeading
       end
-      collection do
-
-      end
     end
 
     resources :map_backgrounds do
