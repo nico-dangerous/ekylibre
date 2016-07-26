@@ -578,7 +578,7 @@ Rails.application.routes.draw do
     resources :manure_management_plans, concerns: [:list, :unroll] do
       member do
         get :list_zones
-        get :compute
+        get :ask_questions_and_print_result
         post :update_georeadings
         delete :delete_georeadings
         post :create_georeading

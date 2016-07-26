@@ -95,6 +95,17 @@ module Backend
       render :edit
     end
 
+
+
+    def ask_questions_and_print_result
+      @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+      @manure_management_plan.zones.each do |zone|
+        zone.approach_name = Approach.get_relevant_approach(zone.support_shape).name
+      end
+      render :ask_questions_and_print_result
+    end
+
+
     def create_georeading
       file_saved = false
 
@@ -105,6 +116,7 @@ module Backend
 
         id = rgeo_feature.properties["id"]
         georeading = nil
+        errors = ""
         if id.nil?
 
           georeading = Georeading.new
@@ -113,12 +125,17 @@ module Backend
           georeading.kind = rgeo_feature.properties["kind"] || ManureManagementPlan.manure_georeading_types.first
           georeading.nature = rgeo_feature.geometry.geometry_type.type_name.lower
           file_saved = georeading.save
+          errors = georeading.errors.full_message unless file_saved
+          id = georeading.id
+        else
+          file_saved = true
         end
+
         respond_to do |format|
           if file_saved
-            format.json  { render json: { :id => georeading.id}}
+            format.json  { render json: { :id => id}}
           else
-            format.json { render json: { error: georeading.errors.full_message }, status: 500 }
+            format.json { render json: { error: errors }, status: 500 }
           end
         end
       end
@@ -169,13 +186,6 @@ module Backend
         else
           format.json { render json: { status: :error }, status: 500 }
         end
-      end
-    end
-
-    def compute
-      @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
-      @manure_management_plan.zones.each do |zone|
-        zone.approach_name = Approach.get_relevant_approach(zone.support_shape).name
       end
     end
   end

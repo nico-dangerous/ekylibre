@@ -93,7 +93,7 @@ module Backend
        unless regulatory_zones_shape == Charta::GeometryCollection.empty
          return [features_to_feature_collection([geometry_to_feature(regulatory_zones_shape)]),info]
        end
-       return :no_data
+       return [:no_data, info]
     end
 
     def manure_feature_description(manure_management_plan)
