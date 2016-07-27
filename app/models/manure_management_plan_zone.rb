@@ -24,7 +24,6 @@
 #
 #  activity_production_id :integer          not null
 #  administrative_area    :string
-#  approach_name          :string
 #  created_at             :datetime         not null
 #  creator_id             :integer
 #  cultivation_variety    :string
@@ -67,57 +66,10 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
       where(:campaign_id => campaign.id)
     end
   }
-=begin
-
-  def estimate_expected_yield
-    if computation_method
-      self.expected_yield = Calculus::ManureManagementPlan.estimate_expected_yield(parameters).to_f(plan.mass_density_unit)
-    end
-  end
-=end
-
-=begin
-  def compute
-    for name, value in Calculus::ManureManagementPlan.compute(parameters)
-      if %w(absorbed_nitrogen_at_opening expected_yield humus_mineralization intermediate_cultivation_residue_mineralization irrigation_water_nitrogen maximum_nitrogen_input meadow_humus_mineralization mineral_nitrogen_at_opening nitrogen_at_closing nitrogen_input nitrogen_need organic_fertilizer_mineral_fraction previous_cultivation_residue_mineralization soil_production).include?(name.to_s)
-        send("#{name}=", value.to_f(:kilogram_per_hectare))
-      end
-    end
-    save!
-  end
-=end
 
   def shape
     support_shape
   end
-
-=begin
-  def parameters
-    hash = {
-      available_water_capacity: available_water_capacity,
-      opened_at: opened_at,
-      support: activity_production
-    }
-    if activity_production.usage
-      hash[:production_usage] = Nomen::ProductionUsage[activity_production.usage]
-    end
-    if computation_method && Calculus::ManureManagementPlan.method_exist?(computation_method.to_sym)
-      hash[:method] = computation_method.to_sym
-    else
-      Rails.logger.warn "Method #{computation_method} doesn't exist. Use default method instead."
-      hash[:method] = :external
-    end
-    if administrative_area
-      hash[:administrative_area] = Nomen::AdministrativeArea[administrative_area]
-    end
-    hash[:variety] = Nomen::Variety[cultivation_variety] if cultivation_variety
-    hash[:soil_nature] = Nomen::SoilNature[soil_nature] if soil_nature
-    if expected_yield
-      hash[:expected_yield] = expected_yield.in(plan.mass_density_unit)
-    end
-    hash
-  end
-=end
 
   # TODO: Compute available from parcels or CZ ?
   def available_water_capacity
@@ -138,5 +90,51 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
     item
   end
+=begin
+    def estimate_expected_yield
+      if computation_method
+        self.expected_yield = Calculus::ManureManagementPlan.estimate_expected_yield(parameters).to_f(plan.mass_density_unit)
+      end
+    end
+    =end
+
+=begin
+  def compute
+    for name, value in Calculus::ManureManagementPlan.compute(parameters)
+      if %w(absorbed_nitrogen_at_opening expected_yield humus_mineralization intermediate_cultivation_residue_mineralization irrigation_water_nitrogen maximum_nitrogen_input meadow_humus_mineralization mineral_nitrogen_at_opening nitrogen_at_closing nitrogen_input nitrogen_need organic_fertilizer_mineral_fraction previous_cultivation_residue_mineralization soil_production).include?(name.to_s)
+        send("#{name}=", value.to_f(:kilogram_per_hectare))
+      end
+    end
+    save!
+  end
+=end
+=begin
+    def parameters
+      hash = {
+          available_water_capacity: available_water_capacity,
+          opened_at: opened_at,
+          support: activity_production
+      }
+      if activity_production.usage
+        hash[:production_usage] = Nomen::ProductionUsage[activity_production.usage]
+      end
+      if computation_method && Calculus::ManureManagementPlan.method_exist?(computation_method.to_sym)
+        hash[:method] = computation_method.to_sym
+      else
+        Rails.logger.warn "Method #{computation_method} doesn't exist. Use default method instead."
+        hash[:method] = :external
+      end
+      if administrative_area
+        hash[:administrative_area] = Nomen::AdministrativeArea[administrative_area]
+      end
+      hash[:variety] = Nomen::Variety[cultivation_variety] if cultivation_variety
+      hash[:soil_nature] = Nomen::SoilNature[soil_nature] if soil_nature
+      if expected_yield
+        hash[:expected_yield] = expected_yield.in(plan.mass_density_unit)
+      end
+      hash
+    end
+=end
+
 
 end

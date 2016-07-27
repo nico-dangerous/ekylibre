@@ -20,17 +20,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses.
 #
-# == Table: approaches
+# == Table: manure_management_plan_natures
 #
-#  id            :integer          not null
-#  name          :string
-#  questions     :jsonb
-#  shape         :geometry({:srid=>4326, :type=>"geometry"})
-#  supply_nature :string
+#  id                        :integer          not null, primary key
+#  manure_management_plan_id :integer
+#  supply_nature             :string
 #
 
-class Approach < Ekylibre::Record::Base
+class ManureManagementPlanNature < Ekylibre::Record::Base
+  belongs_to :manure_management_plan
 
-
+  def self.available_natures
+    Approach.pluck(:supply_nature).compact!
+  end
 
 end

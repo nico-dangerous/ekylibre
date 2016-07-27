@@ -39,6 +39,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   include Attachable
   belongs_to :campaign
   belongs_to :recommender, class_name: 'Entity'
+  has_many :manure_natures, class_name: 'ManureManagementPlanNature', foreign_key: :manure_management_plan_id
   has_many :zones, class_name: 'ManureManagementPlanZone', dependent: :destroy, inverse_of: :plan, foreign_key: :plan_id
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :opened_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
@@ -47,7 +48,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
   # ]VALIDATORS]
 
   accepts_nested_attributes_for :zones
-
 
   protect do
     locked?
@@ -80,6 +80,14 @@ class ManureManagementPlan < Ekylibre::Record::Base
                                                   LEFT JOIN REGULATORY_ZONES as RZ on ST_Intersects(RZ.shape,AP.support_shape)
                                                   WHERE RZ.type = 'VulnerableZone'
                                                   ;")).values.map{|item| item.first}
+  end
+
+  def questions
+    question_hash = {}
+    zones.each do |zone|
+      question_hash[zone_id] = zone.questions
+    end
+    return question_hash
   end
 
   def build_missing_zones

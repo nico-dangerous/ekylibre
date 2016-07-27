@@ -13,14 +13,13 @@
 -#  f.object.build_missing_zones
 -#
 -#= render "zones_form", f: f
-= @manure_management_plan.errors.inspect
 
-.hidden
-  = field_set do
-    = f.input :name, as: :hidden, value: f.object.name
-    = f.referenced_association :recommender, as: :hidden
-    = f.input :annotation, as: :hidden
-    = f.custom_fields
-    = f.referenced_association :campaign, as: :hidden
-    = f.input :opened_at, as: :hidden, value: f.object.opened_at
+= field_set do
+  = f.input :manure_natures, collection: ManureManagementPlanNature.available_natures, as: :check_boxes
+  = f.input :name, as: :hidden, value: f.object.name
+  = f.referenced_association :recommender, as: :hidden
+  = f.input :annotation, as: :hidden
+  = f.custom_fields
+  = f.referenced_association :campaign, as: :hidden
+  = f.input :opened_at, as: :hidden, value: f.object.opened_at
 = render "zones_form", f: f

@@ -18,9 +18,8 @@ module Lexicon
   end
 
   def fill_table_from_yaml(yaml_filename)
-    #the table name is the filename without extension
-    name = File.basename(yaml_filename,".yml").split('.').last.downcase
 
+    name = File.basename(yaml_filename,".yml").split('.').last.downcase
     yaml = YAML::load(File.open(yaml_filename))
     unless yaml.empty?
       columns = yaml[yaml.keys.first].keys

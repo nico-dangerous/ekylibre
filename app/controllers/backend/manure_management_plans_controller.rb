@@ -63,7 +63,7 @@ module Backend
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
                                                          :opened_at => Time.new(current_campaign.harvest_year,2,1).to_datetime,
                                                          :recommender_id => current_user.person_id,
-                                                         :name => "MMP " + current_campaign["harvest_year"].to_s)
+                                                         :name => "Fumure " + current_campaign["harvest_year"].to_s)
       ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
          admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
          admin_area_name = admin_area.name unless admin_area.nil?
@@ -75,36 +75,41 @@ module Backend
          )
          if zone.soil_nature.nil? then need_soil_nature_form = true end
       end
-
-
       render :create unless need_soil_nature_form
     end
 
     def create
+      supply_natures = permitted_params.delete("manure_natures")
+
       @manure_management_plan = ManureManagementPlan.new(permitted_params)
-      if @manure_management_plan.save
-        redirect_to action: :edit, id: @manure_management_plan.id
-      else
-        render :new
-      end
+        if @manure_management_plan.save
+
+          supply_natures.each do |nature|
+            @manure_management_plan.manure_natures.create(supply_nature: :nature) unless nature.empty?
+          end
+
+          @manure_management_plan.manure_natures.each do |manure_nature|
+             @manure_management_plan.zones do |zone|
+               mmpza = ManureManagementPlanZoneApproach.new(manure_management_plan_zone: :zone.id,
+                                                            manure_management_plan_type: :manure_type.id,
+               )
+               render :new unless mmpza.save
+             end
+          end
+
+          redirect_to action: :edit, id: @manure_management_plan.id
+        else
+          render :new
+        end
     end
 
     def edit
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+
       t3e @manure_management_plan.attributes
+
       render :edit
     end
-
-
-
-    def ask_questions_and_print_result
-      @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
-      @manure_management_plan.zones.each do |zone|
-        zone.approach_name = Approach.get_relevant_approach(zone.support_shape).name
-      end
-      render :ask_questions_and_print_result
-    end
-
 
     def create_georeading
       file_saved = false

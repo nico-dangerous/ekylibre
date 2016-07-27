@@ -66,7 +66,7 @@ class RegulatoryZone  < Ekylibre::Record::Base
                                                    WHERE AP.campaign_id = 4 AND RZ.type IN ('BodyOfWater','Watercourse')
                                                   ;", manure_management_plan.campaign.id).first.values.first
 
-    
+
     non_spreadable_charta = Charta.new_geometry(non_spreadable_zone_shape)
 
     #compute square meters area
