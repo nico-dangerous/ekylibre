@@ -11,7 +11,7 @@
       - menu.separator
       - menu.item :manage_activities.tl, { controller: :activities, action: :index }, as: 'main'
     - if (ManureManagementPlan.find_by_campaign_id(@campaign.id).nil?)
-      - if tmp = ManureManagementPlan.budgets_done(@campaign)["valid"]
+      - if tmp = ManureManagementPlan.can_be_created(@campaign)
         =  link_to  "Manuring", {controller: :manure_management_plans, action: :new}, class: :btn
     - else
       =  link_to "Manuring", {controller: :manure_management_plans, action: :new, id: ManureManagementPlan.find_by_campaign_id(@campaign.id).id}, class: :btn

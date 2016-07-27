@@ -56,7 +56,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   delegate :name, to: :cultivable_zone
   delegate :support_shape, to: :activity_production
 
-  accepts_nested_attributes_for :manure_management_plan_zone_approach
+  accepts_nested_attributes_for :manure_approach_applications
 
   protect do
     locked?

@@ -108,6 +108,10 @@ class ManureManagementPlan < Ekylibre::Record::Base
     end
   end
 
+  def self.can_be_created(campaign)
+    return budgets_done(campaign)["valid"] && (not ManureManagementPlanNature.available_natures.nil?)
+  end
+
   def self.budgets_done(campaign)
     activities_prod = ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming")
 
