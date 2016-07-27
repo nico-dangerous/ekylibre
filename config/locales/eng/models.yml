@@ -637,6 +637,7 @@ eng:
     grading_sizes_unit_name: "Grading sizes unit name"
     gradings: "Gradings" #?
     gravity: "Gravity"
+    gross_items: "Gross count" #?
     gross_mass: "Gross mass" #?
     gross_yield_value: "Gross yield value" #?
     group: "Group"
@@ -804,9 +805,10 @@ eng:
     managed_sales: "Managed sales"
     manure_management_plan_zones: "Manure management plan zones"
     marketable: "Marketable"
+    marketable_items_count: "Marketable items count"
     marketable_net_mass: "Marketable net mass"
     marketable_net_yield: "Marketable net yield" #?
-    marketable_yield: "Marketable yield"
+    marketable_yield: "Marketable yield" #?
     mass: "Mass (kg)" #?
     max_zoom: "Max zoom"
     maximal_grantable_reduction_percentage: "Maximal grantable reduction percentage"
@@ -1184,6 +1186,7 @@ eng:
     taxations: "Taxations"
     team: "Team"
     template: "Template"
+    theme: "Theme"
     third: "Third"
     third_role: "Third role"
     thread: "Thread"
@@ -1261,6 +1264,7 @@ eng:
     with_deposit: "With deposit"
     with_supports: "With supports"
     with_transport: "With transport" #?
+    work_name: "Work name"
     work_number: "Work number"
     worker: "Worker"
     working_duration: "Working duration"
@@ -1343,6 +1347,9 @@ eng:
           name: "Chèque"
         transfer:
           name: "Virement"
+    inspection:
+      items: "Items"
+      mass: "Mass"
     intervention:
       name: "%{intervention} #%{number}"
     issue:
@@ -1414,6 +1421,7 @@ eng:
           in_preparation: "In preparation"
           ordered: "Ordered"
           prepared: "Prepared"
+          received: "Received"
     product:
       informations:
         with_components: "%{product} (%{unit}) (transformed material)"

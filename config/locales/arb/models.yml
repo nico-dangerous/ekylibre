@@ -1410,6 +1410,7 @@ arb:
     grading_sizes_unit_name: "الدرجات أحجام اسم الوحدة"
     gradings: "الى التصنيف"
     gravity: "الجاذبية"
+    # gross_items: "Gross count"
     gross_mass: "الكتلة الإجمالية"
     gross_yield_value: "القيمة الإنتاجية الإجمالية"
     group: "مجموعة"
@@ -1605,6 +1606,7 @@ arb:
     mandates: "تفويضات" #?
     manure_management_plan_zones: "مناطق خطة إدارة السماد"
     marketable: "تسويق"
+    # marketable_items_count: "Marketable items count"
     marketable_net_mass: "الكتلة الصافية للتسويق"
     marketable_net_yield: "العائد الصافي للتسويق"
     marketable_yield: "العائد للتسويق"
@@ -2117,6 +2119,7 @@ arb:
     template_id: "نموذج" #?
     text_importance: "ذو شأن" #?
     text_nature: "النوع" #?
+    # theme: "Theme"
     theoric_quantity: "الكمية النظرية" #?
     third: "ثلث"
     third_producer: "ثالث منتج" #?
@@ -2222,6 +2225,7 @@ arb:
     with_supports: "مع الدعم"
     with_tracking: "مع التتبع" #?
     with_transport: "مع النقل"
+    # work_name: "Work name"
     work_number: "رقم العمل"
     worker: "عامل"
     working_duration: "مدة العمل"
@@ -2547,6 +2551,9 @@ arb:
           # name: "Virement"
     incoming_payment_use:  #?
       bookkeep: "[%{resource}] %{mode} (%{payment_number}) وردت من %{attorney} ل %{client} (%{expense_number})" #?
+    inspection:
+      # items: "Items"
+      # mass: "Mass"
     intervention:
       # name: "%{intervention} #%{number}"
     inventory_item:  #?
@@ -2657,6 +2664,7 @@ arb:
           in_preparation: "قيد التحضير"
           ordered: "أمر"
           prepared: "أعدت"
+          # received: "Received"
     product:
       informations:
         with_components: "%{product} (%{unit}) (ليس هناك من فترة استراحة)"

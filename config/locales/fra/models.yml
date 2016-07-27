@@ -806,6 +806,7 @@ fra:
     grading_sizes_unit_name: "Classement tailles nom de l’unité"
     gradings: "Agréages"
     gravity: "Gravité"
+    gross_items: "Nombre d'unités brut"
     gross_mass: "Masse brute"
     gross_yield_value: "Rendement brut"
     group: "Groupe"
@@ -901,7 +902,7 @@ fra:
     item_object: "Objet de l’élément"
     item_type: "Type de l’élément"
     item_value: "Valeur de l’élément"
-    items: "Éléments"
+    items: "Élements"
     items_count: "Nombre d’éléments"
     journal: "Journal"
     journal_entries: "Écritures"
@@ -977,6 +978,7 @@ fra:
     manure_management_plan_zones: "Zones de plan de fumure"
     markers: "Repères" #?
     marketable: "Commercialisable"
+    marketable_items_count: "Nombre d'unités commercialisables"
     marketable_net_mass: "Masse nette commercialisable"
     marketable_net_yield: "Rendement net commercialisable"
     marketable_yield: "Rendement commercialisable"
@@ -1397,6 +1399,7 @@ fra:
     taxations: "Taxations"
     team: "Équipe"
     template: "Modèle"
+    theme: "Thème"
     theoric_quantity: "Quantité théorique" #?
     third: "Tiers"
     third_producer: "Producteur tiers" #?
@@ -1485,6 +1488,7 @@ fra:
     with_deposit: "Utiliser les remises en banque"
     with_supports: "Avec des supports"
     with_transport: "Avec transport"
+    work_name: "Nom de travail"
     work_number: "Numéro de travail"
     worker: "Équipier"
     working_area: "Superficie travaillée" #?
@@ -1575,6 +1579,9 @@ fra:
           name: "Chèque"
         transfer:
           name: "Virement"
+    inspection:
+      items: "Nombre de pièces"
+      mass: "Masse"
     intervention:
       name: "%{intervention} n°%{number}"
     issue:
@@ -1651,6 +1658,7 @@ fra:
           in_preparation: "En préparation"
           ordered: "Commandé"
           prepared: "Prêt"
+          received: "Reçu"
     product:
       informations:
         with_components: "%{product} (%{unit}) (produit transformé)"

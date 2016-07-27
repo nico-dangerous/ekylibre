@@ -664,6 +664,7 @@ Rails.application.routes.draw do
     resources :inspections, concerns: [:list, :unroll] do
       member do
         get :list_points
+        get :set_view_preference
       end
     end
 
