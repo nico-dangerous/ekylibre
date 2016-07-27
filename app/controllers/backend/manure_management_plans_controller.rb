@@ -79,28 +79,48 @@ module Backend
     end
 
     def create
-      supply_natures = permitted_params.delete("manure_natures")
 
+=begin
       @manure_management_plan = ManureManagementPlan.new(permitted_params)
-        if @manure_management_plan.save
+      byebug
+      zones_h = permitted_params[:zones_attributes]
+      manure_approach_h = {:manure_approach_attributes => []}
+      manure_nature_h = {:manure_nature_attributes => {:manure_approach_attributes}}
 
-          supply_natures.each do |nature|
-            @manure_management_plan.manure_natures.create(supply_nature: :nature) unless nature.empty?
+      supply_natures.each_with_index   do |nature, index_supply_natures |
+        unless nature.empty?
+          nature = ManureManagementPlanNature.new(supply_nature: nature)
+          @manure_management_plan.zones.each do |zone|
+            ManureApproachApplication.new(manure_management_plan_zone: zone,
+                                                  manure_management_plan_nature: nature,
+                                                 approach_id: ManureApproachApplication.most_relevant_approach(zone.support_shape,manure_nature.supply_nature))
+
+
           end
-
-          @manure_management_plan.manure_natures.each do |manure_nature|
-             @manure_management_plan.zones do |zone|
-               mmpza = ManureManagementPlanZoneApproach.new(manure_management_plan_zone: :zone.id,
-                                                            manure_management_plan_type: :manure_type.id,
-               )
-               render :new unless mmpza.save
-             end
-          end
-
-          redirect_to action: :edit, id: @manure_management_plan.id
-        else
-          render :new
+        #@manure_management_plan.manure_natures.create(supply_nature: nature) unless nature.empty?
         end
+
+      end
+      natures = ManureManagementPlanNature.create(supply_natures)
+      byebug
+=end
+
+      manure_natures = permitted_params.delete("manure_natures").reject{|nature| nature.empty? || nature.nil? }
+      @manure_management_plan = ManureManagementPlan.new(permitted_params)
+      mmp_natures = []
+      manure_natures.each do |manure_nature|
+        mmp_nature = ManureManagementPlanNature.new(supply_nature: manure_nature)
+        mmp_natures.push(mmp_nature)
+        @manure_management_plan.zones.each do |zone|
+           ManureApproachApplication.create!(manure_management_plan_zone: zone,
+                                             manure_management_plan_nature: mmp_nature,
+                                             approach_id: ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature) )
+         end
+      end
+      @manure_management_plan.manure_natures = mmp_natures
+      @manure_management_plan.save
+      redirect_to action: :edit, id: @manure_management_plan.id
+
     end
 
     def edit

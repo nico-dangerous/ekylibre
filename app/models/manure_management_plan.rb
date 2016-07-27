@@ -47,7 +47,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   validates :campaign, :name, :opened_at, :recommender, presence: true
   # ]VALIDATORS]
 
-  accepts_nested_attributes_for :zones
+  accepts_nested_attributes_for :zones, :manure_natures
 
   protect do
     locked?

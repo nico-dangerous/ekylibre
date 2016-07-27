@@ -42,6 +42,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   has_one :campaign, through: :plan
   has_one :support, through: :activity_production
   has_one :cultivable_zone, through: :activity_production, source: :support
+  has_many :manure_approach_applications
   refers_to :soil_nature
   refers_to :cultivation_variety, class_name: 'Variety'
   refers_to :administrative_area
@@ -54,6 +55,8 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   delegate :locked?, :opened_at, to: :plan
   delegate :name, to: :cultivable_zone
   delegate :support_shape, to: :activity_production
+
+  accepts_nested_attributes_for :manure_management_plan_zone_approach
 
   protect do
     locked?

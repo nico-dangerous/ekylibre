@@ -30,16 +30,12 @@
 #  results                          :jsonb
 #
 
-class ManureManagementPlanZoneApproach < Ekylibre::Record::Base
+class ManureApproachApplication < Ekylibre::Record::Base
   belongs_to :manure_management_plan_zone
-  has_one :manure_management_plan_nature
-  has_one :approach
-
-  before_validation(on: :create) do
-    set_to_most_relevant_approach
-  end
-
-  def set_to_most_relevant_approach()
+  belongs_to :approach
+  belongs_to :manure_management_plan_nature
+  has_one :manure_management_plan, through: :manure_management_plan_nature
+  def self.most_relevant_approach(shape,supply_nature)
     #Return the most relevant model for a given location
 
     # Here we use multiple queries because we can't use comparison on aggregations efficiently.
@@ -47,8 +43,10 @@ class ManureManagementPlanZoneApproach < Ekylibre::Record::Base
     # For exemple by finding the approach id associated with the largest intersection between an approach shape and the shape(param)
 
     # Return the area (numeric value) for the largest intersection of an approach and the shape
+=begin
     shape = manure_management_plan_zone.shape
     supply_nature = manure_management_plan_nature.supply_nature
+=end
     max = ActiveRecord::Base.connection.execute("(SELECT MAX(ST_AREA(ST_Intersection(Ap.shape,#{Charta.new_geometry(shape).geom}))) FROM Approaches Ap)").values.first.first
 
     # Returns the approaches that intersect the most (with larger area) with the shape
@@ -58,7 +56,7 @@ class ManureManagementPlanZoneApproach < Ekylibre::Record::Base
                                           where approach.id in (SELECT area_tab.id
                                                                 FROM (SELECT App.id, ST_AREA(ST_Intersection(App.shape,#{Charta.new_geometry(shape).geom})) AS int_area
                                                                       FROM approaches App
-                                                                      WHERE supply_nature = #{supply_nature}) area_tab
+                                                                      WHERE supply_nature = '#{supply_nature}') area_tab
                                                                 WHERE #{max} = cast(int_area AS numeric))").values
 
     # Find the smallest intersecting area
@@ -71,7 +69,7 @@ class ManureManagementPlanZoneApproach < Ekylibre::Record::Base
         min_couple = couple
       end
     end
-    approach = min_couple[0]
+    return min_couple[0]
     #return Object.const_get("Calculus::ManureManagementPlan::"+model.name).new(model)
   end
 
