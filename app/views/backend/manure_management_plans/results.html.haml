@@ -1,0 +1,9 @@
+= janus do |j|
+  - if resource_model.any?
+    - j.face :map do
+      = model_map(@manure_management_plan.zones)
+  -# if current_campaign
+      - j.face :chart do
+        = cell :cropping_plan_on_cultivable_zones, params: {campaign_id: current_campaign.id}
+  - j.face :list do
+    = main_list
