@@ -13,6 +13,8 @@ module Calculus
         @questions[label].answer if @questions[label]
       end
 
+
+
     end
   end
 end

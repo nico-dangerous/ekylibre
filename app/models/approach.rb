@@ -30,6 +30,10 @@
 #
 
 class Approach < Ekylibre::Record::Base
-  
+
+  def has_answers
+      ActiveSupport::JSON.decode(questions)
+      byebug
+  end
 
 end

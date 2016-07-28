@@ -80,31 +80,6 @@ module Backend
 
     def create
 
-=begin
-      @manure_management_plan = ManureManagementPlan.new(permitted_params)
-      byebug
-      zones_h = permitted_params[:zones_attributes]
-      manure_approach_h = {:manure_approach_attributes => []}
-      manure_nature_h = {:manure_nature_attributes => {:manure_approach_attributes}}
-
-      supply_natures.each_with_index   do |nature, index_supply_natures |
-        unless nature.empty?
-          nature = ManureManagementPlanNature.new(supply_nature: nature)
-          @manure_management_plan.zones.each do |zone|
-            ManureApproachApplication.new(manure_management_plan_zone: zone,
-                                                  manure_management_plan_nature: nature,
-                                                 approach_id: ManureApproachApplication.most_relevant_approach(zone.support_shape,manure_nature.supply_nature))
-
-
-          end
-        #@manure_management_plan.manure_natures.create(supply_nature: nature) unless nature.empty?
-        end
-
-      end
-      natures = ManureManagementPlanNature.create(supply_natures)
-      byebug
-=end
-
       manure_natures = permitted_params.delete("manure_natures").reject{|nature| nature.empty? || nature.nil? }
       @manure_management_plan = ManureManagementPlan.new(permitted_params)
       mmp_natures = []
@@ -119,6 +94,7 @@ module Backend
       end
       @manure_management_plan.manure_natures = mmp_natures
       @manure_management_plan.save
+
       redirect_to action: :edit, id: @manure_management_plan.id
 
     end
@@ -126,8 +102,18 @@ module Backend
     def edit
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
 
-      t3e @manure_management_plan.attributes
+      @manure_management_plan.zones.each do |zone|
+        approach_applications = zone.manure_approach_applications
+        approach_applications.each do |approach_app|
+          approach = approach_app.approach
+          if approach.has_answers
+            puts 'foo'
+          end
+        end
+      end
 
+
+      t3e @manure_management_plan.attributes
       render :edit
     end
 
