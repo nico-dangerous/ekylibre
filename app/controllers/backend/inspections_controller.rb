@@ -18,6 +18,8 @@
 
 module Backend
   class InspectionsController < Backend::BaseController
+    include InspectionViewable
+
     manage_restfully sampled_at: 'Time.zone.now'.c
 
     unroll
@@ -31,15 +33,6 @@ module Backend
       t.column :sampled_at, datatype: :datetime
       # t.column :implanter_rows_number
       # t.column :implanter_working_width
-    end
-
-    def set_view_preference
-      id = params[:inspection_id]
-      id ||= params[:id]
-      Inspection.find(id).unit_preference(current_user, params['preference'])
-      destination = params['redirect'] if params['redirect']
-      destination ||= { action: 'show', id: params[:id] }
-      redirect_to destination
     end
   end
 end

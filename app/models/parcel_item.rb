@@ -71,7 +71,8 @@ class ParcelItem < Ekylibre::Record::Base
   validates :parted, inclusion: { in: [true, false] }
   validates :parcel, presence: true
   # ]VALIDATORS]
-  validates :source_product, presence: { if: :parcel_prepared? }
+  validates :source_product, presence: { if: :parcel_outgoing? }
+  validates :variant, presence: { if: :parcel_incoming? }
   validates :product, presence: { if: :parcel_prepared? }
 
   validates :population, numericality: { less_than_or_equal_to: 1,
@@ -146,6 +147,10 @@ class ParcelItem < Ekylibre::Record::Base
     check_incoming(checked_at) if parcel_incoming?
     check_outgoing(checked_at) if parcel_outgoing?
     save!
+  end
+
+  def name
+    Maybe(source_product || variant || product).name.or_else(nil)
   end
 
   # Mark items as given, and so change enjoyer and ownership if needed at
