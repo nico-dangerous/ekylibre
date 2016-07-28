@@ -70,7 +70,6 @@ class ManureApproachApplication < Ekylibre::Record::Base
       end
     end
     return min_couple[0]
-    #return Object.const_get("Calculus::ManureManagementPlan::"+model.name).new(model)
   end
 
 end

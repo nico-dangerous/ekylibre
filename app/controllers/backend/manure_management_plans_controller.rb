@@ -105,9 +105,12 @@ module Backend
       @manure_management_plan.zones.each do |zone|
         approach_applications = zone.manure_approach_applications
         approach_applications.each do |approach_app|
-          approach = approach_app.approach
-          if approach.has_answers
-            puts 'foo'
+          approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app.approach)
+          res1 = approach.yields_procedure
+          res2 = approach.needs_procedure
+          byebug
+          if not approach.has_answers?
+
           end
         end
       end

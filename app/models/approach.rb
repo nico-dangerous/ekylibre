@@ -31,9 +31,9 @@
 
 class Approach < Ekylibre::Record::Base
 
-  def has_answers
-      ActiveSupport::JSON.decode(questions)
-      byebug
+  def has_answers?
+    # Return true if any question has already an answer
+      return (not questions["answer"].values.compact!.empty?)
   end
 
 end
