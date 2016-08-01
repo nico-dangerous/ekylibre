@@ -79,7 +79,6 @@ module Backend
     end
 
     def create
-
       manure_natures = permitted_params.delete("manure_natures").reject{|nature| nature.empty? || nature.nil? }
       @manure_management_plan = ManureManagementPlan.new(permitted_params)
       mmp_natures = []
@@ -96,7 +95,6 @@ module Backend
       @manure_management_plan.save
 
       redirect_to action: :edit, id: @manure_management_plan.id
-
     end
 
     def edit
@@ -106,11 +104,9 @@ module Backend
         approach_applications = zone.manure_approach_applications
         approach_applications.each do |approach_app|
           approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app.approach)
-          res1 = approach.yields_procedure
-          res2 = approach.needs_procedure
-          byebug
-          if not approach.has_answers?
-
+          if approach.questions_answered?
+            res1 = approach.yields_procedure
+            res2 = approach.needs_procedure
           end
         end
       end

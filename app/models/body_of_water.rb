@@ -22,7 +22,7 @@
 #
 # == Table: regulatory_zones
 #
-#  id    :integer          not null
+#  id    :integer          not null, primary key
 #  name  :string
 #  shape :geometry({:srid=>4326, :type=>"geometry"})
 #  type  :string

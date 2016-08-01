@@ -8,7 +8,6 @@ module Calculus
         #Retrieve data
         ExampleApproachQuestionPrefiller.prefill_questions(@question_group)
         result = {toto: 10, tata: 30 }
-        byebug
       end
 
       def needs_procedure

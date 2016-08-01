@@ -50,6 +50,7 @@
     $(this._getInnerContentContainer()).find('.modal-body').append($(content))
     this.update()
 
+
   $.widget "ui.mapeditor",
     options:
       box:
@@ -399,13 +400,45 @@
       else
         layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
 
+    modalizeSeries: (feature,layer) ->
+      header = "<div class='modal-header'><i ></i><span>{title}</span></div> <div class='modal-body'>"
+
+      footer =     "</div>
+                   <div class='modal-footer'>
+                     <button type='submit' class='{OK_CLS}' data-editor-submit=true>{okText}</button>
+                     <button class='{CANCEL_CLS}' data-editor-cancel=true>{cancelText}</button>
+                    </div>"
+
+      console.log(feature)
+
+      layer.on 'click' , (e) =>
+        this.map.fire('modal',
+          closeTitle: 'close'
+          zIndex: 10000
+          transitionDuration: 300
+          template: '{content}'
+          onShow: (evt) ->
+            modal = evt.modal
+            'toto'
+            return
+          onHide: (evt) ->
+            modal = evt.modal
+            'toto'
+            return
+          OVERLAY_CLS: 'overlay'
+          MODAL_CLS: 'modal'
+          MODAL_CONTENT_CLS: 'modal-content'
+          INNER_CONTENT_CLS: 'modal-inner'
+          SHOW_CLS: 'show'
+          CLOSE_CLS: 'close')
+
     colorize: (level) ->
-      #levels rane is set to [-3,3]
-      minLevel = -3
-      start = this.colors.indexOf(this.options.multiLevels.startColor)
-      stop = this.colors.indexOf(this.options.multiLevels.stopColor)
-      colorsRange = this.colors.slice(start, stop)
-      colorsRange[Math.abs(minLevel - parseInt(level))]
+        #levels rane is set to [-3,3]
+        minLevel = -3
+        start = this.colors.indexOf(this.options.multiLevels.startColor)
+        stop = this.colors.indexOf(this.options.multiLevels.stopColor)
+        colorsRange = this.colors.slice(start, stop)
+        colorsRange[Math.abs(minLevel - parseInt(level))]
 
     _destroy: ->
       this.element.attr this.oldElementType
@@ -557,21 +590,20 @@
       this
 
     onEachFeature: (feature, layer) ->
-      if feature.properties?
-        if not feature.properties.internal_id?
-          feature.properties['internal_id'] = new Date().getTime()
-          feature.properties['removable'] = true
+     if feature.properties?
+      if not feature.properties.internal_id?
+        feature.properties['internal_id'] = new Date().getTime()
+        feature.properties['removable'] = true
 
-        if not feature.properties.name?
-          feature.properties.name = if feature.properties.id? then "#{this.counter}-  #{this.options.defaultEditionFeaturePrefix}#{feature.properties.id}" else "#{this.counter}-  #{this.options.defaultLabel}"
+      if not feature.properties.name?
+        feature.properties.name = if feature.properties.id? then "#{this.counter}-  #{this.options.defaultEditionFeaturePrefix}#{feature.properties.id}" else "#{this.counter}-  #{this.options.defaultLabel}"
 
-        this.counter += 1
-        feature.properties['level'] = 0 if this.options.multiLevels? and not feature.properties.level?
+      this.counter += 1
+      feature.properties['level'] = 0 if this.options.multiLevels? and not feature.properties.level?
 
-        unless this.options.withoutLabel
-          label = new L.GhostLabel(className: 'leaflet-ghost-label').setContent(feature.properties.name || feature.properties.id).toCentroidOfBounds(layer.getLatLngs())
-          @ghostLabelCluster.bind label, layer
-
+      unless this.options.withoutLabel
+        label = new L.GhostLabel(className: 'leaflet-ghost-label').setContent(feature.properties.name || feature.properties.id).toCentroidOfBounds(layer.getLatLngs())
+        @ghostLabelCluster.bind label, layer
 
       $(this.element).trigger('mapeditor:feature_add', feature)
 

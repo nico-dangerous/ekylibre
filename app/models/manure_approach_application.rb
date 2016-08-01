@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses.
 #
-# == Table: manure_management_plan_zone_approaches
+# == Table: manure_approach_applications
 #
 #  approach_id                      :integer
 #  id                               :integer          not null, primary key
@@ -35,6 +35,10 @@ class ManureApproachApplication < Ekylibre::Record::Base
   belongs_to :approach
   belongs_to :manure_management_plan_nature
   has_one :manure_management_plan, through: :manure_management_plan_nature
+
+  delegate :questions, to: :approach
+  delegate :supply_nature, to: :manure_management_plan_nature
+
   def self.most_relevant_approach(shape,supply_nature)
     #Return the most relevant model for a given location
 

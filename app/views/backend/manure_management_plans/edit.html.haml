@@ -31,7 +31,9 @@
                                                                     :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
                                                                                                     {type: :label, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
                                                                                                     {type: :label, property_label: "attributes.cultivation_variety".t, property_value: :variety},
-                                                                                                    {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}]},
+                                                                                                    {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}],
+                                                                    modal: manure_modal_fields(@manure_management_plan)
+                                                                   },
 
                                                                     { name: :regulatory_zone,
                                                                     label: :regulatory_zone.tl,
@@ -39,9 +41,7 @@
                                                                     fillColor: '#A00',
                                                                     type: :simple
                                                                     }
-
-                                                                 ]
-                                                                 },
+                                                                 ]},
                                                                  useFeatures: true,
                                                                  defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
                                                                  overlaySelector: { editionLayer: :georeadings.tl },
@@ -54,4 +54,6 @@
                                                                  })
     - j.face :list do
       = main_list
+
+
   =  link_to "Validate", {controller: :manure_management_plans, action: :results}, class: :btn

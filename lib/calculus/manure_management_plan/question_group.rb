@@ -10,13 +10,15 @@ module Calculus
 
       def ask(question_label)
         #Return the actual answer for the question
-        @questions[label].answer if @questions[label]
+        @questions[question_label.to_s]["answer"] if @questions[question_label.to_s]
       end
 
       def answers
         answers = {}
         @questions.each do |question|
-          answers[question["label"]]=question["answer"]
+          if answers[question["label"]]
+           answers[question["label"]]=question["answer"]
+          end
         end
         answers
       end
@@ -35,8 +37,12 @@ module Calculus
 
       def labels
         labels = []
-        questions.map {|question| labels << question["label"]}
+        @questions.map {|question| labels << question["label"]}
         labels
+      end
+
+      def has_answers?
+        answers.empty?
       end
 
     end

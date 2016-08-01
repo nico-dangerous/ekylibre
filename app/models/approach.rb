@@ -22,7 +22,7 @@
 #
 # == Table: approaches
 #
-#  id            :integer          not null
+#  id            :integer          not null, primary key
 #  name          :string
 #  questions     :jsonb
 #  shape         :geometry({:srid=>4326, :type=>"geometry"})
@@ -30,10 +30,5 @@
 #
 
 class Approach < Ekylibre::Record::Base
-
-  def has_answers?
-    # Return true if any question has already an answer
-      return (not questions["answer"].values.compact!.empty?)
-  end
 
 end

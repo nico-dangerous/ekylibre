@@ -96,9 +96,23 @@ module Backend
        return [:no_data, info]
     end
 
+    def manure_zone_questions_properties(manure_zone)
+      approaches_properties = {}
+      approach_applications = manure_zone.manure_approach_applications
+
+      approach_applications.each do |approach_app|
+        approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app.approach)
+        approaches_properties[approach.supply_nature] = {}
+        approach.questions.each do |question|
+          approaches_properties[approach.supply_nature][question["label"]] = question["answer"]
+        end
+      end
+      approaches_properties
+    end
+
     def manure_feature_description(manure_management_plan)
 
-      regulatory_zones_shape, info = *regulatory_zones_feature_collection(manure_management_plan)
+      regulatory_zones_shape, regulatory_zone_info = *regulatory_zones_feature_collection(manure_management_plan)
       cultivable_zones_properties = []
       georeadings_properties = []
       mmpz_in_vulnerable_area = manure_management_plan.zones_in_vulnerable_area
@@ -119,25 +133,41 @@ module Backend
       #Build manure_management_plan feature properties
       manure_management_plan.zones.each do |manure_zone|
         property = {}
-        unless info.nil?
+
+        property = property.merge(manure_zone_questions_properties(manure_zone))
+
+        unless regulatory_zone_info.nil?
           # extracts from info and place it in properties
-          info.each_key { |key|
-            value = info[key].select{ |info_id,value| info_id == manure_zone.id }
+          regulatory_zone_info.each_key { |key|
+            value = regulatory_zone_info[key].select{ |info_id,value| info_id == manure_zone.id }
             property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
           }
         end
         #Is the mmpz in a vulnerable_zone ?
         property[:vulnerable_zone] = mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s
+        property[:id] = manure_zone.id
         property[:name] = manure_zone.name
         property[:variety] = manure_zone.cultivation_variety_name
         property[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
         cultivable_zones_properties << property
       end
+
       return {
               :georeadings => objects_to_feature_collection(georeadings,georeadings_properties),
               :regulatory_zones => regulatory_zones_shape,
               :cultivable_zones => manure_feature_collection(manure_management_plan,cultivable_zones_properties)
               }
+    end
+
+    def manure_modal_fields(manure_management_plan)
+      #[{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone}
+      manure_management_plan.zones.each do |manure_zone|
+        manure_zone.manure_approach_applications.each do |manure_app|
+
+
+          byebug
+        end
+      end
     end
   end
 end

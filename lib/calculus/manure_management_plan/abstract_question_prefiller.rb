@@ -4,12 +4,12 @@ module Calculus
     class AbstractQuestionPrefiller
 
       def self.prefill(question_group)
-        #implement this method to define the values you desire
+        #Return a hash with {question_label => answer, ...}
         raise NotImplemented
       end
 
       def self.prefill_questions(question_group)
-        answer_to_questions(self.prefill(question_group))
+        question_group.answer_to_questions(self.prefill(question_group))
       end
 
     end

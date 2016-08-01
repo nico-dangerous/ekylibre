@@ -14,6 +14,7 @@ class mapeditor.Simple
             widget.ghostLabelCluster.bind label, layer
           feature.properties['popupAttributes'] = globalStyle.popup || []
           widget.popupizeSerie(feature, layer) if @layer.popup
+          widget.modalizeSeries(feature,layer) if @layer.modal
 
         style: (feature) =>
           $.extend {}, true, globalStyle, feature.properties

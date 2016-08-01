@@ -36,6 +36,50 @@ namespace :lexicon do
     end
   end
 
+
+  desc ""
+  task approach_yml: :environment do
+    name = ENV["NAME"]
+    supply_nature = ENV["SUPPLY_NATURE"]
+    shape_file = ENV["SHAPEFILE"]
+    filename = name+".approaches.yml"
+    shape = nil
+    RGeo::Shapefile::Reader.open(shape_file, srid: 4326) do |file|
+      file.each do |record|
+        shape = record.geometry.as_text
+      end
+    end
+    finished = false
+    questions = {"questions" => {}}
+
+    index = 0
+    while not finished do
+      puts ("add question ? y/n")
+      answer = STDIN.gets.chomp
+      question = {}
+      if answer == "y"
+
+        question = {}
+        puts ("text :")
+        question["text"] = STDIN.gets.chomp
+        puts ("label :")
+        question["label"] = STDIN.gets.chomp
+        puts ("type :")
+        question["type"] = STDIN.gets.chomp
+        questions["questions"][index.to_s] = question
+        index+=1
+      elsif answer == "n"
+        finished = true
+      end
+    end
+    approach = {"name" => name,
+                "supply_nature" => supply_nature,
+                "questions" => questions.to_s,
+                "shape" => shape
+                }
+    File.new(filename,"w").puts(approach.to_yaml)
+  end
+
   desc ""
   task shapefile_to_yaml: :environment do
 

@@ -22,7 +22,7 @@
 #
 # == Table: administrative_areas
 #
-#  id    :integer          not null
+#  id    :integer          not null, primary key
 #  name  :string
 #  shape :geometry({:srid=>4326, :type=>"multi_polygon"})
 #  type  :string
