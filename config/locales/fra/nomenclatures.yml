@@ -1,6 +1,10 @@
 fra:
   nomenclatures:
     abilities:
+      choices:
+        parameters:
+          issue_nature: "Type d’incident"
+          variety: "Variété"
       items:
         acidify: "Acidifier"
         administer_care: "Administrer des soins"
@@ -3298,9 +3302,9 @@ fra:
         variety: "Variété"
     product_natures:
       choices:
-        linkage_points:  #?
-          front: "avant" #?
-          rear: "arrière" #?
+        linkage_points:
+          front: "Avant"
+          rear: "Arrière"
         population_counting:
           decimal: "Décimal"
           integer: "Entier"
@@ -3411,7 +3415,7 @@ fra:
         gas: "Gaz"
         gas_engine: "Machine à gaz"
         goat_herd: "Troupeau caprin"
-        grain: "Céréale"
+        grain: "Céréale-Légumineuse-Oléagineuse"
         grain_crop: "Culture à graines"
         grain_tank: "Silo à grain"
         grape: "Raisin"
