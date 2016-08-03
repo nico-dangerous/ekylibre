@@ -28,11 +28,7 @@
                                                                     serie: :cultivable_zone_serie,
                                                                     type: :simple,
                                                                     fillColor: '#0A0',
-                                                                    :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
-                                                                                                    {type: :label, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
-                                                                                                    {type: :label, property_label: "attributes.cultivation_variety".t, property_value: :variety},
-                                                                                                    {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}],
-                                                                    modal: manure_modal_fields(@manure_management_plan)
+                                                                    modal: true
                                                                    },
 
                                                                     { name: :regulatory_zone,

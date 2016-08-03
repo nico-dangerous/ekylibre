@@ -401,36 +401,91 @@
         layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
 
     modalizeSeries: (feature,layer) ->
-      header = "<div class='modal-header'><i ></i><span>{title}</span></div> <div class='modal-body'>"
-
-      footer =     "</div>
-                   <div class='modal-footer'>
-                     <button type='submit' class='{OK_CLS}' data-editor-submit=true>{okText}</button>
-                     <button class='{CANCEL_CLS}' data-editor-cancel=true>{cancelText}</button>
+      header = "<div class='{MODAL_CLS}'>" +
+                 "<h1 class='{MODAL_TITLE}' data-internal-id='#{feature.properties.internal_id}'>"+feature.properties.name+"</h1>" +
+               "</div>"
+      footer =     "
+                   <div class='{MODAL_FOOTER_CLS}'>
+                     <button type='submit' class='{OK_CLS}' data-editor-submit=true>OK</button>
                     </div>"
 
-      console.log(feature)
+      body = "<div class='{MODAL_CONTENT_CLS}'>"
+
+
+
+      Object.keys(feature.properties.modalAttributes).forEach (key, index) =>
+          properties = feature.properties.modalAttributes[key]
+
+          if key == "group"
+            Object.keys(properties).forEach (key, index) =>
+              properties = properties[key]
+              body += '<h2 class="{MODAL_GROUP_TITLE}">'+ key + "</h2>"
+              body += "<div class='(MODAL_GROUP_CONTENT_CLS}'>"
+              Object.keys(properties).forEach (key, index) =>
+                properties=properties[key]
+                body += "<label for='#{properties.label}'>#{properties.text} : </label>"
+                switch properties.type
+                  when 'input'
+                    body += "<input type='text' name=#{properties.label || '' } class='updateAttributesSerieLabelInput' value='#{properties.value || ""}'/>"
+                  else
+                    body += "<span>#{properties.value || ''}</span>"
+              body += "</div>"
+
+          else
+            body += "<div class='{MODAL_ITEM_CLS}'>"
+            body += "<label for='#{properties.label}'>#{properties.text} : </label>"
+            switch properties.type
+              when 'input'
+                body += "<input type='text' name=#{properties.label || '' } class='updateAttributesSerieLabelInput' value='#{properties.value || ""}'/>"
+              else
+                body += "<span>#{properties.value || ''}</span>"
+            body += "</div>"
+
+      body += "</div>"
+      content = header + body + footer
 
       layer.on 'click' , (e) =>
         this.map.fire('modal',
           closeTitle: 'close'
           zIndex: 10000
           transitionDuration: 300
-          template: '{content}'
+          template: content
           onShow: (evt) ->
             modal = evt.modal
-            'toto'
-            return
+            L.DomEvent.on(modal._container.querySelector('.modal-ok'), 'click', (e) ->
+              feature_internal_id = $(modal._container.querySelector('.modal-title')).attr('data-internal-id')
+              properties = feature.properties.modalAttributes
+              console.log(properties)
+
+              Object.keys(properties).forEach (key, index) =>
+                properties = properties[key]
+                console.log(key)
+                console.log(properties)
+
+                if key == "group"
+                  Object.keys(properties).forEach (key, index) =>
+                  properties = properties[key]
+
+              modal.hide())
           onHide: (evt) ->
             modal = evt.modal
             'toto'
             return
           OVERLAY_CLS: 'overlay'
+          OK_CLS: 'modal-ok'
+          CANCEL_CLS: 'modal-cancel'
           MODAL_CLS: 'modal'
-          MODAL_CONTENT_CLS: 'modal-content'
-          INNER_CONTENT_CLS: 'modal-inner'
+          MODAL_CONTENT_CLS: ''
+          MODAL_TITLE: 'modal-title'
+          INNER_CONTENT_CLS: 'modal-content'
+          MODAL_FOOTER_CLS: ''
+          MODAL_GROUP_TITLE: ''
+          MODAL_ITEM_CLS: ''
+          MODAL_GROUP_CONTENT_CLS: ''
           SHOW_CLS: 'show'
           CLOSE_CLS: 'close')
+
+
 
     colorize: (level) ->
         #levels rane is set to [-3,3]

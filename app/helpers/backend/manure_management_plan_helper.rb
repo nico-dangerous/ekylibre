@@ -97,17 +97,23 @@ module Backend
     end
 
     def manure_zone_questions_properties(manure_zone)
+      #Fill two hashes using the approach of the manure zone
+      #approach_modal_fields contains the text and approaches_properties the answer
+
       approaches_properties = {}
       approach_applications = manure_zone.manure_approach_applications
 
       approach_applications.each do |approach_app|
-        approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app.approach)
-        approaches_properties[approach.supply_nature] = {}
-        approach.questions.each do |question|
-          approaches_properties[approach.supply_nature][question["label"]] = question["answer"]
+        approach = approach_app.approach
+
+        approaches_properties["group"] = {approach.supply_nature => {}}
+
+        approach_question_hash = approach.questions["questions"]
+        approach_question_hash.values.each  do |question|
+          approaches_properties["group"][approach.supply_nature][question["label"]] = {"type"=> question["type"], "value" => question["answer"], "text" => question["text"], "label" => question["label"]}
         end
       end
-      approaches_properties
+      return approaches_properties
     end
 
     def manure_feature_description(manure_management_plan)
@@ -115,6 +121,7 @@ module Backend
       regulatory_zones_shape, regulatory_zone_info = *regulatory_zones_feature_collection(manure_management_plan)
       cultivable_zones_properties = []
       georeadings_properties = []
+      modal_fields = {}
       mmpz_in_vulnerable_area = manure_management_plan.zones_in_vulnerable_area
 
       #mmpz_in_vulnerable_area is an array of array of one element, so we convert it into a simple array
@@ -134,8 +141,18 @@ module Backend
       manure_management_plan.zones.each do |manure_zone|
         property = {}
 
-        property = property.merge(manure_zone_questions_properties(manure_zone))
+=begin
+        :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
+                   {type: :input, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
+                   {type: :label, property_label: "attributes.cultivation_variety".t, property_value: :variety},
+                   {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}],
+=end
 
+
+        #Create fields for modal
+        approach_app_prop = manure_zone_questions_properties(manure_zone)
+
+        #add properties calculated by regulatory zone
         unless regulatory_zone_info.nil?
           # extracts from info and place it in properties
           regulatory_zone_info.each_key { |key|
@@ -143,15 +160,19 @@ module Backend
             property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
           }
         end
+        property_modal = {}
         #Is the mmpz in a vulnerable_zone ?
         property[:vulnerable_zone] = mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s
         property[:id] = manure_zone.id
         property[:name] = manure_zone.name
-        property[:variety] = manure_zone.cultivation_variety_name
-        property[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
-        cultivable_zones_properties << property
-      end
+        property_modal[:variety] = {"text" => "attributes.cultivation_variety".t, "type"=> "label", "value" => manure_zone.cultivation_variety_name}
+        property_modal[:soil_nature] =  {"text" => "attributes.soil_nature".t, "type"=> "label", "value" => Nomen::SoilNature.find(manure_zone.soil_nature).human_name}
 
+        property_modal = {"modalAttributes" => property_modal}
+        property_modal["modalAttributes"] = property_modal["modalAttributes"].merge(approach_app_prop)
+        cultivable_zones_properties << property.merge(property_modal)
+
+      end
       return {
               :georeadings => objects_to_feature_collection(georeadings,georeadings_properties),
               :regulatory_zones => regulatory_zones_shape,
@@ -159,16 +180,6 @@ module Backend
               }
     end
 
-    def manure_modal_fields(manure_management_plan)
-      #[{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone}
-      manure_management_plan.zones.each do |manure_zone|
-        manure_zone.manure_approach_applications.each do |manure_app|
-
-
-          byebug
-        end
-      end
-    end
   end
 end
 
