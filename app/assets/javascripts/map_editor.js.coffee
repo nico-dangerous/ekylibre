@@ -322,7 +322,6 @@
       @map.eachLayer (layer) =>
         if layer.feature and (parseInt(layer.feature.properties.internal_id) == feature_id)
           containerLayer = layer
-          return
       containerLayer
 
     findLayerByName: (feature_name) ->
@@ -400,76 +399,73 @@
       else
         layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
 
-    modalizeSeries: (feature,layer) ->
+    modal_content:(feature,layer) ->
       header = "<div class='{MODAL_CLS}'>" +
-                 "<h1 class='{MODAL_TITLE}' data-internal-id='#{feature.properties.internal_id}'>"+feature.properties.name+"</h1>" +
-               "</div>"
+        "<h1 class='{MODAL_TITLE}' data-internal-id='#{feature.properties.internal_id}'>"+feature.properties.name+"</h1>" +
+        "</div>"
       footer =     "
                    <div class='{MODAL_FOOTER_CLS}'>
-                     <button type='submit' class='{OK_CLS}' data-editor-submit=true>OK</button>
+                     <button type='button' class='btn btn-primary modal-ok'>OK</button>
                     </div>"
 
-      body = "<div class='{MODAL_CONTENT_CLS}'>"
-
-
-
+      body = "<div class='form-group'>"
       Object.keys(feature.properties.modalAttributes).forEach (key, index) =>
-          properties = feature.properties.modalAttributes[key]
-
-          if key == "group"
-            Object.keys(properties).forEach (key, index) =>
-              properties = properties[key]
-              body += '<h2 class="{MODAL_GROUP_TITLE}">'+ key + "</h2>"
-              body += "<div class='(MODAL_GROUP_CONTENT_CLS}'>"
-              Object.keys(properties).forEach (key, index) =>
-                properties=properties[key]
-                body += "<label for='#{properties.label}'>#{properties.text} : </label>"
-                switch properties.type
-                  when 'input'
-                    body += "<input type='text' name=#{properties.label || '' } class='updateAttributesSerieLabelInput' value='#{properties.value || ""}'/>"
-                  else
-                    body += "<span>#{properties.value || ''}</span>"
+        properties = feature.properties.modalAttributes[key]
+        path = key
+        if key == "group"
+          Object.keys(properties).forEach (key, index) =>
+            properties_group = properties[key]
+            path = path + '@' + key
+            body += '<h2 class="{MODAL_GROUP_TITLE}">'+ key + "</h2>"
+            Object.keys(properties_group).forEach (key, index) =>
+              properties_group_item=properties_group[key]
+              body += "<div class='form-group'>"
+              body += "<label class='col-form-label' for='#{properties_group_item.label}'>#{properties_group_item.text} : </label>"
+              switch properties_group_item.type
+                when 'input'
+                  body += "<input type='text' class='updateAttributesSerieLabelInput form-control' name=#{path + '@' + properties_group_item.label || '' } value='#{properties_group_item.value || ""}'/>"
+                else
+                  body += "<span>#{properties_group_item.value || ''}</span>"
               body += "</div>"
 
-          else
-            body += "<div class='{MODAL_ITEM_CLS}'>"
-            body += "<label for='#{properties.label}'>#{properties.text} : </label>"
-            switch properties.type
-              when 'input'
-                body += "<input type='text' name=#{properties.label || '' } class='updateAttributesSerieLabelInput' value='#{properties.value || ""}'/>"
-              else
-                body += "<span>#{properties.value || ''}</span>"
-            body += "</div>"
+        else
+          body += "<div class='{MODAL_ITEM_CLS}'>"
+          body += "<label for='#{properties.label}'>#{properties.text} : </label>"
+          switch properties.type
+            when 'input'
+              body += "<input class='form-control updateAttributesSerieLabelInput' type='text' name=#{path + '@' +properties.label || '' }  value='#{properties.value || ""}'/>"
+            else
+              body += "<span>#{properties.value || ''}</span>"
+          body += "</div>"
 
       body += "</div>"
-      content = header + body + footer
+      return header + body + footer
 
+
+    modalizeSeries: (feature,layer) ->
       layer.on 'click' , (e) =>
         this.map.fire('modal',
           closeTitle: 'close'
           zIndex: 10000
           transitionDuration: 300
-          template: content
-          onShow: (evt) ->
+          template: @modal_content(feature,layer)
+          onShow: (evt) =>
             modal = evt.modal
-            L.DomEvent.on(modal._container.querySelector('.modal-ok'), 'click', (e) ->
-              feature_internal_id = $(modal._container.querySelector('.modal-title')).attr('data-internal-id')
-              properties = feature.properties.modalAttributes
-              console.log(properties)
-
-              Object.keys(properties).forEach (key, index) =>
-                properties = properties[key]
-                console.log(key)
-                console.log(properties)
-
-                if key == "group"
-                  Object.keys(properties).forEach (key, index) =>
-                  properties = properties[key]
-
+            L.DomEvent.on(modal._container.querySelector('.modal-ok'), 'click', (e) =>
+              $('.updateAttributesSerieLabelInput').each (index, value) =>
+                path = $(value).attr("name").split('@')
+                set_property = (prop, keys,value) ->
+                  if keys.length == 0
+                    prop.value = value
+                  else
+                    prop = prop[keys[0]]
+                    keys.shift()
+                    set_property(prop,keys,value)
+                set_property(layer.feature.properties.modalAttributes,path,$(value).val())
+              this.element.trigger "modal_validated", feature
               modal.hide())
           onHide: (evt) ->
             modal = evt.modal
-            'toto'
             return
           OVERLAY_CLS: 'overlay'
           OK_CLS: 'modal-ok'

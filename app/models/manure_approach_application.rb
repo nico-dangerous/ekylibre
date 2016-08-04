@@ -37,6 +37,8 @@ class ManureApproachApplication < Ekylibre::Record::Base
   has_one :manure_management_plan, through: :manure_management_plan_nature
 
   delegate :questions, to: :approach
+  delegate :name, to: :approach
+
   delegate :supply_nature, to: :manure_management_plan_nature
 
   def self.most_relevant_approach(shape,supply_nature)
@@ -72,6 +74,9 @@ class ManureApproachApplication < Ekylibre::Record::Base
       if couple[1] < min_couple[1]
         min_couple = couple
       end
+    end
+    if min_couple.nil?
+      return nil
     end
     return min_couple[0]
   end

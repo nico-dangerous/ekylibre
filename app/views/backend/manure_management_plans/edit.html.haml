@@ -1,55 +1,55 @@
 -features_description = manure_feature_description(@manure_management_plan)
 
-.manure_edit
+= form_tag({action: :compute}, class: "manure_edit") do
   = janus do |j|
     - j.face :map do
-      .form-map
-        :ruby
-          haml_io.write shape_field_tag("manure_management_plan", features_description[:georeadings], {class: :manuring_step_form,
-                                                          box: {width: '70%'},
-                                                          data: {
-                                                          'update-url':url_for(:action => 'update_georeadings'),
-                                                          'delete-url':url_for(:action => 'delete_georeadings'),
-                                                          'create-url':url_for(:action => 'create_georeading'),
-                                                           map_editor: {
-                                                              customClass:'manure-map',
-                                                              allowAttributesPopup: true,
-                                                              view: {
-                                                                  center: Charta.new_geometry(features_description[:cultivable_zones]).centroid
-                                                              },
-                                                              show: {
-                                                                 series: {
-                                                                    cultivable_zone_serie:  features_description[:cultivable_zones],
-                                                                    regulatory_zone_serie:  features_description[:regulatory_zones]
+      :ruby
+        haml_io.write shape_field_tag("manure_management_plan", features_description[:georeadings], {class: :manuring_step_form,
+                                                        box: {width: '70%'},
+                                                        data: {
+                                                        'update-url':url_for(:action => 'update_georeadings'),
+                                                        'delete-url':url_for(:action => 'delete_georeadings'),
+                                                        'create-url':url_for(:action => 'create_georeading'),
+                                                        'update_question':url_for(:action => 'update_question'),
+                                                         map_editor: {
+                                                            customClass:'manure-map',
+                                                            allowAttributesPopup: true,
+                                                            view: {
+                                                                center: Charta.new_geometry(features_description[:cultivable_zones]).centroid
+                                                            },
+                                                            show: {
+                                                               series: {
+                                                                  cultivable_zone_serie:  features_description[:cultivable_zones],
+                                                                  regulatory_zone_serie:  features_description[:regulatory_zones]
+                                                               },
+                                                               layers: [
+                                                                 { name: :cultivable_zones,
+                                                                  label: :cultivable_zones.tl,
+                                                                  serie: :cultivable_zone_serie,
+                                                                  type: :simple,
+                                                                  fillColor: '#0A0',
+                                                                  modal: true
                                                                  },
-                                                                 layers: [
-                                                                   { name: :cultivable_zones,
-                                                                    label: :cultivable_zones.tl,
-                                                                    serie: :cultivable_zone_serie,
-                                                                    type: :simple,
-                                                                    fillColor: '#0A0',
-                                                                    modal: true
-                                                                   },
-
-                                                                    { name: :regulatory_zone,
-                                                                    label: :regulatory_zone.tl,
-                                                                    serie: :regulatory_zone_serie,
-                                                                    fillColor: '#A00',
-                                                                    type: :simple
-                                                                    }
-                                                                 ]},
-                                                                 useFeatures: true,
-                                                                 defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
-                                                                 overlaySelector: { editionLayer: :georeadings.tl },
-                                                                 defaultLabel: :unnamed.tl,
-                                                                 controls:{
-                                                                  measure: { show: false, localization: 'i18n.iso2'.t },
-                                                                  importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
-                                                                 }},
-                                                                  actionmenu: { box: {width: '30%'},customClass:'responsive-map'}}
-                                                                 })
-    - j.face :list do
-      = main_list
+                                                                  { name: :regulatory_zone,
+                                                                  label: :regulatory_zone.tl,
+                                                                  serie: :regulatory_zone_serie,
+                                                                  fillColor: '#A00',
+                                                                  type: :simple
+                                                                  }
+                                                               ]},
+                                                               useFeatures: true,
+                                                               defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
+                                                               overlaySelector: { editionLayer: :georeadings.tl },
+                                                               defaultLabel: :unnamed.tl,
+                                                               controls:{
+                                                                measure: { show: false, localization: 'i18n.iso2'.t },
+                                                                importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
+                                                               }},
+                                                                actionmenu: { box: {width: '30%'},customClass:'responsive-map'}}
+                                                               })
+      - j.face :list do
+        = main_list
 
 
-  =  link_to "Validate", {controller: :manure_management_plans, action: :results}, class: :btn
+  = form_actions do
+    = submit_tag(:validate.tl, :name => :validate)

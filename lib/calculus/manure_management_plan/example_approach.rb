@@ -6,7 +6,8 @@ module Calculus
       def yields_procedure
 
         #Retrieve data
-        ExampleApproachQuestionPrefiller.prefill_questions(@question_group)
+        byebug
+
         result = {toto: 10, tata: 30 }
       end
 
@@ -14,7 +15,6 @@ module Calculus
         # return a hash with the following keys :
         # needs:
         # the args used for computation
-        EmptyQuestionPrefiller.prefill_questions(@question_group)
 
         result = {kayak: 1.0, kayak: 0.1 }
       end

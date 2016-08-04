@@ -88,7 +88,10 @@ module Backend
         @manure_management_plan.zones.each do |zone|
            ManureApproachApplication.create!(manure_management_plan_zone: zone,
                                              manure_management_plan_nature: mmp_nature,
-                                             approach_id: ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature) )
+                                             supply_nature: mmp_nature.supply_nature,
+                                             parameters: {},
+                                             results: {},
+                                             approach_id: ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature))
          end
       end
       @manure_management_plan.manure_natures = mmp_natures
@@ -97,23 +100,51 @@ module Backend
       redirect_to action: :edit, id: @manure_management_plan.id
     end
 
-    def edit
+    def compute
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
 
       @manure_management_plan.zones.each do |zone|
         approach_applications = zone.manure_approach_applications
         approach_applications.each do |approach_app|
-          approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app.approach)
-          if approach.questions_answered?
+          unless approach_app.approach.nil?
+            approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app)
             res1 = approach.yields_procedure
             res2 = approach.needs_procedure
           end
         end
       end
 
+    end
 
-      t3e @manure_management_plan.attributes
-      render :edit
+    def update_question
+      geojson = params['shape']
+      rgeo_coder = RGeo::GeoJSON::Coder.new({:json_parser => :json})
+      rgeo_feature = rgeo_coder.decode(geojson)
+      id = rgeo_feature.properties["manure_zone_id"]
+      attributes = rgeo_feature.properties["modalAttributes"]["group"]
+      success = true
+
+      zone= ManureManagementPlanZone.find(id)
+      approach_applications = zone.manure_approach_applications
+      approach_applications.each do |approach_app|
+        approach = approach_app.approach
+        unless approach.nil?
+          response_questions = attributes[approach.supply_nature]
+          approach_questions = approach.questions["questions"]
+          approach_questions.values.each do |approach_question|
+            label = approach_question["label"]
+            approach_app.parameters[label] = response_questions[label]["value"]
+          end
+          success = false if not approach_app.save
+        end
+      end
+      respond_to do |format|
+        if success
+          format.json  { render json: { :status => 'success'}}
+        else
+          format.json { render json: { status: 'errors' }, status: 500 }
+        end
+      end
     end
 
     def create_georeading
@@ -176,7 +207,6 @@ module Backend
         if saved
           format.json  { render json: { :status => 'success'}}
         else
-          format.json { render json: { status: 'errors' }, status: 500 }
         end
       end
     end

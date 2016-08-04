@@ -102,15 +102,22 @@ module Backend
 
       approaches_properties = {}
       approach_applications = manure_zone.manure_approach_applications
-
+      approaches_properties["group"] = {}
       approach_applications.each do |approach_app|
         approach = approach_app.approach
+        if approach.nil?
+          approaches_properties["group"][approach_app.supply_nature] = {"error" =>{
+              "type" => "label",
+              "text" => "error".tl,
+              "value" => "no_approach_found".tl
+          }}
+        else
+          approaches_properties["group"][approach.supply_nature]={}
 
-        approaches_properties["group"] = {approach.supply_nature => {}}
-
-        approach_question_hash = approach.questions["questions"]
-        approach_question_hash.values.each  do |question|
-          approaches_properties["group"][approach.supply_nature][question["label"]] = {"type"=> question["type"], "value" => question["answer"], "text" => question["text"], "label" => question["label"]}
+          approach_question_hash = approach.questions["questions"]
+          approach_question_hash.values.each  do |question|
+            approaches_properties["group"][approach.supply_nature][question["label"]] = {"type"=> question["type"], "value" => approach_app.parameters[question["label"]], "text" => question["text"], "label" => question["label"]}
+          end
         end
       end
       return approaches_properties
@@ -163,7 +170,7 @@ module Backend
         property_modal = {}
         #Is the mmpz in a vulnerable_zone ?
         property[:vulnerable_zone] = mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s
-        property[:id] = manure_zone.id
+        property[:manure_zone_id] = manure_zone.id
         property[:name] = manure_zone.name
         property_modal[:variety] = {"text" => "attributes.cultivation_variety".t, "type"=> "label", "value" => manure_zone.cultivation_variety_name}
         property_modal[:soil_nature] =  {"text" => "attributes.soil_nature".t, "type"=> "label", "value" => Nomen::SoilNature.find(manure_zone.soil_nature).human_name}
@@ -171,7 +178,6 @@ module Backend
         property_modal = {"modalAttributes" => property_modal}
         property_modal["modalAttributes"] = property_modal["modalAttributes"].merge(approach_app_prop)
         cultivable_zones_properties << property.merge(property_modal)
-
       end
       return {
               :georeadings => objects_to_feature_collection(georeadings,georeadings_properties),

@@ -31,7 +31,7 @@ class ManureManagementPlanNature < Ekylibre::Record::Base
   belongs_to :manure_management_plan
 
   def self.available_natures
-    Approach.pluck(:supply_nature).compact!
+    Approach.pluck(:supply_nature).compact
   end
 
 end
