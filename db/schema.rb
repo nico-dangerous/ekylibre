@@ -1211,6 +1211,7 @@ ActiveRecord::Schema.define(version: 20160727201017) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "lock_version",                                          default: 0, null: false
+    t.string   "kind"
   end
 
   add_index "georeadings", ["created_at"], name: "index_georeadings_on_created_at", using: :btree
@@ -1905,32 +1906,38 @@ ActiveRecord::Schema.define(version: 20160727201017) do
   add_index "loans", ["updated_at"], name: "index_loans_on_updated_at", using: :btree
   add_index "loans", ["updater_id"], name: "index_loans_on_updater_id", using: :btree
 
+  create_table "manure_approach_applications", force: :cascade do |t|
+    t.string  "supply_nature"
+    t.jsonb   "parameters"
+    t.jsonb   "results"
+    t.integer "manure_management_plan_nature_id"
+    t.integer "manure_management_plan_zone_id"
+    t.integer "approach_id"
+  end
+
+  add_index "manure_approach_applications", ["approach_id"], name: "index_manure_plan_approach_on_approach", using: :btree
+  add_index "manure_approach_applications", ["manure_management_plan_nature_id"], name: "index_manure_approach_application_on_manure_plan_nature", using: :btree
+  add_index "manure_approach_applications", ["manure_management_plan_zone_id"], name: "index_manure_plan_approach_on_manure_plan_zone", using: :btree
+
+  create_table "manure_management_plan_natures", force: :cascade do |t|
+    t.string  "supply_nature"
+    t.integer "manure_management_plan_id"
+  end
+
+  add_index "manure_management_plan_natures", ["manure_management_plan_id"], name: "index_manure_plan_nature_on_manure_plan", using: :btree
+
   create_table "manure_management_plan_zones", force: :cascade do |t|
-    t.integer  "plan_id",                                                                              null: false
-    t.integer  "activity_production_id",                                                               null: false
-    t.string   "computation_method",                                                                   null: false
+    t.integer  "plan_id",                                                     null: false
+    t.integer  "activity_production_id",                                      null: false
     t.string   "administrative_area"
     t.string   "cultivation_variety"
     t.string   "soil_nature"
-    t.decimal  "expected_yield",                                  precision: 19, scale: 4
-    t.decimal  "nitrogen_need",                                   precision: 19, scale: 4
-    t.decimal  "absorbed_nitrogen_at_opening",                    precision: 19, scale: 4
-    t.decimal  "mineral_nitrogen_at_opening",                     precision: 19, scale: 4
-    t.decimal  "humus_mineralization",                            precision: 19, scale: 4
-    t.decimal  "meadow_humus_mineralization",                     precision: 19, scale: 4
-    t.decimal  "previous_cultivation_residue_mineralization",     precision: 19, scale: 4
-    t.decimal  "intermediate_cultivation_residue_mineralization", precision: 19, scale: 4
-    t.decimal  "irrigation_water_nitrogen",                       precision: 19, scale: 4
-    t.decimal  "organic_fertilizer_mineral_fraction",             precision: 19, scale: 4
-    t.decimal  "nitrogen_at_closing",                             precision: 19, scale: 4
-    t.decimal  "soil_production",                                 precision: 19, scale: 4
-    t.decimal  "nitrogen_input",                                  precision: 19, scale: 4
-    t.datetime "created_at",                                                                           null: false
-    t.datetime "updated_at",                                                                           null: false
+    t.decimal  "expected_yield",         precision: 19, scale: 4
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.integer  "lock_version",                                                             default: 0, null: false
-    t.decimal  "maximum_nitrogen_input",                          precision: 19, scale: 4
+    t.integer  "lock_version",                                    default: 0, null: false
   end
 
   add_index "manure_management_plan_zones", ["activity_production_id"], name: "index_manure_management_plan_zones_on_activity_production_id", using: :btree
@@ -1941,19 +1948,17 @@ ActiveRecord::Schema.define(version: 20160727201017) do
   add_index "manure_management_plan_zones", ["updater_id"], name: "index_manure_management_plan_zones_on_updater_id", using: :btree
 
   create_table "manure_management_plans", force: :cascade do |t|
-    t.string   "name",                                       null: false
-    t.integer  "campaign_id",                                null: false
-    t.integer  "recommender_id",                             null: false
-    t.datetime "opened_at",                                  null: false
-    t.string   "default_computation_method",                 null: false
-    t.boolean  "locked",                     default: false, null: false
-    t.boolean  "selected",                   default: false, null: false
+    t.string   "name",                           null: false
+    t.integer  "campaign_id",                    null: false
+    t.integer  "recommender_id",                 null: false
+    t.datetime "opened_at",                      null: false
+    t.boolean  "locked",         default: false, null: false
     t.text     "annotation"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.integer  "lock_version",               default: 0,     null: false
+    t.integer  "lock_version",   default: 0,     null: false
   end
 
   add_index "manure_management_plans", ["campaign_id"], name: "index_manure_management_plans_on_campaign_id", using: :btree

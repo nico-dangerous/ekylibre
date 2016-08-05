@@ -59,11 +59,7 @@ class ActivityProduction < Ekylibre::Record::Base
   belongs_to :support, class_name: 'Product' # , inverse_of: :supports
   has_many :distributions, class_name: 'TargetDistribution', inverse_of: :activity_production, dependent: :restrict_with_exception
   has_many :budgets, through: :activity
-  has_many :manure_management_plan_zones, class_name: 'ManureManagementPlanZone',
-                                          inverse_of: :activity_production,
-                                          dependent: :destroy
-  has_one :selected_manure_management_plan_zone, -> { selecteds },
-          class_name: 'ManureManagementPlanZone', inverse_of: :activity_production
+  has_one :manure_management_plan_zone, class_name: 'ManureManagementPlanZone', inverse_of: :activity_production, dependent: :destroy
   has_one :cap_land_parcel, class_name: 'CapLandParcel', inverse_of: :activity_production, foreign_key: :support_id
 
   has_geometry :support_shape
@@ -332,11 +328,11 @@ class ActivityProduction < Ekylibre::Record::Base
     balance = 0.0
     nitrogen_mass = []
     nitrogen_unity_per_hectare = nil
-    if selected_manure_management_plan_zone
+    if manure_management_plan_zone
       # get the output O aka nitrogen_input from opened_at (in kg N / Ha )
-      o = selected_manure_management_plan_zone.nitrogen_input || 0.0
+      o = manure_management_plan_zone.nitrogen_input || 0.0
       # get the nitrogen input I from opened_at to now (in kg N / Ha )
-      opened_at = selected_manure_management_plan_zone.opened_at
+      opened_at = manure_management_plan_zone.opened_at
       i = soil_enrichment_indicator_content_per_area(:nitrogen_concentration, opened_at, Time.zone.now)
       balance = o - i if i && o
     else
@@ -484,7 +480,7 @@ class ActivityProduction < Ekylibre::Record::Base
 
   # TODO: Which yield is computed? usage is not very good to determine yields
   #   because many yields can be computed...
-  def estimate_yield(campaign, options = {})
+  def estimate_yield(campaign = self.campaign, options = {})
     variety = options.delete(:variety)
     # compute variety for estimate yield
     if usage == 'grain' || usage == 'seed'

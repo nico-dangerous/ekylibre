@@ -38,7 +38,7 @@
     - c.cobble :weather do
       = cell :weather, params: {id: resource.cultivable_zone.id} unless resource.cultivable_zone.nil?
 
-  - if resource.selected_manure_management_plan_zone
+  - if resource.manure_management_plan_zone
     - c.cobble :manure_management_plan_chart do
       :ruby
         # prepare an array of hash
@@ -46,8 +46,8 @@
         data_series = []
         nitrogen_mass = []
 
-        nitrogen_input = resource.selected_manure_management_plan_zone.nitrogen_input || 0.0
-        opened_at = resource.selected_manure_management_plan_zone.opened_at
+        nitrogen_input = resource.manure_management_plan_zone.nitrogen_input || 0.0
+        opened_at = resource.manure_management_plan_zone.opened_at
 
         # FIXME Some french to remove, arghh....
         data_series << { name: 'Fumure calculée (X) au ' + opened_at.l, y: nitrogen_input.to_s.to_f, color: "#000077"}

@@ -93,6 +93,11 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
     item
   end
+  
+  def nitrogen_input
+    # waiting for N,P and K result storage in DB
+    return nil
+  end
 =begin
     def estimate_expected_yield
       if computation_method
