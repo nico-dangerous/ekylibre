@@ -51,6 +51,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   accepts_nested_attributes_for :zones, :manure_management_plan_natures
   alias_attribute :natures, :manure_management_plan_natures
 
+
   protect do
     locked?
   end
@@ -69,8 +70,10 @@ class ManureManagementPlan < Ekylibre::Record::Base
     Georeading.where(kind: natures)
   end
 
-  def compute
-    zones.map(&:compute)
+  def compute_needs
+    results = {}
+    zones.map{|zone| results[zone.id] = zone.compute_needs}
+    return results
   end
 
   def self.create_for_campaign(campaign=nil, user=nil, soil_natures = {}, manure_natures = [],approach = nil)

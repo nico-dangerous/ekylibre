@@ -55,6 +55,8 @@ module Backend
     end
 
     def new
+      @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+      redirect_to action: :edit, id: @manure_management_plan.id unless @manure_management_plan.nil?
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
                                                         :opened_at => Time.new(current_campaign.harvest_year,2,1).to_datetime,
                                                         :recommender_id => current_user.person_id,
@@ -74,7 +76,7 @@ module Backend
     def create
       soil_natures = {}
       permitted_params["zones_attributes"].values.map{|zone| soil_natures[zone["activity_production_id"]] = zone["soil_nature"]}
-      manure_natures = permitted_params.delete("manure_natures").reject{|nature| nature.empty? || nature.nil? }
+      manure_natures = permitted_params.delete("natures").reject{|nature| nature.empty? || nature.nil? }
       
       @manure_management_plan = ManureManagementPlan.create_for_campaign(current_campaign,current_user,soil_natures,manure_natures)
       @manure_management_plan.save
@@ -83,18 +85,9 @@ module Backend
 
     def compute
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
+      @results = @manure_management_plan.compute_needs
 
-      @manure_management_plan.zones.each do |zone|
-        approach_applications = zone.manure_approach_applications
-        approach_applications.each do |approach_app|
-          unless approach_app.approach.nil?
-            approach = Calculus::ManureManagementPlan::Approach.build_approach(approach_app)
-            res1 = approach.yields_procedure
-            res2 = approach.needs_procedure
-          end
-        end
-      end
-
+      render :results
     end
 
     def update_question

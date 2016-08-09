@@ -116,7 +116,7 @@ module Backend
 
           approach_question_hash = approach.questions["questions"]
           approach_question_hash.values.each  do |question|
-            approaches_properties["group"][approach.supply_nature][question["label"]] = {"type"=> question["type"], "value" => approach_app.parameters[question["label"]], "text" => question["text"], "label" => question["label"]}
+            approaches_properties["group"][approach.supply_nature][question["label"]] = {"type"=> question["type"], "value" => approach_app.parameters[question["label"]], "text" => ManureApproachApplication.humanize_question(question["text"]), "label" => question["label"]}
           end
         end
       end
@@ -184,6 +184,31 @@ module Backend
               :regulatory_zones => regulatory_zones_shape,
               :cultivable_zones => manure_feature_collection(manure_management_plan,cultivable_zones_properties)
               }
+    end
+
+    def manure_zone_result_properties(manure_zone,results)
+      properties = {}
+      approach_applications = manure_zone.manure_approach_applications
+      zone_results = results[manure_zone.id]
+      approach_applications.each do |approach_app|
+        application_results = {"modalAttributes" => {"group" => {approach_app.supply_nature => {}}}}
+        zone_results[approach_app.id].each_key do |key|
+          application_results["modalAttributes"]["group"][approach_app.supply_nature][key] = {"text" => ManureApproachApplication.humanize_result(key) ,"type" => "label","value" => zone_results[approach_app.id][key]}
+        end
+         properties.merge!(application_results)
+      end
+      properties
+    end
+
+    def results_features(manure_management_plan, results)
+
+      cultivable_zones_properties=[]
+      manure_management_plan.zones.each do |manure_zone|
+        property = manure_zone_result_properties(manure_zone,results)
+        property[:name] = manure_zone.name
+        cultivable_zones_properties << property
+      end
+      return  {:cultivable_zones => manure_feature_collection(manure_management_plan,cultivable_zones_properties)}
     end
 
   end

@@ -1,9 +1,42 @@
-= janus do |j|
-  - if resource_model.any?
+- results = results_features(@manure_management_plan, @results)
+
+= form_tag({action: :compute}, class: "manure_edit") do
+  = janus do |j|
     - j.face :map do
-      = model_map(@manure_management_plan.zones)
-  -# if current_campaign
-      - j.face :chart do
-        = cell :cropping_plan_on_cultivable_zones, params: {campaign_id: current_campaign.id}
-  - j.face :list do
-    = main_list
+      :ruby
+        haml_io.write shape_field_tag("manure_management_plan", nil, {class: :manuring_step_form,
+                                                        box: {width: '70%'},
+                                                        data: {
+                                                         map_editor: {
+                                                            customClass:'manure-map',
+                                                            allowAttributesPopup: true,
+                                                            view: {
+                                                                center: Charta.new_geometry(results[:cultivable_zones]).centroid
+                                                            },
+                                                            show: {
+                                                               series: {
+                                                                  cultivable_zone_serie:  results[:cultivable_zones],
+                                                               },
+                                                               layers: [
+                                                                 { name: :cultivable_zones,
+                                                                  label: :cultivable_zones.tl,
+                                                                  serie: :cultivable_zone_serie,
+                                                                  type: :simple,
+                                                                  fillColor: '#0A0',
+                                                                  modal: true
+                                                                 }
+                                                               ]},
+                                                               useFeatures: true,
+                                                               defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
+                                                               defaultLabel: :unnamed.tl,
+                                                               controls:{
+                                                                measure: { show: false, localization: 'i18n.iso2'.t },
+                                                                importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
+                                                               }},
+                                                               }})
+      - j.face :list do
+        = main_list
+
+
+  = form_actions do
+    = submit_tag(:validate.tl, :name => :validate)

@@ -1,5 +1,5 @@
 = field_set do
-  = f.input :manure_natures, collection: ManureManagementPlanNature.available_natures, as: :check_boxes
+  = f.input :natures, collection: ManureManagementPlanNature.available_natures, as: :check_boxes
   = f.input :name, as: :hidden, value: f.object.name
   = f.referenced_association :recommender, as: :hidden
   = f.input :annotation, as: :hidden

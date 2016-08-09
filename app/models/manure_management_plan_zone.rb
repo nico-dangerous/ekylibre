@@ -56,11 +56,10 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   delegate :support_shape, to: :activity_production
 
   alias_attribute :approach_applications, :manure_approach_applications
+  alias_attribute :approach_applications, :manure_approach_applications
+
 
   accepts_nested_attributes_for :manure_approach_applications
-
-
-
 
   protect do
     locked?
@@ -97,11 +96,14 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
     end
     item
   end
-  
-  def nitrogen_input
-    # waiting for N,P and K result storage in DB
-    return nil
+
+
+  def compute_needs
+    results = {}
+    approach_applications.map{|approach| results[approach.id] = approach.compute_needs}
+    return results
   end
+
 =begin
     def estimate_expected_yield
       if computation_method

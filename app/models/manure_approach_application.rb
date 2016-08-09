@@ -46,7 +46,6 @@ class ManureApproachApplication < Ekylibre::Record::Base
 
   validates :approach_id, presence: true
 
-
   def self.most_relevant_approach(shape,supply_nature)
     #Return the most relevant model for a given location
 
@@ -87,4 +86,15 @@ class ManureApproachApplication < Ekylibre::Record::Base
     return min_couple[0]
   end
 
+  def compute_needs
+    Calculus::ManureManagementPlan::Approach.build_approach(self).compute_needs
+  end
+
+  def self.humanize_result(key_result)
+    I18n.translate("MMP.#{name}.results.#{key_result}",default:["MMP.results.#{key_result}","labels.#{key_result}",key_result.to_s.humanize])
+  end
+
+  def self.humanize_question(key_question)
+    I18n.translate("MMP.#{name}.question.#{key_question}",default:["MMP.question.#{key_question}","labels.#{key_question}",key_question.to_s.humanize])
+  end
 end
