@@ -55,48 +55,29 @@ module Backend
     end
 
     def new
-      #check if manure_management_plan already exists
-      mmp = ManureManagementPlan.of_campaign(current_campaign).first
-
-      redirect_to action: :edit, id: mmp.id unless mmp.nil?
-      need_soil_nature_form = false
       @manure_management_plan = ManureManagementPlan.new(:campaign => current_campaign,
-                                                         :opened_at => Time.new(current_campaign.harvest_year,2,1).to_datetime,
-                                                         :recommender_id => current_user.person_id,
-                                                         :name => "Fumure " + current_campaign["harvest_year"].to_s)
+                                                        :opened_at => Time.new(current_campaign.harvest_year,2,1).to_datetime,
+                                                        :recommender_id => current_user.person_id,
+                                                        :name => "Fumure " + current_campaign["harvest_year"].to_s)
       ActivityProduction.of_campaign(current_campaign).of_activity_families("plant_farming").each do |activity_production|
-         admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
-         admin_area_name = admin_area.name unless admin_area.nil?
-         zone = @manure_management_plan.zones.new(
+        admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
+        admin_area_name = admin_area.name unless admin_area.nil?
+        zone = @manure_management_plan.zones.new(
             :activity_production => activity_production,
             :soil_nature => activity_production.support.estimated_soil_nature,
             :cultivation_variety => activity_production.cultivation_variety,
             :administrative_area => admin_area_name,
-         )
-         if zone.soil_nature.nil? then need_soil_nature_form = true end
+        )
       end
-      render :create unless need_soil_nature_form
     end
 
     def create
+      soil_natures = {}
+      permitted_params["zones_attributes"].values.map{|zone| soil_natures[zone["activity_production_id"]] = zone["soil_nature"]}
       manure_natures = permitted_params.delete("manure_natures").reject{|nature| nature.empty? || nature.nil? }
-      @manure_management_plan = ManureManagementPlan.new(permitted_params)
-      mmp_natures = []
-      manure_natures.each do |manure_nature|
-        mmp_nature = ManureManagementPlanNature.new(supply_nature: manure_nature)
-        mmp_natures.push(mmp_nature)
-        @manure_management_plan.zones.each do |zone|
-           ManureApproachApplication.create!(manure_management_plan_zone: zone,
-                                             manure_management_plan_nature: mmp_nature,
-                                             supply_nature: mmp_nature.supply_nature,
-                                             parameters: {},
-                                             results: {},
-                                             approach_id: ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature))
-         end
-      end
-      @manure_management_plan.manure_natures = mmp_natures
+      
+      @manure_management_plan = ManureManagementPlan.create_for_campaign(current_campaign,current_user,soil_natures,manure_natures)
       @manure_management_plan.save
-
       redirect_to action: :edit, id: @manure_management_plan.id
     end
 
@@ -159,7 +140,6 @@ module Backend
         georeading = nil
         errors = ""
         if id.nil?
-
           georeading = Georeading.new
           georeading.content = Charta.new_geometry(geojson)
           georeading.name = rgeo_feature.properties["name"]

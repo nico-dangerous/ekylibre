@@ -11,7 +11,7 @@ module Calculus
       end
 
       def self.build_approach(application)
-        approach = Object.const_get(application.approach.name).new(application)
+        return Object.const_get(application.approach.classname).new(application)
       end
 
       def questions_answered?

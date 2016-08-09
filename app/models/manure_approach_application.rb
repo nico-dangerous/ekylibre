@@ -38,8 +38,14 @@ class ManureApproachApplication < Ekylibre::Record::Base
 
   delegate :questions, to: :approach
   delegate :name, to: :approach
-
   delegate :supply_nature, to: :manure_management_plan_nature
+
+  alias_attribute :plan, :manure_management_plan
+  alias_attribute :nature, :manure_management_plan_nature
+  alias_attribute :zone, :manure_management_plan_zone
+
+  validates :approach_id, presence: true
+
 
   def self.most_relevant_approach(shape,supply_nature)
     #Return the most relevant model for a given location

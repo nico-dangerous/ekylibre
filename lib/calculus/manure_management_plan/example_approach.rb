@@ -3,10 +3,13 @@ module Calculus
 
     class ExampleApproach < Approach
 
+      def initialize(application)
+        super(application)
+      end
+
       def yields_procedure
 
         #Retrieve data
-        byebug
 
         result = {toto: 10, tata: 30 }
       end
@@ -20,6 +23,5 @@ module Calculus
       end
 
     end
-
   end
 end

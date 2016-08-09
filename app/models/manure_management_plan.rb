@@ -39,15 +39,16 @@ class ManureManagementPlan < Ekylibre::Record::Base
   include Attachable
   belongs_to :campaign
   belongs_to :recommender, class_name: 'Entity'
-  has_many :manure_natures, class_name: 'ManureManagementPlanNature', foreign_key: :manure_management_plan_id
+  has_many :manure_management_plan_natures
   has_many :zones, class_name: 'ManureManagementPlanZone', dependent: :destroy, inverse_of: :plan, foreign_key: :plan_id
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :opened_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
   validates :locked, inclusion: { in: [true, false] }
-  validates :campaign, :name, :opened_at, :recommender, presence: true
+  validates :campaign, :name, :opened_at, :recommender, :natures, presence: true
   # ]VALIDATORS]
 
-  accepts_nested_attributes_for :zones, :manure_natures
+  accepts_nested_attributes_for :zones, :manure_management_plan_natures
+  alias_attribute :natures, :manure_management_plan_natures
 
   protect do
     locked?
@@ -69,6 +70,41 @@ class ManureManagementPlan < Ekylibre::Record::Base
 
   def compute
     zones.map(&:compute)
+  end
+
+  def self.create_for_campaign(campaign,user,soil_natures = {}, manure_natures = [],approach = nil)
+    #soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
+    if manure_natures.empty?
+      manure_natures = ["N"]
+    end
+    manure_management_plan = ManureManagementPlan.new(:campaign => campaign,
+                                                       :opened_at => Time.new(campaign.harvest_year,2,1).to_datetime,
+                                                       :recommender_id => user.person_id,
+                                                       :name => "Fumure " + campaign["harvest_year"].to_s)
+
+    ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming").each do |activity_production|
+      admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
+      admin_area_name = admin_area.name unless admin_area.nil?
+      manure_management_plan.zones.new(
+          :activity_production => activity_production,
+          :soil_nature => soil_natures[activity_production.id.to_s] || "champagne_soil",
+          :cultivation_variety => activity_production.cultivation_variety,
+          :administrative_area => admin_area_name,
+      )
+    end
+    manure_natures.each do |manure_nature|
+      mmp_nature = manure_management_plan.natures.new(supply_nature: manure_nature)
+      manure_management_plan.zones.each do |zone|
+        if approach.nil?
+          approach = ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature)
+        end
+        zone.manure_approach_applications.new(manure_management_plan_nature: mmp_nature,
+                                              parameters: {},
+                                              results: {},
+                                              approach_id: approach)
+      end
+    end
+    return manure_management_plan
   end
 
   def zones_in_vulnerable_area
@@ -127,6 +163,10 @@ class ManureManagementPlan < Ekylibre::Record::Base
     #check soil nature
 
     return missing_info
+  end
+
+  def self.compute_needs
+
   end
 
   def mass_density_unit

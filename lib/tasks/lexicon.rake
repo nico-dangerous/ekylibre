@@ -10,7 +10,7 @@ namespace :lexicon do
     ActiveRecord::Base.connection.execute 'CREATE SCHEMA IF NOT EXISTS lexicon;'
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.regulatory_zones(id serial PRIMARY KEY, name varchar, type varchar, shape geometry(GEOMETRY,4326));'
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.administrative_areas(id serial PRIMARY KEY, name varchar, type varchar, shape geometry(MULTIPOLYGON,4326));'
-    ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.approaches(id serial PRIMARY KEY, name varchar, supply_nature varchar, questions jsonb, shape geometry(GEOMETRY,4326));'
+    ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.approaches(id serial PRIMARY KEY, classname varchar ,name varchar, supply_nature varchar, questions jsonb, shape geometry(GEOMETRY,4326));'
   end
 
   desc "delete lexicon schema and all its data"

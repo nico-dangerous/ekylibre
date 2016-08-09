@@ -47,7 +47,6 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   refers_to :cultivation_variety, class_name: 'Variety'
   refers_to :administrative_area
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates :expected_yield, numericality: { allow_nil: true }
   validates :activity_production, :plan, presence: true
   # ]VALIDATORS]
   validates :soil_nature, presence: true
@@ -56,7 +55,12 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   delegate :name, to: :cultivable_zone
   delegate :support_shape, to: :activity_production
 
+  alias_attribute :approach_applications, :manure_approach_applications
+
   accepts_nested_attributes_for :manure_approach_applications
+
+
+
 
   protect do
     locked?
