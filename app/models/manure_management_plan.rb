@@ -72,8 +72,20 @@ class ManureManagementPlan < Ekylibre::Record::Base
     zones.map(&:compute)
   end
 
-  def self.create_for_campaign(campaign,user,soil_natures = {}, manure_natures = [],approach = nil)
+  def self.create_for_campaign(campaign=nil, user=nil, soil_natures = {}, manure_natures = [],approach = nil)
     #soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
+    if campaign.nil?
+      campaign = Campaign.last
+      if campaign.nil?
+        raise "no Campaign found"
+      end
+    end
+    if user.nil?
+      user = User.first
+      if user.nil?
+        raise "no User found"
+      end
+    end
     if manure_natures.empty?
       manure_natures = ["N"]
     end
