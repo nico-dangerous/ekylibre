@@ -45,6 +45,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   validates :opened_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
   validates :locked, inclusion: { in: [true, false] }
   validates :campaign, :name, :opened_at, :recommender, :natures, presence: true
+
   # ]VALIDATORS]
 
   accepts_nested_attributes_for :zones, :manure_management_plan_natures
@@ -175,10 +176,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
     #check soil nature
 
     return missing_info
-  end
-
-  def self.compute_needs
-
   end
 
   def mass_density_unit
