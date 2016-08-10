@@ -80,8 +80,8 @@ class ManureManagementPlan < Ekylibre::Record::Base
     return results
   end
 
-  def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [],approach_name: nil)
-    #soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
+  def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [], approach_name: nil)
+    # soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
     if campaign.nil?
       campaign = Campaign.last
       if campaign.nil?

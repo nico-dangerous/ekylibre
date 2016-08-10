@@ -245,7 +245,17 @@ class ActivityProduction < Ekylibre::Record::Base
     list.reverse! if 'i18n.dir'.t == 'rtl'
     list.join(' ')
   end
-
+  
+  # anyway return the variety to produce
+  # return the cultivation variety if a cultivation exist or the activity variety if none
+  def production_variety
+    if current_cultivation
+      return current_cultivation.variety
+    else
+      return cultivation_variety
+    end
+  end
+  
   def update_names
     if support
       new_support_name = computed_support_name
@@ -523,7 +533,7 @@ class ActivityProduction < Ekylibre::Record::Base
 
   def current_cultivation
     # get the first object with variety 'plant', availables
-    if cultivation = support.contents.where(type: Plant).of_variety(variant.variety).availables.reorder(:born_at).first
+    if cultivation = support.contents.where(type: Plant).of_variety(cultivation_variety).availables.reorder(:born_at).first
       return cultivation
     else
       return nil

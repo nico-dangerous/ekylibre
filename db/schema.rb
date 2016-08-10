@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729080926) do
+ActiveRecord::Schema.define(version: 20160810084131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2000,6 +2000,7 @@ ActiveRecord::Schema.define(version: 20160729080926) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "lock_version",   default: 0,     null: false
+    t.string   "data_unit"
   end
 
   add_index "manure_management_plans", ["campaign_id"], name: "index_manure_management_plans_on_campaign_id", using: :btree

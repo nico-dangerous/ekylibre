@@ -54,7 +54,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
 
   delegate :locked?, :opened_at, to: :plan
   delegate :name, to: :cultivable_zone
-  delegate :support_shape, to: :activity_production
+  delegate :support_shape, :irrigated, to: :activity_production
 
   alias_attribute :approach_applications, :manure_approach_applications
   alias_attribute :approach_applications, :manure_approach_applications
