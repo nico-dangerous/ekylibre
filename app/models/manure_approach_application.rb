@@ -87,8 +87,12 @@ class ManureApproachApplication < Ekylibre::Record::Base
     return min_couple[0]
   end
 
-  def compute_needs
-    Calculus::ManureManagementPlan::Approach.build_approach(self).compute_needs
+  def compute
+    approach = Calculus::ManureManagementPlan::Approach.build_approach(self)
+    return {:needs => approach.estimated_needs,
+            :yields => approach.estimate_expected_yield,
+            :supply => approach.estimated_supply,
+            :input => approach.estimated_input}
   end
 
   def self.humanize_result(key_result)

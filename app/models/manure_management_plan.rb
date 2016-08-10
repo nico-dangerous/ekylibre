@@ -74,13 +74,13 @@ class ManureManagementPlan < Ekylibre::Record::Base
     Georeading.where(kind: natures)
   end
 
-  def compute_needs
+  def compute
     results = {}
-    zones.map{|zone| results[zone.id] = zone.compute_needs}
+    zones.map{|zone| results[zone.id] = zone.compute}
     return results
   end
 
-  def self.create_for_campaign(campaign=nil, user=nil, soil_natures = {}, manure_natures = [],approach = nil)
+  def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [],approach_name: nil)
     #soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
     if campaign.nil?
       campaign = Campaign.last
@@ -94,6 +94,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
         raise "no User found"
       end
     end
+
     if manure_natures.empty?
       manure_natures = ["N"]
     end
@@ -116,13 +117,15 @@ class ManureManagementPlan < Ekylibre::Record::Base
     manure_natures.each do |manure_nature|
       mmp_nature = manure_management_plan.natures.new(supply_nature: manure_nature)
       manure_management_plan.zones.each do |zone|
-        if approach.nil?
+        if approach_name.nil?
           approach = ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature)
+        else
+          approach = Approach.find_by_name(approach_name)
         end
         zone.manure_approach_applications.new(manure_management_plan_nature: mmp_nature,
                                               parameters: {},
                                               results: {},
-                                              approach_id: approach)
+                                              approach_id: approach.id)
       end
     end
     return manure_management_plan
