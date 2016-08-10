@@ -47,6 +47,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   validates :data_unit, length: { maximum: 500 }, allow_blank: true
   validates :locked, inclusion: { in: [true, false] }
   validates :name, presence: true, length: { maximum: 500 }
+
   validates :opened_at, presence: true, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
   validates :campaign, :recommender, presence: true
   # ]VALIDATORS]

@@ -38,7 +38,7 @@ cmn:
       # detach: "Detach from affair %{number}"
       # finish: "Finish affair %{number}"
       index: "事务"
-      # select: "Select for affair %{number}"
+      select: "选择一个记录添加到外遇"
       # show: "Affair: %{number}"
     backend/analyses:
       # edit: "Edit analysis #%{number}"
@@ -389,7 +389,7 @@ cmn:
       # show: "Group: %{name}"
     backend/product_localizations:
       edit: "编辑产品的本地化："
-      # new: "New product localization"
+      new: "新产品本地化"
     backend/product_nature_categories:
       # edit: "Edit product category: %{name}"
       index: "产品类别"
@@ -670,10 +670,10 @@ cmn:
     add_reading: "添加值的指标"
     add_revenue: "添加收入"
     add_sale_taxation: "添加销售税收"
-    # add_season: "Add season"
+    add_season: "添加赛季"
     # add_subscription_for_sale_line: "Add subscription for sale line #%{position}"
     add_support: "添加支持"
-    # add_tactic: "Add cropping technique"
+    add_tactic: "添加作物管理技术"
     add_tool: "添加工具"
     add_website: "添加网站"
     add_working_period: "添加working_period"
@@ -818,7 +818,7 @@ cmn:
     current_stocks_by_variety: "目前的库存按品种"
     custom_fields: "自定义字段"
     dates: "选择期限起始日期和周期的最后一天"
-    # days: "Days"
+    days: "天"
     deals: "优惠"
     debit: "借方"
     debts_on_assets: "资产负债"
@@ -917,7 +917,6 @@ cmn:
     first_line_as_title: "第一行标题"
     fixed_asset_depreciations: "固定资产折旧"
     fixed_assets: "固定资产"
-    # forecast_volume: "Forecast volume"
     from: "从"
     fullscreen: "全屏"
     function: "功能"
@@ -1332,6 +1331,7 @@ cmn:
     # timeline_comment: "%{author} commented %{when}"
     timeline_entity_link: "时间轴实体链接"
     # timeline_event: "%{name} with %{participants} %{when}"
+    # timeline_event_without_participants: "%{name} %{when}"
     # timeline_incoming_call: "%{author} called %{entity} about %{name} %{when}"
     # timeline_incoming_mail: "%{entity} wrote to %{author} about %{name} %{when}"
     # timeline_item: "%{type} %{name} added by %{author} %{when}"
@@ -1504,6 +1504,9 @@ cmn:
     x_sales_invoices:
       # one: "%{count} sales invoice"
       # other: "%{count} sales invoices"
+    x_seconds:
+      # one: "%{count} second"
+      # other: "%{count} seconds"
     x_subscriptions:
       # one: "%{count} subscription"
       # other: "%{count} subscriptions"

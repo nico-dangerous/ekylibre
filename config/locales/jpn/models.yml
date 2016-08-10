@@ -5,7 +5,7 @@ jpn:
         expenses_amount: "費用額"
         revenues_amount: "収益額"
       activity_tactic:
-        # mode: "Planning type"
+        mode: "計画タイプ"
       animal_group:
         born_at: "で作成されました"
       building:
@@ -74,7 +74,7 @@ jpn:
         # on_or_after: "%{attribute} must be on or after %{restriction}"
         # on_or_before: "%{attribute} must be on or before %{restriction}"
         # overlap_sibling: "%{attribute} overlaps sibling"
-        # posterior: "The date %{attribute} must be posterior to %{to}"
+        # posterior: "%{attribute} must be posterior to %{to}"
         # record_invalid: "Validations failed: %{errors}"
         # taken: "%{attribute} has already been taken"
         # too_long: "%{attribute} is too long (maximum is %{count} characters)"
@@ -103,7 +103,7 @@ jpn:
             stopped_on:
               # end_of_month: "%{attribute} must be an end of month"
           # overlap: "%{attribute} overlaps an existing financial year"
-        fixed_asset:
+        fixed_asset_depreciation:
           attributes:
             started_on:
               # invalid_date: "The depreciation must start on %{start} or on a beginning of month"
@@ -149,8 +149,8 @@ jpn:
       activity_inspection_calibration_scale: "口径"
       activity_inspection_point_nature: "アクティビティグレーディングチェック"
       activity_production: "生産支援"
-      # activity_season: "Activity season"
-      # activity_tactic: "Activity cropping technique"
+      activity_season: "季節性"
+      activity_tactic: "アクティビティトリミング技術"
       affair: "事件"
       analysis: "分析"
       analysis_item: "分析項目"
@@ -548,6 +548,7 @@ jpn:
     employed: "採用"
     employees: "従業員"
     employment: "雇用"
+    enabled: "使用可能"
     encrypted_password: "暗号化されたパスワード"
     # enjoyer: "Enjoyer"
     enjoyments: "楽しみ"
@@ -583,6 +584,10 @@ jpn:
     father: "お父さん"
     faxes: "ファックス"
     fifth_producer: "フィフスプロデューサー" #?
+    file: "ファイル"
+    file_file_size: "ファイルサイズ"
+    file_pages_count: "ページカウント"
+    file_updated_at: "で更新"
     filtered_columns: "フィルタリングされた列"
     financial_year: "会計年度"
     financial_year_as_last: "会計年度（最後の仕訳など）"
@@ -595,6 +600,8 @@ jpn:
     fixed_asset: "固定資産"
     fixed_asset_account: "固定資産勘定"
     fixed_asset_allocation_account: "固定資産の減価償却のアカウント"
+    fixed_asset_collect_account: "固定資産のアカウントを収集"
+    fixed_asset_deduction_account: "固定資産控除アカウント"
     fixed_asset_depreciation_method: "固定資産の減価償却の方法"
     fixed_asset_depreciation_percentage: "固定資産の減価償却費の割合"
     fixed_asset_depreciations: "固定資産の減価償却"
@@ -817,7 +824,6 @@ jpn:
     minimal_size_value: "最小限のサイズ値"
     minimal_value: "極小値"
     mobiles: "携帯電話"
-    # mod: "Mod"
     mode: "モード"
     model_euid: "モデル"
     mother: "母"
@@ -1076,8 +1082,8 @@ jpn:
     sampling_temporal_mode: "サンプリング時間的モード"
     scale: "規模"
     scheduled: "予定の"
-    # season: "Seasonality"
-    # seasons: "Seasonalities"
+    season: "季節性"
+    seasons: "季節性"
     second_producer: "セカンドプロデューサー" #?
     seeding_density_unit: "播種密度ユニット"
     seeding_density_value: "播種密度"
@@ -1147,9 +1153,10 @@ jpn:
     support_variety: "サポートさまざまな"
     supports: "サポート"
     suspended: "吊り"
-    # tactic: "Cropping technique"
-    # tactics: "Cropping techniques"
+    tactic: "作物管理手法"
+    tactics: "戦術"
     target: "ターゲット"
+    target_name: "ターゲット名"
     target_type: "ターゲット・タイプ"
     target_url: "ターゲットURL"
     targets: "ターゲット"
@@ -1206,10 +1213,10 @@ jpn:
     usage_limit_on: "上で使用されます"
     usages: "用途"
     use_countings: "countingsを使用してください"
-    use_grading_calibre: "グレーディング口径を使用します"
+    use_grading_calibre: "グレーディング口径を使用します" #?
     use_gradings: "グレーディングを使用してください"
-    # use_seasons: "Use seasonalities"
-    # use_tactics: "Use cropping techniques"
+    use_seasons: "使用季節性"
+    use_tactics: "作物管理技術を使用して、"
     used_for_affairs: "業務用に使用されます"
     used_for_gaps: "ギャップのために使用"
     useful_items: "便利なアイテム"

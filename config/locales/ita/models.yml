@@ -5,7 +5,7 @@ ita:
         expenses_amount: "Le spese importo"
         revenues_amount: "I ricavi sono pari"
       activity_tactic:
-        # mode: "Planning type"
+        mode: "tipo di pianificazione"
       animal_group:
         born_at: "creato a"
       building:
@@ -76,7 +76,7 @@ ita:
         # on_or_before: "%{attribute} must be on or before %{restriction}"
         other_than: "devono essere di numero diverso da %{count}" #?
         # overlap_sibling: "%{attribute} overlaps sibling"
-        # posterior: "The date %{attribute} must be posterior to %{to}"
+        # posterior: "%{attribute} must be posterior to %{to}"
         present: "deve essere lasciato in bianco" #?
         # record_invalid: "Validations failed: %{errors}"
         taken: "è già presente"
@@ -112,7 +112,7 @@ ita:
             stopped_on:
               # end_of_month: "%{attribute} must be an end of month"
           # overlap: "%{attribute} overlaps an existing financial year"
-        fixed_asset:
+        fixed_asset_depreciation:
           attributes:
             started_on:
               # invalid_date: "The depreciation must start on %{start} or on a beginning of month"
@@ -180,8 +180,8 @@ ita:
       activity_inspection_calibration_scale: "Calibro"
       activity_inspection_point_nature: "controllo di classificazione di attività"
       activity_production: "supporto alla produzione"
-      # activity_season: "Activity season"
-      # activity_tactic: "Activity cropping technique"
+      activity_season: "stagionalità"
+      activity_tactic: "Tecnica ritaglio Activity"
       affair: "Affare"
       analysis: "Analisi"
       analysis_item: "oggetto di analisi"
@@ -579,6 +579,7 @@ ita:
     employed: "occupato"
     employees: "I dipendenti"
     employment: "occupazione"
+    enabled: "Abilitato"
     encrypted_password: "password crittografata"
     enjoyer: "enjoyer"
     enjoyments: "godimenti"
@@ -614,6 +615,10 @@ ita:
     father: "Padre"
     faxes: "fax"
     fifth_producer: "Quinto produttore" #?
+    # file: "File"
+    file_file_size: "Dimensione del file"
+    file_pages_count: "Contano pagine"
+    file_updated_at: "Aggiornati alle"
     filtered_columns: "colonne filtrati"
     financial_year: "Anno finanziario"
     financial_year_as_last: "Esercizio (come ultima voce di diario)"
@@ -626,6 +631,8 @@ ita:
     fixed_asset: "Assetto stabile"
     fixed_asset_account: "conto capitale fisso"
     fixed_asset_allocation_account: "Fixed conto svalutazioni di asset"
+    fixed_asset_collect_account: "Cespite raccogliere conto"
+    fixed_asset_deduction_account: "Conto detrazione capitale fisso"
     fixed_asset_depreciation_method: "metodo di ammortamento capitale fisso"
     fixed_asset_depreciation_percentage: "percentuale di deprezzamento capitale fisso"
     fixed_asset_depreciations: "svalutazioni di immobilizzazioni"
@@ -848,7 +855,6 @@ ita:
     minimal_size_value: "valore della dimensione minima"
     minimal_value: "valore minimo"
     mobiles: "Cellulari"
-    # mod: "Mod"
     mode: "modo"
     model_euid: "Modello"
     mother: "Madre"
@@ -1107,8 +1113,8 @@ ita:
     sampling_temporal_mode: "modalità temporale di campionamento"
     scale: "Scala"
     scheduled: "In programma"
-    # season: "Seasonality"
-    # seasons: "Seasonalities"
+    season: "stagionalità"
+    seasons: "stagionalità"
     second_producer: "secondo produttore" #?
     seeding_density_unit: "unità di densità di semina"
     seeding_density_value: "densità di semina"
@@ -1178,9 +1184,10 @@ ita:
     support_variety: "varietà di sostegno"
     supports: "supporti"
     suspended: "Sospeso"
-    # tactic: "Cropping technique"
-    # tactics: "Cropping techniques"
+    tactic: "Tecnica gestione delle colture"
+    tactics: "tattica"
     target: "Bersaglio"
+    target_name: "Nome di destinazione"
     target_type: "tipo di destinazione"
     target_url: "URL di destinazione"
     targets: "obiettivi"
@@ -1237,10 +1244,10 @@ ita:
     usage_limit_on: "Utilizzato da su"
     usages: "usi"
     use_countings: "Utilizzare i conteggi"
-    use_grading_calibre: "Utilizzare calibro di classificazione"
+    use_grading_calibre: "Utilizzare calibro di classificazione" #?
     use_gradings: "Utilizzare classificazioni"
-    # use_seasons: "Use seasonalities"
-    # use_tactics: "Use cropping techniques"
+    use_seasons: "Utilizzare stagionalità"
+    use_tactics: "Utilizzare tecnica di gestione delle colture"
     used_for_affairs: "Usato per gli affari"
     used_for_gaps: "Usato per le lacune"
     useful_items: "oggetti utili"

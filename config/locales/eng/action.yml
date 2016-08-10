@@ -55,7 +55,7 @@ eng:
       detach: "Detach from affair %{number}"
       finish: "Finish affair %{number}"
       index: "Affairs"
-      select: "Select for affair %{number}"
+      select: "Select a record to add to affair"
       show: "Affair: %{number}"
     backend/analyses:
       edit: "Edit analysis #%{number}"
@@ -1081,7 +1081,6 @@ eng:
     first_line_as_title: "First line as title"
     fixed_asset_depreciations: "Fixed asset depreciations"
     fixed_assets: "Fixed assets"
-    forecast_volume: "Forecast volume" #?!
     from: "From"
     fullscreen: "Fullscreen"
     function: "Function"
@@ -1486,6 +1485,7 @@ eng:
     timeline_comment: "%{author} commented %{when}"
     timeline_entity_link: "Timeline entity link"
     timeline_event: "%{name} with %{participants} %{when}"
+    timeline_event_without_participants: "%{name} %{when}"
     timeline_incoming_call: "%{author} called %{entity} about %{name} %{when}"
     timeline_incoming_mail: "%{entity} wrote to %{author} about %{name} %{when}"
     timeline_item: "%{type} %{name} added by %{author} %{when}"
@@ -1654,6 +1654,9 @@ eng:
     x_sales_invoices:
       one: "%{count} sales invoice"
       other: "%{count} sales invoices"
+    x_seconds:
+      one: "%{count} second"
+      other: "%{count} seconds"
     x_subscriptions:
       one: "%{count} subscription"
       other: "%{count} subscriptions"
