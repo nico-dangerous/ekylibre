@@ -47,6 +47,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   refers_to :cultivation_variety, class_name: 'Variety'
   refers_to :administrative_area
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
+  validates :expected_yield, numericality: { greater_than: -1_000_000_000_000_000, less_than: 1_000_000_000_000_000 }, allow_blank: true
   validates :activity_production, :plan, presence: true
   # ]VALIDATORS]
   validates :soil_nature, presence: true

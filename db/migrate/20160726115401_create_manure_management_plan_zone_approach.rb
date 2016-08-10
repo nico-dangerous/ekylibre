@@ -2,7 +2,6 @@ class CreateManureManagementPlanZoneApproach < ActiveRecord::Migration
   def change
     create_table :manure_approach_applications do |t|
       t.string :supply_nature
-      t.string :unit_name
       t.jsonb :parameters
       t.jsonb :results
       t.belongs_to :manure_management_plan_nature, index: {:name => "index_manure_approach_application_on_manure_plan_nature"}

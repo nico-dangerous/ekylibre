@@ -107,16 +107,19 @@ module Backend
         approach = approach_app.approach
         if approach.nil?
           approaches_properties["group"][approach_app.supply_nature] = {"error" =>{
-              "type" => "label",
+              "widget" => "label",
               "text" => "error".tl,
               "value" => "no_approach_found".tl
           }}
         else
           approaches_properties["group"][approach.supply_nature]={}
-
-          approach_question_hash = approach.questions["questions"]
-          approach_question_hash.values.each  do |question|
-            approaches_properties["group"][approach.supply_nature][question["label"]] = {"type"=> question["type"], "value" => approach_app.parameters[question["label"]], "text" => ManureApproachApplication.humanize_question(question["text"]), "label" => question["label"]}
+          approach.questions.each_key  do |label|
+            if (approach.questions[label]["data-type"] == "quantity")
+              unit = Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
+            else
+              unit = ""
+            end
+            approaches_properties["group"][approach.supply_nature][label] = {"unit" => unit,"widget" => approach.questions[label]["widget"], "value" => approach_app.parameters[label], "text" => ManureApproachApplication.humanize_question(approach.questions[label]["text"]), "label" => label}
           end
         end
       end
@@ -190,10 +193,12 @@ module Backend
       properties = {}
       approach_applications = manure_zone.manure_approach_applications
       zone_results = results[manure_zone.id]
+      unit = Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
+
       approach_applications.each do |approach_app|
         application_results = {"modalAttributes" => {"group" => {approach_app.supply_nature => {}}}}
         zone_results[approach_app.id].each_key do |key|
-          application_results["modalAttributes"]["group"][approach_app.supply_nature][key] = {"text" => ManureApproachApplication.humanize_result(key) ,"type" => "label","value" => zone_results[approach_app.id][key]}
+          application_results["modalAttributes"]["group"][approach_app.supply_nature][key] = {"text" => ManureApproachApplication.humanize_result(key) ,"widget" => "label","value" => zone_results[approach_app.id][key], "unit" => unit}
         end
          properties.merge!(application_results)
       end

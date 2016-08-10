@@ -28,6 +28,7 @@
 #  manure_management_plan_zone_id   :integer
 #  parameters                       :jsonb
 #  results                          :jsonb
+#  supply_nature                    :string
 #
 
 class ManureApproachApplication < Ekylibre::Record::Base

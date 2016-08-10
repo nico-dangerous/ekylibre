@@ -2,13 +2,21 @@ module Calculus
   module ManureManagementPlan
     class AbstractApproach
 
-        def needs_procedure
-          # return a hash with the following keys :
-          # needs:
-          # the args used for computation
-          raise NotImplemented
-        end
+      def estimate_expected_yield
+        raise NotImplemented
+      end
 
+      def estimated_needs
+        raise NotImplemented
+      end
+
+      def estimated_supply
+        raise NotImplemented
+      end
+
+      def estimated_input
+        raise NotImplemented
+      end
     end
   end
 end

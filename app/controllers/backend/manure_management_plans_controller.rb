@@ -77,7 +77,7 @@ module Backend
       soil_natures = {}
       permitted_params["zones_attributes"].values.map{|zone| soil_natures[zone["activity_production_id"]] = zone["soil_nature"]}
       manure_natures = permitted_params.delete("natures").reject{|nature| nature.empty? || nature.nil? }
-      
+
       @manure_management_plan = ManureManagementPlan.create_for_campaign(current_campaign,current_user,soil_natures,manure_natures)
       @manure_management_plan.save
       redirect_to action: :edit, id: @manure_management_plan.id
@@ -104,10 +104,8 @@ module Backend
         approach = approach_app.approach
         unless approach.nil?
           response_questions = attributes[approach.supply_nature]
-          approach_questions = approach.questions["questions"]
-          approach_questions.values.each do |approach_question|
-            label = approach_question["label"]
-            approach_app.parameters[label] = response_questions[label]["value"]
+          approach.questions.each_key do |key|
+            approach_app.parameters[key] = response_questions[key]["value"]
           end
           success = false if not approach_app.save
         end

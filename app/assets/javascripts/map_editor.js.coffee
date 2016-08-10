@@ -421,21 +421,23 @@
               properties_group_item=properties_group[key]
               body += "<div class='form-group'>"
               body += "<label class='col-form-label' for='#{properties_group_item.label}'>#{properties_group_item.text} : </label>"
-              switch properties_group_item.type
+              switch properties_group_item.widget
                 when 'input'
                   body += "<input type='text' class='updateAttributesSerieLabelInput form-control' name=#{path + '@' + properties_group_item.label || '' } value='#{properties_group_item.value || ""}'/>"
                 else
                   body += "<span>#{properties_group_item.value || ''}</span>"
+              body += " <span>#{properties_group_item.unit || ''}</span>"
               body += "</div>"
 
         else
           body += "<div class='{MODAL_ITEM_CLS}'>"
           body += "<label for='#{properties.label}'>#{properties.text} : </label>"
-          switch properties.type
+          switch properties.widget
             when 'input'
               body += "<input class='form-control updateAttributesSerieLabelInput' type='text' name=#{path + '@' +properties.label || '' }  value='#{properties.value || ""}'/>"
             else
               body += "<span>#{properties.value || ''}</span>"
+          body += "<span>#{properties.unit || ''}</span>"
           body += "</div>"
 
       body += "</div>"

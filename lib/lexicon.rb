@@ -26,7 +26,17 @@ module Lexicon
       #Insert row
       yaml.each_value do |data|
         #add quotes around value to insert
-        data = data.each_pair.map { |key, value| [key, ActiveRecord::Base.connection.quote(value)] }.to_h
+
+        columns_list = ActiveRecord::Base.connection.columns(name).each_with_object({}.with_indifferent_access) { | column, hash|
+          hash[column.name] = column }
+
+        data = data.each_pair.map { |key, value|
+          data_type = columns_list[key].type
+          if data_type == :json || data_type == :jsonb
+            value = value.to_json
+          end
+          [key, ActiveRecord::Base.connection.quote(value)]
+        }.to_h
         ActiveRecord::Base.connection.execute "INSERT INTO lexicon.#{name} (#{columns.join(', ')}) VALUES (#{data.values.join(',')});"
       end
     end

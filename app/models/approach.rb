@@ -22,6 +22,7 @@
 #
 # == Table: approaches
 #
+#  classname     :string
 #  id            :integer          not null, primary key
 #  name          :string
 #  questions     :jsonb

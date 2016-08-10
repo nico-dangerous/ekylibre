@@ -583,6 +583,7 @@ Rails.application.routes.draw do
         get :list_zones
         post :update_question
         post :compute
+        get :compute
         post :update_georeadings
         delete :delete_georeadings
         post :create_georeading

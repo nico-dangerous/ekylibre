@@ -7,7 +7,7 @@ module Calculus
 
       def initialize(application)
         @application = application
-        @question_group = QuestionGroup.new(questions["questions"].values)
+        @question_group = QuestionGroup.new(questions)
       end
 
       def self.build_approach(application)
@@ -17,7 +17,7 @@ module Calculus
       def questions_answered?
         @question_group.has_answers?
       end
-      
+
       def budget_estimate_expected_yield
         return manure_management_plan_zone.activity_production.estimate_yield
       end

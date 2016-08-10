@@ -26,6 +26,7 @@
 #  campaign_id    :integer          not null
 #  created_at     :datetime         not null
 #  creator_id     :integer
+#  data_unit      :string
 #  id             :integer          not null, primary key
 #  lock_version   :integer          default(0), not null
 #  locked         :boolean          default(FALSE), not null
@@ -42,10 +43,12 @@ class ManureManagementPlan < Ekylibre::Record::Base
   has_many :manure_management_plan_natures
   has_many :zones, class_name: 'ManureManagementPlanZone', dependent: :destroy, inverse_of: :plan, foreign_key: :plan_id
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates :opened_at, timeliness: { allow_blank: true, on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
+  validates :annotation, length: { maximum: 100_000 }, allow_blank: true
+  validates :data_unit, length: { maximum: 500 }, allow_blank: true
   validates :locked, inclusion: { in: [true, false] }
-  validates :campaign, :name, :opened_at, :recommender, :natures, presence: true
-
+  validates :name, presence: true, length: { maximum: 500 }
+  validates :opened_at, presence: true, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
+  validates :campaign, :recommender, presence: true
   # ]VALIDATORS]
 
   accepts_nested_attributes_for :zones, :manure_management_plan_natures
@@ -94,6 +97,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
       manure_natures = ["N"]
     end
     manure_management_plan = ManureManagementPlan.new(:campaign => campaign,
+                                                      :data_unit => :kilogram_per_hectare,
                                                        :opened_at => Time.new(campaign.harvest_year,2,1).to_datetime,
                                                        :recommender_id => user.person_id,
                                                        :name => "Fumure " + campaign["harvest_year"].to_s)
