@@ -27,6 +27,7 @@
 #  creator_id   :integer
 #  description  :text
 #  id           :integer          not null, primary key
+#  kind         :string
 #  lock_version :integer          default(0), not null
 #  name         :string           not null
 #  nature       :string           not null

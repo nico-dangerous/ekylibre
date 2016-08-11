@@ -2390,6 +2390,8 @@ georeadings:
   id:
     type: integer
     required: true
+  kind:
+    type: string
   lock_version:
     type: integer
     required: true
@@ -3791,20 +3793,41 @@ loans:
   updater_id:
     type: integer
     references: user
+manure_approach_applications:
+  approach_id:
+    type: integer
+    references: approach
+  id:
+    type: integer
+    required: true
+  manure_management_plan_nature_id:
+    type: integer
+    references: manure_management_plan_nature
+  manure_management_plan_zone_id:
+    type: integer
+    references: manure_management_plan_zone
+  parameters:
+    type: jsonb
+  results:
+    type: jsonb
+  supply_nature:
+    type: string
+manure_management_plan_natures:
+  id:
+    type: integer
+    required: true
+  manure_management_plan_id:
+    type: integer
+    references: manure_management_plan
+  supply_nature:
+    type: string
 manure_management_plan_zones:
-  absorbed_nitrogen_at_opening:
-    type: decimal
-    precision: 19
-    scale: 4
   activity_production_id:
     type: integer
     references: activity_production
     required: true
   administrative_area:
     type: string
-  computation_method:
-    type: string
-    required: true
   created_at:
     type: datetime
     required: true
@@ -3817,66 +3840,18 @@ manure_management_plan_zones:
     type: decimal
     precision: 19
     scale: 4
-  humus_mineralization:
-    type: decimal
-    precision: 19
-    scale: 4
   id:
     type: integer
     required: true
-  intermediate_cultivation_residue_mineralization:
-    type: decimal
-    precision: 19
-    scale: 4
-  irrigation_water_nitrogen:
-    type: decimal
-    precision: 19
-    scale: 4
   lock_version:
     type: integer
     required: true
-  maximum_nitrogen_input:
-    type: decimal
-    precision: 19
-    scale: 4
-  meadow_humus_mineralization:
-    type: decimal
-    precision: 19
-    scale: 4
-  mineral_nitrogen_at_opening:
-    type: decimal
-    precision: 19
-    scale: 4
-  nitrogen_at_closing:
-    type: decimal
-    precision: 19
-    scale: 4
-  nitrogen_input:
-    type: decimal
-    precision: 19
-    scale: 4
-  nitrogen_need:
-    type: decimal
-    precision: 19
-    scale: 4
-  organic_fertilizer_mineral_fraction:
-    type: decimal
-    precision: 19
-    scale: 4
   plan_id:
     type: integer
     references: manure_management_plan
     required: true
-  previous_cultivation_residue_mineralization:
-    type: decimal
-    precision: 19
-    scale: 4
   soil_nature:
     type: string
-  soil_production:
-    type: decimal
-    precision: 19
-    scale: 4
   updated_at:
     type: datetime
     required: true
@@ -3896,9 +3871,8 @@ manure_management_plans:
   creator_id:
     type: integer
     references: user
-  default_computation_method:
+  data_unit:
     type: string
-    required: true
   id:
     type: integer
     required: true
@@ -3919,10 +3893,6 @@ manure_management_plans:
     type: integer
     references: entity
     required: true
-  selected:
-    type: boolean
-    required: true
-    default: false
   updated_at:
     type: datetime
     required: true

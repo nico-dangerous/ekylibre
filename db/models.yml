@@ -11,15 +11,18 @@
 - activity_production
 - activity_season
 - activity_tactic
+- administrative_area
 - affair
 - analysis
 - analysis_item
 - animal
 - animal_group
+- approach
 - attachment
 - bank_statement
 - bank_statement_item
 - bioproduct
+- body_of_water
 - building
 - building_division
 - campaign
@@ -38,6 +41,7 @@
 - dashboard
 - delivery
 - delivery_tool
+- department
 - deposit
 - district
 - document
@@ -90,7 +94,9 @@
 - listing_node_item
 - loan
 - loan_repayment
+- manure_approach_application
 - manure_management_plan
+- manure_management_plan_nature
 - manure_management_plan_zone
 - map_background
 - matter
@@ -129,6 +135,7 @@
 - purchase
 - purchase_item
 - purchase_nature
+- regulatory_zone
 - role
 - sale
 - sale_item
@@ -150,5 +157,7 @@
 - tracking
 - user
 - version
+- vulnerable_zone
+- watercourse
 - worker
 - zone

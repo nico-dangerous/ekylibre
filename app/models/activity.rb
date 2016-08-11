@@ -112,9 +112,8 @@ class Activity < Ekylibre::Record::Base
   scope :of_campaign, lambda { |campaign|
     if campaign
       c = campaign.is_a?(Campaign) || campaign.is_a?(ActiveRecord::Relation) ? campaign : campaign.map { |c| c.is_a?(Campaign) ? c : Campaign.find(c) }
-      prods = where(id: ActivityProduction.select(:activity_id).of_campaign(c))
       budgets = where(id: ActivityBudget.select(:activity_id).of_campaign(c))
-      where(id: prods.select(:id) + budgets.select(:id))
+      where(id: budgets.select(:id))
     else
       none
     end
@@ -239,8 +238,11 @@ class Activity < Ekylibre::Record::Base
   end
 
   def budget_of(campaign)
-    return nil unless campaign
-    budgets.find_by(campaign: campaign)
+    if campaign && campaign.is_a?(Campaign)
+      budgets.where(campaign_id: campaign.id)
+    else
+      puts "No campaign found for #{campaign.inspect}"
+    end
   end
 
   def count_during(campaign)

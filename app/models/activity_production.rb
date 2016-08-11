@@ -245,7 +245,7 @@ class ActivityProduction < Ekylibre::Record::Base
     list.reverse! if 'i18n.dir'.t == 'rtl'
     list.join(' ')
   end
-  
+
   # anyway return the variety to produce
   # return the cultivation variety if a cultivation exist or the activity variety if none
   def production_variety
@@ -255,7 +255,7 @@ class ActivityProduction < Ekylibre::Record::Base
       return cultivation_variety
     end
   end
-  
+
   def update_names
     if support
       new_support_name = computed_support_name
@@ -515,9 +515,9 @@ class ActivityProduction < Ekylibre::Record::Base
                           surface_unit_name: surface_unit_name)
   end
 
-  # TODO: Which yield is computed? usage is not very good to determine yields
+  # TODO: Which yield is computed? usage ,is not very good to determine yields
   #   because many yields can be computed...
-  def estimate_yield(campaign = self.campaign, options = {})
+  def estimate_yield(options = {}, campaign = self.campaign)
     variety = options.delete(:variety)
     # compute variety for estimate yield
     if usage == 'grain' || usage == 'seed'
@@ -526,9 +526,16 @@ class ActivityProduction < Ekylibre::Record::Base
       variety ||= 'grass'
     end
     # get current campaign
-    budget = activity.budget_of(campaign)
-    return nil unless budget
-    budget.estimate_yield(variety, options)
+    ap_budgets = activity.budget_of(campaign)
+    if ap_budgets.any?
+      values = []
+      for ap_budget in ap_budgets
+        values << ap_budget.estimate_yield(variety, options)
+      end
+      return values.compact.sum
+    else
+      return nil
+    end
   end
 
   def current_cultivation

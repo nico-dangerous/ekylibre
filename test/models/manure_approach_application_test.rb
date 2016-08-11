@@ -20,25 +20,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses.
 #
-# == Table: manure_management_plans
+# == Table: manure_approach_applications
 #
-#  annotation     :text
-#  campaign_id    :integer          not null
-#  created_at     :datetime         not null
-#  creator_id     :integer
-#  data_unit      :string
-#  id             :integer          not null, primary key
-#  lock_version   :integer          default(0), not null
-#  locked         :boolean          default(FALSE), not null
-#  name           :string           not null
-#  opened_at      :datetime         not null
-#  recommender_id :integer          not null
-#  updated_at     :datetime         not null
-#  updater_id     :integer
+#  approach_id                      :integer
+#  id                               :integer          not null, primary key
+#  manure_management_plan_nature_id :integer
+#  manure_management_plan_zone_id   :integer
+#  parameters                       :jsonb
+#  results                          :jsonb
+#  supply_nature                    :string
 #
 require 'test_helper'
 
-class ManureManagementPlanTest < ActiveSupport::TestCase
-  test_model_actions
+class ManureApproachApplicationTest < ActiveSupport::TestCase
   # Add tests here...
 end

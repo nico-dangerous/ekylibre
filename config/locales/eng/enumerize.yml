@@ -132,6 +132,13 @@ eng:
         client: "Client"
         supplier: "Supplier"
     georeading:
+      kind:
+        # bathing_place: "Bathing place"
+        # drinkingwater: "Drinkingwater"
+        # shellfish_waters: "Shellfish waters"
+        # steep_slopes: "Steep slopes"
+        # water: "Water"
+        # well: "Well"
       nature:
         linestring: "Linestring"
         point: "Point"
@@ -379,6 +386,7 @@ eng:
         entities: "Numeration of people"
         fixed_assets: "Numeration of fixed assets"
         gaps: "Numeration of gaps"
+        # georeadings: "Georeadings"
         incoming_payments: "Numeration of payments"
         inspections: "Numeration of inspections"
         interventions: "Numeration of interventions"

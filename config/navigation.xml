@@ -1771,6 +1771,14 @@
     </group>
   </inaccessible-actions>
   <untreated-actions>
-    <group/>
+    <group>
+      <item name="manure_management_plans">
+        <page to="backend/manure_management_plans#compute"/>
+        <page to="backend/manure_management_plans#create_georeading"/>
+        <page to="backend/manure_management_plans#delete_georeadings"/>
+        <page to="backend/manure_management_plans#update_georeadings"/>
+        <page to="backend/manure_management_plans#update_question"/>
+      </item>
+    </group>
   </untreated-actions>
 </navigation>

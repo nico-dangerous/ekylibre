@@ -401,10 +401,15 @@ eng:
       new: "New loan"
       show: "Loan: %{name}"
     backend/manure_management_plans:
+      # compute: "Compute manure management plan: %{name}"
+      # create_georeading: "Create georeading manure management plan: %{name}"
+      # delete_georeadings: "Delete georeadings manure management plan: %{name}"
       edit: "Edit manure management plan: %{name}"
       index: "Manure management plans"
       new: "New manure management plan"
       show: "Manure management plan: %{name}"
+      # update_georeadings: "Update georeadings manure management plan: %{name}"
+      # update_question: "Update question manure management plan: %{name}"
     backend/map_backgrounds:
       edit: "Edit map background: %{name}"
       index: "Map backgrounds"
@@ -985,7 +990,8 @@ eng:
     cropping_plan_on_cultivable_zones: "Cropping plan on cultivable zones"
     crumbs: "Crumbs" #?
     cultivable_zone: "Cultivable zone" #?
-    cultivable_zones: "arable areas" #?
+    # cultivable_zone_prefix: "Cultivable zone prefix"
+    cultivable_zones: "arable areas"
     cumul: "Accumulation of tattle and previous balance N°%{number}" #?
     current: "Current" #?
     current_cultivation: "Current cultivation"
@@ -1104,6 +1110,7 @@ eng:
     generate_last_journal_entry: "Generate last journal entry"
     generate_parcel: "Generate parcel"
     geolocation: "Geolocation" #?
+    # georeadings: "Georeadings"
     go: "Go" #?
     gradings: "Gradings" #?
     grain_yield: "Grain yield" #?
@@ -1272,6 +1279,7 @@ eng:
     new_writing: "New writing"
     next: "Next"
     nitrogen_concentration: "Nitrogen concentration" #?
+    # no_approach_found: "No approach found"
     no_attachments: "Drop your files here or click on the button"
     no_crumbs_to_check: "No crumbs to check"
     no_data: "No data"
@@ -1391,6 +1399,7 @@ eng:
     reflections: "Reflections" #?
     refresh: "Refresh" #?
     register_intervention_request: "Register intervention request" #?!
+    # regulatory_zone: "Regulatory zone"
     relationship: "Relationship"
     relationship_of_entity: "%{relationship} of %{entity}"
     relationship_of_entity_as_inverse_post: "%{relationship} of %{entity} (%{inverse_post})"
@@ -1544,6 +1553,7 @@ eng:
     unlock: "Unlock" #?
     unmark: "Unmark" #?
     unmarketable_inspection_categories_evolution: "Unmarketable inspection categories evolution"
+    # unnamed: "Unnamed"
     unpaid: "Unpaid" #?
     unpaid_days: "Unpaid since (in days)" #?
     unpaid_purchases: "Unpaid purchases" #?
@@ -1568,6 +1578,7 @@ eng:
     variants: "Variants" #?
     view: "View"
     # vine_yield: "Vine yield"
+    # vulnerable_zone: "Vulnerable zone"
     watering_concentration: "Water use" #?
     # wear: "Wear"
     weather: "Weather"
@@ -1846,7 +1857,9 @@ eng:
       convert: "Convert"
       correct: "Correct"
       create: "Create"
+      # create_georeading: "Create georeading"
       # current: "Current"
+      # delete_georeadings: "Delete georeadings"
       destroy: "Destroy"
       detach: "Detach"
       detail: "Detail"
@@ -1920,6 +1933,8 @@ eng:
       unvalidateds: "Unvalidateds"
       up: "Up"
       update: "Update"
+      # update_georeadings: "Update georeadings"
+      # update_question: "Update question"
       # upload: "Upload"
       win: "Win"
   unrolls:

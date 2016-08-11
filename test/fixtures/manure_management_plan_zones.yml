@@ -22,32 +22,18 @@
 #
 # == Table: manure_management_plan_zones
 #
-#  absorbed_nitrogen_at_opening                    :decimal(19, 4)
-#  activity_production_id                          :integer          not null
-#  administrative_area                             :string
-#  computation_method                              :string           not null
-#  created_at                                      :datetime         not null
-#  creator_id                                      :integer
-#  cultivation_variety                             :string
-#  expected_yield                                  :decimal(19, 4)
-#  humus_mineralization                            :decimal(19, 4)
-#  id                                              :integer          not null, primary key
-#  intermediate_cultivation_residue_mineralization :decimal(19, 4)
-#  irrigation_water_nitrogen                       :decimal(19, 4)
-#  lock_version                                    :integer          default(0), not null
-#  maximum_nitrogen_input                          :decimal(19, 4)
-#  meadow_humus_mineralization                     :decimal(19, 4)
-#  mineral_nitrogen_at_opening                     :decimal(19, 4)
-#  nitrogen_at_closing                             :decimal(19, 4)
-#  nitrogen_input                                  :decimal(19, 4)
-#  nitrogen_need                                   :decimal(19, 4)
-#  organic_fertilizer_mineral_fraction             :decimal(19, 4)
-#  plan_id                                         :integer          not null
-#  previous_cultivation_residue_mineralization     :decimal(19, 4)
-#  soil_nature                                     :string
-#  soil_production                                 :decimal(19, 4)
-#  updated_at                                      :datetime         not null
-#  updater_id                                      :integer
+#  activity_production_id :integer          not null
+#  administrative_area    :string
+#  created_at             :datetime         not null
+#  creator_id             :integer
+#  cultivation_variety    :string
+#  expected_yield         :decimal(19, 4)
+#  id                     :integer          not null, primary key
+#  lock_version           :integer          default(0), not null
+#  plan_id                :integer          not null
+#  soil_nature            :string
+#  updated_at             :datetime         not null
+#  updater_id             :integer
 #
 ---
 manure_management_plan_zones_001:
