@@ -67,7 +67,7 @@ module Backend
         zone = @manure_management_plan.zones.new(
             :activity_production => activity_production,
             :soil_nature => activity_production.support.estimated_soil_nature,
-            :cultivation_variety => activity_production.cultivation_variety,
+            :cultivation_variety => activity_production.production_variety,
             :administrative_area => admin_area_name,
         )
       end
@@ -78,7 +78,7 @@ module Backend
       permitted_params["zones_attributes"].values.map{|zone| soil_natures[zone["activity_production_id"]] = zone["soil_nature"]}
       manure_natures = permitted_params.delete("natures").reject{|nature| nature.empty? || nature.nil? }
 
-      @manure_management_plan = ManureManagementPlan.create_for_campaign(current_campaign,current_user,soil_natures,manure_natures)
+      @manure_management_plan = ManureManagementPlan.create_for_campaign(campaign: current_campaign, user: current_user, soil_natures: {}, manure_natures: manure_natures)
       @manure_management_plan.save
       redirect_to action: :edit, id: @manure_management_plan.id
     end
