@@ -1052,15 +1052,12 @@ por:
         precision: "Precisão"
         symbol: "Símbolo"
     delivery_modes:
-      choices:
-
       items:
         delivered_at_place: "Entregue no local"
         delivered_at_terminal: "Entregue no terminal"
         delivered_duty_paid: "Imposto entregue pago"
         ex_works: "Antigo trabalho"
       name: "Modos de entrega"
-
     dimensions:
       items:
         amount_of_substance: "Quantidade de substância"
@@ -1733,7 +1730,6 @@ por:
         complete_wine_transfer: "Transferência de vinhos completa"
         concrete_slab_pouring: "Laje de concreto de derramamento"
         conservation_plowing: "lavoura de conservação"
-        # corvicide: "Corvicide"
         curative_maintenance: "Manutenção curativa"
         cutting: "Corte"
         dehorning: "Descorna"

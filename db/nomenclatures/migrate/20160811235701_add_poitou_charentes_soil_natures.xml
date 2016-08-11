@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<migration name="Add poitou charentes soil natures">
+  <item-creation item="soil_natures#clay_schist_soil"/>
+</migration>

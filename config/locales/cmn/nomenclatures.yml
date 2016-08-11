@@ -1196,8 +1196,6 @@ cmn:
         precision: "精确"
         symbol: "符号"
     delivery_modes:
-      choices:
-
       items:
         delivered_at_place: "在交货地点"
         delivered_at_terminal: "在终端交付"
@@ -1933,7 +1931,6 @@ cmn:
         complete_wine_transfer: "完整的酒调"
         concrete_slab_pouring: "混凝土浇筑板"
         conservation_plowing: "保护春耕"
-        # corvicide: "Corvicide"
         curative_maintenance: "疗效维持"
         cutting: "切割"
         dehorning: "去角"

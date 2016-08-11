@@ -1213,8 +1213,6 @@ jpn:
         precision: "精度"
         symbol: "シンボル"
     delivery_modes:
-      choices:
-
       items:
         delivered_at_place: "場所でお届け"
         delivered_at_terminal: "ターミナルでお届け"
@@ -1948,7 +1946,6 @@ jpn:
         complete_wine_transfer: "完全なワインの転送"
         concrete_slab_pouring: "注ぐコンクリートスラブ"
         conservation_plowing: "保全耕起"
-        # corvicide: "Corvicide"
         curative_maintenance: "根治メンテナンス"
         cutting: "切断"
         dehorning: "除角"

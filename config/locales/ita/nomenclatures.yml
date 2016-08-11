@@ -1009,8 +1009,6 @@ ita:
         precision: "Precisione"
         symbol: "Simbolo"
     delivery_modes:
-      choices:
-
       items:
         delivered_at_place: "Recapitato sul posto"
         delivered_at_terminal: "Consegnato al terminal"
@@ -1018,7 +1016,6 @@ ita:
         ex_works: "opere ex"
         free_carrier: "Trasportatore"
       name: "modalità di consegna"
-
     dimensions:
       items:
         amount_of_substance: "Ammontare della sostanza"
@@ -1613,7 +1610,6 @@ ita:
         sulfur_dioxide: "Diossido di zolfo"
         water: "Acqua"
       name: "molecole"
-
     net_services:
       choices:
         approach:
@@ -1696,7 +1692,6 @@ ita:
         complete_wine_transfer: "trasferimento di vini completa"
         concrete_slab_pouring: "lastra di cemento versando"
         conservation_plowing: "Conservazione aratura"
-        # corvicide: "Corvicide"
         curative_maintenance: "Manutenzione curativa"
         cutting: "Taglio"
         dehorning: "decornazione"
