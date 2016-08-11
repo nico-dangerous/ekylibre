@@ -10,7 +10,7 @@ class mapeditor.Categories
     else
       L.geoJson(@data, {
         onEachFeature: (feature, layer) =>
-          feature.properties['internal_id'] = new Date().getTime()
+          feature.properties['internal_id'] = widget.guuid()
           if feature.properties.name
             label = new L.GhostLabel(className: 'leaflet-ghost-label', toBack: false).setContent(feature.properties.name).toCentroidOfBounds(layer.getLatLngs())
             widget.ghostLabelCluster.bind label, layer

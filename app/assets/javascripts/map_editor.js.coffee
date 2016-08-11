@@ -291,6 +291,14 @@
 
       widget.element.trigger "mapeditor:loaded"
 
+    guuid: () ->
+      d = (new Date).getTime()
+      uuid = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) ->
+        r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+        (if c == 'x' then r else r & 0x3 | 0x8).toString 16)
+
+
     updateFeature: (feature_id, attributeName, attributeValue) ->
       this.updateFeatureProperties(feature_id, attributeName, attributeValue)
       layer = this.findLayer(feature_id)
@@ -322,7 +330,7 @@
     findLayer: (feature_id) ->
       containerLayer = undefined
       @map.eachLayer (layer) =>
-        if layer.feature and (parseInt(layer.feature.properties.internal_id) == feature_id)
+        if layer.feature and layer.feature.properties.internal_id == feature_id
           containerLayer = layer
       containerLayer
 
@@ -432,6 +440,7 @@
               body += "</div>"
 
         else
+          console.log(properties)
           body += "<div class='{MODAL_ITEM_CLS}'>"
           body += "<label for='#{properties.label}'>#{properties.text} : </label>"
           switch properties.widget
@@ -445,47 +454,48 @@
       body += "</div>"
       return header + body + footer
 
+    fire_modal_serie: (feature,layer) ->
+      this.map.fire('modal',
+        closeTitle: 'close'
+        zIndex: 10000
+        transitionDuration: 300
+        template: @modal_content(feature,layer)
+        onShow: (evt) =>
+          modal = evt.modal
+          L.DomEvent.on(modal._container.querySelector('.modal-ok'), 'click', (e) =>
+            $('.updateAttributesSerieLabelInput').each (index, value) =>
+              path = $(value).attr("name").split('@')
+              set_property = (prop, keys,value) ->
+                if keys.length == 0
+                  prop.value = value
+                else
+                  prop = prop[keys[0]]
+                  keys.shift()
+                  set_property(prop,keys,value)
+              set_property(layer.feature.properties.modalAttributes,path,$(value).val())
+            this.element.trigger "modal_validated", feature
+            modal.hide())
+        onHide: (evt) ->
+          modal = evt.modal
+          return
+        OVERLAY_CLS: 'overlay'
+        OK_CLS: 'modal-ok'
+        CANCEL_CLS: 'modal-cancel'
+        MODAL_CLS: 'modal'
+        MODAL_CONTENT_CLS: ''
+        MODAL_TITLE: 'modal-title'
+        INNER_CONTENT_CLS: 'modal-content'
+        MODAL_FOOTER_CLS: ''
+        MODAL_GROUP_TITLE: ''
+        MODAL_ITEM_CLS: ''
+        MODAL_GROUP_CONTENT_CLS: ''
+        SHOW_CLS: 'show'
+        CLOSE_CLS: 'close')
+
 
     modalizeSeries: (feature,layer) ->
       layer.on 'click' , (e) =>
-        this.map.fire('modal',
-          closeTitle: 'close'
-          zIndex: 10000
-          transitionDuration: 300
-          template: @modal_content(feature,layer)
-          onShow: (evt) =>
-            modal = evt.modal
-            L.DomEvent.on(modal._container.querySelector('.modal-ok'), 'click', (e) =>
-              $('.updateAttributesSerieLabelInput').each (index, value) =>
-                path = $(value).attr("name").split('@')
-                set_property = (prop, keys,value) ->
-                  if keys.length == 0
-                    prop.value = value
-                  else
-                    prop = prop[keys[0]]
-                    keys.shift()
-                    set_property(prop,keys,value)
-                set_property(layer.feature.properties.modalAttributes,path,$(value).val())
-              this.element.trigger "modal_validated", feature
-              modal.hide())
-          onHide: (evt) ->
-            modal = evt.modal
-            return
-          OVERLAY_CLS: 'overlay'
-          OK_CLS: 'modal-ok'
-          CANCEL_CLS: 'modal-cancel'
-          MODAL_CLS: 'modal'
-          MODAL_CONTENT_CLS: ''
-          MODAL_TITLE: 'modal-title'
-          INNER_CONTENT_CLS: 'modal-content'
-          MODAL_FOOTER_CLS: ''
-          MODAL_GROUP_TITLE: ''
-          MODAL_ITEM_CLS: ''
-          MODAL_GROUP_CONTENT_CLS: ''
-          SHOW_CLS: 'show'
-          CLOSE_CLS: 'close')
-
-
+        this.fire_modal_serie(feature,layer)
 
     colorize: (level) ->
         #levels rane is set to [-3,3]
@@ -651,7 +661,7 @@
     onEachFeature: (feature, layer) ->
      if feature.properties?
       if not feature.properties.internal_id?
-        feature.properties['internal_id'] = new Date().getTime()
+        feature.properties['internal_id'] = this.guuid()
         feature.properties['removable'] = true
 
       if not feature.properties.name?

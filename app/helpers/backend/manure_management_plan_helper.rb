@@ -172,9 +172,10 @@ module Backend
         end
         property_modal = {}
         #Is the mmpz in a vulnerable_zone ?
-        property[:vulnerable_zone] = mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s
         property[:manure_zone_id] = manure_zone.id
         property[:name] = manure_zone.name
+
+        property_modal[:vulnerable_zone] ={"text" => "attributes.cultivation_variety".t, "type"=> "label", "value" => mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s}
         property_modal[:variety] = {"text" => "attributes.cultivation_variety".t, "type"=> "label", "value" => manure_zone.cultivation_variety_name}
         property_modal[:soil_nature] =  {"text" => "attributes.soil_nature".t, "type"=> "label", "value" => Nomen::SoilNature.find(manure_zone.soil_nature).human_name}
 
