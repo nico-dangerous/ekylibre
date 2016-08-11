@@ -183,6 +183,8 @@
           feature = e.layer.toGeoJSON()
 
           widget.edition.addData feature
+          widget.element.trigger 'mapeditor:edit_feature_add', feature
+
         catch
           widget.edition.addLayer e.layer
 
@@ -602,9 +604,13 @@
                 layerGroup = renderedLayer.buildLayerGroup(this, options)
                 layerGroup.name = layer.name
                 layerGroup.renderedLayer = renderedLayer
-                @seriesReferencesLayers[layer.label] = layerGroup
-                @map.addLayer(layerGroup)
 
+                @seriesReferencesLayers[layer.label] = layerGroup
+                for key of layerGroup._layers
+                  $(this.element).trigger('mapeditor:serie_feature_add', layerGroup._layers[key].feature)
+                  $(this.element).trigger('mapeditor:feature_add', layerGroup._layers[key].feature)
+
+                @map.addLayer(layerGroup)
           else
 
             this.reference = L.geoJson(this.options.show, {
@@ -657,7 +663,6 @@
       unless this.options.withoutLabel
         label = new L.GhostLabel(className: 'leaflet-ghost-label').setContent(feature.properties.name || feature.properties.id).toCentroidOfBounds(layer.getLatLngs())
         @ghostLabelCluster.bind label, layer
-
       $(this.element).trigger('mapeditor:feature_add', feature)
 
       if feature.properties? and !!this.options.allowAttributesPopup
