@@ -1,7 +1,6 @@
 module Calculus
   module ManureManagementPlan
     class AbstractApproach
-
       def estimate_expected_yield
         raise NotImplemented
       end

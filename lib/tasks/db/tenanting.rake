@@ -27,6 +27,6 @@ Rake::Task['db:test:purge'].enhance do
   Rake::Task['db:extensions'].invoke
 end
 
-Rake::Task['db:migrate'].enhance(["lexicon:drop"]) do
+Rake::Task['db:migrate'].enhance(['lexicon:drop']) do
   Rake::Task['lexicon:import'].invoke
 end

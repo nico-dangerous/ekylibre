@@ -35,5 +35,4 @@ class ManureManagementPlanNature < Ekylibre::Record::Base
   def self.available_natures
     Approach.pluck(:supply_nature).compact.uniq
   end
-
 end

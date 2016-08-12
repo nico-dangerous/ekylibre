@@ -940,6 +940,7 @@ fra:
     junction_ways: "Voies de jonction" #?
     junctions: "Jonctions" #?
     key: "Clé"
+    # kind: "Kind"
     label: "Libellé"
     land_parcel_number: "Numéro de la parcelle PAC"
     land_parcels: "Parcelles"
@@ -1002,6 +1003,8 @@ fra:
     managed: "Géré par le système"
     managed_sales: "Ventes gérées"
     mandates: "Responsabilités" #?
+    # manure_management_plan: "Manure management plan"
+    # manure_management_plan_zone: "Manure management plan zone"
     manure_management_plan_zones: "Zones de plan de fumure"
     markers: "Repères" #?
     marketable: "Commercialisable"
@@ -1258,6 +1261,7 @@ fra:
     quantity_unit_name: "Quantité nom de l’unité"
     quantity_value: "Valeur Quantité"
     query: "Requête"
+    # questions: "Questions"
     rank_number: "Numéro de Rang"
     read_at: "Mesuré à"
     reading: "Relevé" #?
@@ -1421,6 +1425,7 @@ fra:
     supplier_account: "Compte fournisseur associé"
     supplier_address: "Adresse du fournisseur"
     suppliers: "Fournisseurs"
+    # supply_nature: "Supply nature"
     support: "Support"
     support_nature: "Type de support"
     support_shape: "Forme du support"

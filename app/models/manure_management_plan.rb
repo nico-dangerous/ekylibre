@@ -54,7 +54,6 @@ class ManureManagementPlan < Ekylibre::Record::Base
   accepts_nested_attributes_for :zones, :manure_management_plan_natures
   alias_attribute :natures, :manure_management_plan_natures
 
-
   protect do
     locked?
   end
@@ -62,9 +61,9 @@ class ManureManagementPlan < Ekylibre::Record::Base
   # after_save :compute
   scope :of_campaign, lambda{ |campaign|
     if campaign.is_a?(Fixnum)
-      where(:campaign_id => campaign)
+      where(campaign_id: campaign)
     else
-      where(:campaign_id => campaign.id)
+      where(campaign_id: campaign.id)
     end
   }
 
@@ -75,70 +74,64 @@ class ManureManagementPlan < Ekylibre::Record::Base
 
   def compute
     results = {}
-    zones.map{|zone| results[zone.id] = zone.compute}
-    return results
+    zones.map { |zone| results[zone.id] = zone.compute }
+    results
   end
 
   def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [], approach_name: nil)
     # soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
     if campaign.nil?
       campaign = Campaign.last
-      if campaign.nil?
-        raise "no Campaign found"
-      end
+      raise 'no Campaign found' if campaign.nil?
     end
     if user.nil?
       user = User.first
-      if user.nil?
-        raise "no User found"
-      end
+      raise 'no User found' if user.nil?
     end
 
-    if manure_natures.empty?
-      manure_natures = ["N"]
-    end
-    manure_management_plan = ManureManagementPlan.new(:campaign => campaign,
-                                                      :data_unit => :kilogram_per_hectare,
-                                                       :opened_at => Time.new(campaign.harvest_year,2,1).to_datetime,
-                                                       :recommender_id => user.person_id,
-                                                       :name => "Fumure " + campaign["harvest_year"].to_s)
+    manure_natures = ['N'] if manure_natures.empty?
+    manure_management_plan = ManureManagementPlan.new(campaign: campaign,
+                                                      data_unit: :kilogram_per_hectare,
+                                                      opened_at: Time.new(campaign.harvest_year, 2, 1).to_datetime,
+                                                      recommender_id: user.person_id,
+                                                      name: 'Fumure ' + campaign['harvest_year'].to_s)
 
-    ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming").each do |activity_production|
+    ActivityProduction.of_campaign(campaign).of_activity_families('plant_farming').each do |activity_production|
       admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)
       admin_area_name = admin_area.name unless admin_area.nil?
       manure_management_plan.zones.new(
-          :activity_production => activity_production,
-          :soil_nature => soil_natures[activity_production.id.to_s] || "champagne_soil",
-          :cultivation_variety => activity_production.cultivation_variety,
-          :administrative_area => admin_area_name,
+        activity_production: activity_production,
+        soil_nature: soil_natures[activity_production.id.to_s] || 'champagne_soil',
+        cultivation_variety: activity_production.cultivation_variety,
+        administrative_area: admin_area_name
       )
     end
     manure_natures.each do |manure_nature|
       mmp_nature = manure_management_plan.natures.new(supply_nature: manure_nature)
       manure_management_plan.zones.each do |zone|
-        if approach_name.nil?
-          approach = ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature)
-        else
-          approach = Approach.find_by_name(approach_name)
-        end
+        approach = if approach_name.nil?
+                     ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature)
+                   else
+                     Approach.find_by_name(approach_name)
+                   end
         zone.manure_approach_applications.new(manure_management_plan_nature: mmp_nature,
                                               parameters: {},
                                               results: {},
                                               approach_id: approach.id)
       end
     end
-    return manure_management_plan
+    manure_management_plan
   end
 
   def zones_in_vulnerable_area
     res = []
-    (ActiveRecord::Base.connection.execute("SELECT distinct MMPZ.id
+    ActiveRecord::Base.connection.execute("SELECT distinct MMPZ.id
                                                   FROM MANURE_MANAGEMENT_PLANS as MMP
                                                   JOIN MANURE_MANAGEMENT_PLAN_ZONES as MMPZ ON MMPZ.plan_id = MMP.id
                                                   JOIN ACTIVITY_PRODUCTIONS as AP on MMPZ.activity_production_id = AP.id
                                                   LEFT JOIN REGULATORY_ZONES as RZ on ST_Intersects(RZ.shape,AP.support_shape)
                                                   WHERE RZ.type = 'VulnerableZone'
-                                                  ;")).values.map{|item| item.first}
+                                                  ;").values.map(&:first)
   end
 
   def questions
@@ -146,7 +139,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
     zones.each do |zone|
       question_hash[zone_id] = zone.questions
     end
-    return question_hash
+    question_hash
   end
 
   def build_missing_zones
@@ -168,24 +161,24 @@ class ManureManagementPlan < Ekylibre::Record::Base
   end
 
   def self.can_be_created(campaign)
-    return budgets_done(campaign)["valid"] && (not ManureManagementPlanNature.available_natures.nil?)
+    budgets_done(campaign)['valid'] && !ManureManagementPlanNature.available_natures.nil?
   end
 
   def self.budgets_done(campaign)
-    activities_prod = ActivityProduction.of_campaign(campaign).of_activity_families("plant_farming")
+    activities_prod = ActivityProduction.of_campaign(campaign).of_activity_families('plant_farming')
 
     missing_budgets = []
     activities_prod.each do |activity_production|
-      missing_budgets << activity_production.budgets.of_campaign(campaign).select{|budget| budget.revenues.empty?}
+      missing_budgets << activity_production.budgets.of_campaign(campaign).select { |budget| budget.revenues.empty? }
     end
-    missing_info = {budget: missing_budgets.reject(&:empty?),
-                    cultivation_variety: activities_prod.select{ |act| act.cultivation_variety.nil?} }
-    activities_prod.select{ |act| act.cultivation_variety.nil?}
+    missing_info = { budget: missing_budgets.reject(&:empty?),
+                     cultivation_variety: activities_prod.select { |act| act.cultivation_variety.nil? } }
+    activities_prod.select { |act| act.cultivation_variety.nil? }
 
-    missing_info["valid"] = missing_info[:budget].empty? && missing_info[:cultivation_variety].empty?
-    #check soil nature
+    missing_info['valid'] = missing_info[:budget].empty? && missing_info[:cultivation_variety].empty?
+    # check soil nature
 
-    return missing_info
+    missing_info
   end
 
   def mass_density_unit

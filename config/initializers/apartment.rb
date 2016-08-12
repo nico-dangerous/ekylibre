@@ -16,7 +16,7 @@ Apartment.configure do |config|
   # config.excluded_models = %w{Tenant}
   #
 
-  #config.excluded_models = %w{Lexicon}
+  # config.excluded_models = %w{Lexicon}
 
   # use postgres schemas?
   # config.use_schemas = true
@@ -25,7 +25,7 @@ Apartment.configure do |config|
   # config.use_sql = true
 
   # Postgis default Schema must be "postgis"
-  config.persistent_schemas = ['postgis','lexicon']
+  config.persistent_schemas = %w(postgis lexicon)
 
   # add the Rails environment to database names?
   # config.prepend_environment = false

@@ -121,8 +121,6 @@ class ActivityBudget < Ekylibre::Record::Base
       raise ArgumentError, "Cannot find unit for yield estimate: #{options[:unit].inspect}"
     end
 
-
-
     Nomen::Variety.find!(variety)
 
     r = []

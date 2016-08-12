@@ -1,15 +1,12 @@
 module Calculus
   module ManureManagementPlan
-
     class ExampleApproachQuestionPrefiller < AbstractQuestionPrefiller
-
-      def self.prefill(question_group)
+      def self.prefill(_question_group)
         answers = {}
-        answers["foo"] = "foofoo"
-        answers["bar"] = "barbar"
-        return answers
+        answers['foo'] = 'foofoo'
+        answers['bar'] = 'barbar'
+        answers
       end
-
     end
   end
 end

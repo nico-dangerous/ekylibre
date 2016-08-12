@@ -13,12 +13,12 @@ namespace :lexicon do
     ActiveRecord::Base.connection.execute 'CREATE TABLE IF NOT EXISTS lexicon.approaches(id serial PRIMARY KEY, classname varchar ,name varchar, supply_nature varchar, questions jsonb, shape geometry(GEOMETRY,4326));'
   end
 
-  desc "delete lexicon schema and all its data"
+  desc 'delete lexicon schema and all its data'
   task drop: :environment do
     ActiveRecord::Base.connection.execute 'DROP SCHEMA IF EXISTS lexicon CASCADE;'
   end
 
-  desc "call tasks drop and create"
+  desc 'call tasks drop and create'
   task reset: :environment do
     Rake::Task['lexicon:drop'].invoke
     Rake::Task['lexicon:import'].invoke
@@ -29,20 +29,19 @@ namespace :lexicon do
         all items must have the same attributs, and must be referenced, even if null.
         The table created is lexicon.<filename> without extension"
   task import: :create do
-    path =  File.join("{db,plugins/**/db}","lexicon","**","*.yml")
+    path = File.join('{db,plugins/**/db}', 'lexicon', '**', '*.yml')
     Dir.glob(path).each do |filename|
       puts filename
       Lexicon.fill_table_from_yaml(filename)
     end
   end
 
-
-  desc ""
+  desc ''
   task approach_yml: :environment do
-    name = ENV["NAME"]
-    supply_nature = ENV["SUPPLY_NATURE"]
-    shape_file = ENV["SHAPEFILE"]
-    filename = name+".approaches.yml"
+    name = ENV['NAME']
+    supply_nature = ENV['SUPPLY_NATURE']
+    shape_file = ENV['SHAPEFILE']
+    filename = name + '.approaches.yml'
     shape = nil
     RGeo::Shapefile::Reader.open(shape_file, srid: 4326) do |file|
       file.each do |record|
@@ -50,47 +49,44 @@ namespace :lexicon do
       end
     end
     finished = false
-    questions = {"questions" => {}}
+    questions = { 'questions' => {} }
 
     index = 0
-    while not finished do
-      puts ("add question ? y/n")
+    until finished
+      puts 'add question ? y/n'
       answer = STDIN.gets.chomp
       question = {}
-      if answer == "y"
+      if answer == 'y'
 
         question = {}
-        puts ("text :")
-        question["text"] = STDIN.gets.chomp
-        puts ("label :")
-        question["label"] = STDIN.gets.chomp
-        puts ("type :")
-        question["type"] = STDIN.gets.chomp
-        questions["questions"][index.to_s] = question
-        index+=1
-      elsif answer == "n"
+        puts 'text :'
+        question['text'] = STDIN.gets.chomp
+        puts 'label :'
+        question['label'] = STDIN.gets.chomp
+        puts 'type :'
+        question['type'] = STDIN.gets.chomp
+        questions['questions'][index.to_s] = question
+        index += 1
+      elsif answer == 'n'
         finished = true
       end
     end
-    approach = {"name" => name,
-                "supply_nature" => supply_nature,
-                "questions" => questions.to_s,
-                "shape" => shape
-                }
-    File.new(filename,"w").puts(approach.to_yaml)
+    approach = { 'name' => name,
+                 'supply_nature' => supply_nature,
+                 'questions' => questions.to_s,
+                 'shape' => shape }
+    File.new(filename, 'w').puts(approach.to_yaml)
   end
 
-  desc ""
+  desc ''
   task shapefile_to_yaml: :environment do
-
     input_filename = ENV['SHAPEFILE'] # File to read
-    output_filename = ENV['FILENAME'] #File to write in
-    srid = ENV['SRID'] || 4326  #SRID from shapefile read
+    output_filename = ENV['FILENAME'] # File to write in
+    srid = ENV['SRID'] || 4326 # SRID from shapefile read
     nature_column = ENV['NATURE'] # string
-    name_attr = ENV['NAME_ATTR'] #the attribute from the shapefile for name column
-    prefix = ENV["PREFIX"] || ''
+    name_attr = ENV['NAME_ATTR'] # the attribute from the shapefile for name column
+    prefix = ENV['PREFIX'] || ''
 
-    Lexicon.shapefile_to_yaml(input_filename,output_filename,nature_column,name_attr,prefix,srid)
+    Lexicon.shapefile_to_yaml(input_filename, output_filename, nature_column, name_attr, prefix, srid)
   end
-
 end

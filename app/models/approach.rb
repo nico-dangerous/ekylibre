@@ -31,5 +31,4 @@
 #
 
 class Approach < Ekylibre::Record::Base
-
 end

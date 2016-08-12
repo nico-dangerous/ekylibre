@@ -29,5 +29,4 @@
 #
 
 class Department < AdministrativeArea
-
 end

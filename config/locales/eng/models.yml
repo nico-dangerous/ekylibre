@@ -151,15 +151,18 @@ eng:
       activity_production: "Activity production"
       activity_season: "Activity season"
       activity_tactic: "Activity cropping technique"
+      # administrative_area: "Administrative area"
       affair: "Affair"
       analysis: "Analysis"
       analysis_item: "Analysis item"
       animal: "Animal"
       animal_group: "Animal group"
+      # approach: "Approach"
       attachment: "Attachment"
       bank_statement: "Bank statement"
       bank_statement_item: "Bank statement row"
       bioproduct: "Living product"
+      # body_of_water: "Body of water"
       building: "Building"
       building_division: "Room / Zone"
       campaign: "Campaign"
@@ -178,6 +181,7 @@ eng:
       dashboard: "Dashboard"
       delivery: "Delivery"
       delivery_tool: "Delivery tool"
+      # department: "Department"
       deposit: "Deposit"
       district: "District"
       document: "Document"
@@ -230,7 +234,9 @@ eng:
       listing_node_item: "Listing node item"
       loan: "Loan"
       loan_repayment: "Loan repayment"
+      # manure_approach_application: "Manure approach application"
       manure_management_plan: "Manure management plan"
+      # manure_management_plan_nature: "Manure management plan nature"
       manure_management_plan_zone: "Manure management plan zone"
       map_background: "Map background"
       matter: "Matter"
@@ -269,6 +275,7 @@ eng:
       purchase: "Purchase"
       purchase_item: "Purchase item"
       purchase_nature: "Purchase type"
+      # regulatory_zone: "Regulatory zone"
       role: "Role"
       sale: "Sale"
       sale_item: "Sale item"
@@ -290,6 +297,8 @@ eng:
       tracking: "Tracking"
       user: "User"
       version: "Version"
+      # vulnerable_zone: "Vulnerable zone"
+      # watercourse: "Watercourse"
       worker: "Worker"
       zone: "Zone"
   attributes:
@@ -300,7 +309,7 @@ eng:
     absolute_measure_value: "Absolute measure value"
     absolute_measure_value_unit: "Absolute measure value unit"
     absolute_measure_value_value: "Absolute measure value value"
-    absorbed_nitrogen_at_opening: "Absorbed nitrogen at opening"
+    absorbed_nitrogen_at_opening: "Absorbed nitrogen at opening" #?
     absorber: "Absorber" #?
     acceptance_status: "Acceptance status"
     access_parameters: "Access parameters"
@@ -348,6 +357,7 @@ eng:
     analysis: "Analysis"
     analysis_items: "Analysis items"
     annotation: "Annotation"
+    # approach: "Approach"
     archive: "Archive"
     # archive_content_type: "Archive content type"
     # archive_file_name: "Archive file name"
@@ -411,6 +421,7 @@ eng:
     choices_count: "Choices count"
     city: "City"
     city_name: "City name"
+    # classname: "Classname"
     client: "Client"
     client_account: "Client account"
     clients: "Clients"
@@ -494,6 +505,7 @@ eng:
     customized_type: "Customized type"
     daily_nitrogen_production: "Daily nitrogen production"
     dashboards: "Dashboards"
+    # data_unit: "Data unit"
     dead_at: "Dead on"
     dead_line_at: "Dead line at"
     deals_count: "Deals count"
@@ -502,7 +514,7 @@ eng:
     decimal_value: "Decimal value"
     declarant: "Declarant"
     deduction_account: "Deduction account"
-    default_computation_method: "Default computation method"
+    default_computation_method: "Default computation method" #?
     default_mail_address: "Default mail address"
     default_storage: "Default storage"
     default_variant: "Default variant"
@@ -663,7 +675,7 @@ eng:
     human_target_names: "Target names"
     human_working_duration: "Working duration"
     human_working_zone_area: "Working zone area"
-    humus_mineralization: "Humus mineralization"
+    humus_mineralization: "Humus mineralization" #?
     iban: "IBAN"
     id: "ID"
     identification_number: "Identification number"
@@ -713,7 +725,7 @@ eng:
     integer_value: "Integer value"
     interest_amount: "Interest amount"
     interest_percentage: "Interest percentage"
-    intermediate_cultivation_residue_mineralization: "Intermediate cultivation residue mineralization"
+    intermediate_cultivation_residue_mineralization: "Intermediate cultivation residue mineralization" #?
     interpolations: "Interpolations"
     intervention: "Intervention"
     intervention_cast: "Intervention cast" #?
@@ -732,7 +744,7 @@ eng:
     invoice_address: "Invoice address"
     invoiced_at: "Invoiced on"
     irrigated: "Irrigated"
-    irrigation_water_nitrogen: "Irrigation water nitrogen"
+    irrigation_water_nitrogen: "Irrigation water nitrogen" #?
     islet: "Islet"
     islet_number: "Islet number"
     islets: "Islets"
@@ -755,6 +767,7 @@ eng:
     journal_entry_item: "Journal entry item" #?
     journal_entry_items: "Journal entry items"
     key: "Key"
+    kind: "Kind"
     label: "Label"
     land_parcel_number: "Land parcel number"
     land_parcels: "Land parcels"
@@ -814,7 +827,12 @@ eng:
     main_production: "Main production" #?
     managed: "Managed"
     managed_sales: "Managed sales"
-    manure_management_plan_zones: "Manure management plan zones"
+    # manure_approach_applications: "Manure approach applications"
+    manure_management_plan: "Manure management plan"
+    # manure_management_plan_nature: "Manure management plan nature"
+    # manure_management_plan_natures: "Manure management plan natures"
+    manure_management_plan_zone: "Manure management plan zone"
+    manure_management_plan_zones: "Manure management plan zones" #?
     marketable: "Marketable"
     marketable_items_count: "Marketable items count"
     marketable_net_mass: "Marketable net mass"
@@ -827,8 +845,8 @@ eng:
     maximal_size: "Maximal size"
     maximal_size_value: "Maximal size value"
     maximal_value: "Maximal value"
-    maximum_nitrogen_input: "Maximum nitrogen input"
-    meadow_humus_mineralization: "Meadow humus mineralization"
+    maximum_nitrogen_input: "Maximum nitrogen input" #?
+    meadow_humus_mineralization: "Meadow humus mineralization" #?
     measure_grading_items_count: "Measure grading items count"
     measure_grading_net_mass: "Measure grading net mass"
     measure_grading_sizes: "Measure grading sizes"
@@ -843,7 +861,7 @@ eng:
     message: "Message"
     metadata: "Metadata"
     min_zoom: "Min zoom"
-    mineral_nitrogen_at_opening: "Mineral nitrogen at opening"
+    mineral_nitrogen_at_opening: "Mineral nitrogen at opening" #?
     minimal_length: "Minimal length"
     minimal_size: "Minimal size"
     minimal_size_value: "Minimal size value"
@@ -870,9 +888,9 @@ eng:
     new_name: "New name"
     new_variant: "New variant"
     nitrate_fixing: "Nitrate fixing"
-    nitrogen_at_closing: "Nitrogen at closing"
-    nitrogen_input: "Nitrogen input"
-    nitrogen_need: "Nitrogen need"
+    nitrogen_at_closing: "Nitrogen at closing" #?
+    nitrogen_input: "Nitrogen input" #?
+    nitrogen_need: "Nitrogen need" #?
     node: "Node"
     nodes: "Nodes"
     noticed_start_amount: "Noticed start amount"
@@ -888,7 +906,7 @@ eng:
     old_password: "Old password"
     opened_at: "Opened at"
     ordered_at: "Ordered at"
-    organic_fertilizer_mineral_fraction: "Organic fertilizer mineral fraction"
+    organic_fertilizer_mineral_fraction: "Organic fertilizer mineral fraction" #?
     origin: "Origin"
     originator: "Originator"
     originator_type: "Originator type"
@@ -964,7 +982,7 @@ eng:
     prescription: "Prescription"
     prescriptor: "Prescriptor"
     pretax_amount: "Pre-tax amount"
-    previous_cultivation_residue_mineralization: "Previous cultivation residue mineralization"
+    previous_cultivation_residue_mineralization: "Previous cultivation residue mineralization" #?
     price: "Price"
     printed_at: "Printed at"
     printed_on: "Printed on"
@@ -1034,6 +1052,7 @@ eng:
     quantity_unit_name: "Quantity unit name"
     quantity_value: "Quantity value"
     query: "Query"
+    questions: "Questions"
     rank_number: "Rank number"
     read_at: "Read at"
     reading_tasks: "Reading tasks" #?
@@ -1093,6 +1112,7 @@ eng:
     resource_type: "Resource type"
     responsible: "Responsible"
     restricted: "Restricted"
+    # results: "Results"
     retrieval_message: "Retrieval message"
     retrieval_mode: "Retrieval mode"
     retrieval_status: "Retrieval status"
@@ -1132,9 +1152,9 @@ eng:
     seasons: "Seasonalities"
     seeding_density_unit: "Seeding density unit"
     seeding_density_value: "Seeding density"
-    selected: "Selected"
+    selected: "Selected" #?
     selected_manure_management_plan: "Selected manure management plan"
-    selected_manure_management_plan_zone: "Selected manure management plan zone"
+    selected_manure_management_plan_zone: "Selected manure management plan zone" #?
     sender: "Sender"
     sensor: "Sensor"
     sensors: "Sensors"
@@ -1156,7 +1176,7 @@ eng:
     size_unit_name: "Size unit name"
     size_value: "Size value"
     soil_nature: "Soil type"
-    soil_production: "Soil production"
+    soil_production: "Soil production" #?
     source: "Source"
     source_product: "Source product"
     # source_product_movement: "Source product movement"
@@ -1194,6 +1214,7 @@ eng:
     supplier_account: "Supplier account"
     supplier_address: "Supplier address"
     suppliers: "Suppliers"
+    supply_nature: "Supply nature"
     support: "Support"
     support_nature: "Support type"
     support_shape: "Support shape"

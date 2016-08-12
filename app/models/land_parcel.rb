@@ -96,12 +96,8 @@ class LandParcel < Easement
 
   def estimated_soil_nature
     unless shape.nil?
-      analyse = Analysis.contained_in(shape).of_nature("soil_analysis").most_recent
-      unless analyse.empty?
-        analyse.first.soil_nature
-      end
+      analyse = Analysis.contained_in(shape).of_nature('soil_analysis').most_recent
+      analyse.first.soil_nature unless analyse.empty?
     end
   end
-
-
 end

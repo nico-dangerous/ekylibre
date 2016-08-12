@@ -247,7 +247,7 @@ class ActivityProduction < Ekylibre::Record::Base
   end
 
   # anyway return the variety to produce
-  # return the cultivation variety if a cultivation exist or the activity variety if none
+  #  return the cultivation variety if a cultivation exist or the activity variety if none
   def production_variety
     if current_cultivation
       return current_cultivation.variety

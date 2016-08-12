@@ -72,11 +72,11 @@ module Backend
 
     def shape_field_tag(name, value = nil, options = {})
       unless value.nil?
-        if Charta::GeoJSON.new(value).valid?
-          geometry=value
-        else
-          geometry = Charta.new_geometry(value).to_json_object(true)
-        end
+        geometry = if Charta::GeoJSON.new(value).valid?
+                     value
+                   else
+                     Charta.new_geometry(value).to_json_object(true)
+                   end
       end
       box ||= {}
       options[:box] ||= {}
@@ -98,7 +98,7 @@ module Backend
 
       options[:data][:map_editor][:back] ||= MapBackground.availables.collect(&:to_json_object)
 
-      options.deep_merge!(data: { map_editor: { edit: geometry} }) unless value.nil?
+      options.deep_merge!(data: { map_editor: { edit: geometry } }) unless value.nil?
 
       text_field_tag(name, value, options.deep_merge(data: { map_editor: { box: box.jsonize_keys } }))
     end
@@ -134,7 +134,7 @@ module Backend
           area_unit = options[:area_unit] || :hectare
           content = []
           if records.respond_to?(:net_surface_area)
-           # content << { label: klass.human_attribute_name(label_method), value: record.send(label_method) }
+            # content << { label: klass.human_attribute_name(label_method), value: record.send(label_method) }
             content << { label: Nomen::Indicator.find(:net_surface_area).human_name,
                          value: record.net_surface_area.in(area_unit).round(3).l }
             content << content_tag(:div, class: 'btn-group') do

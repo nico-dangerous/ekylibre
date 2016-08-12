@@ -83,7 +83,7 @@ class Analysis < Ekylibre::Record::Base
   }
 
   scope :of_nature, lambda { |nature|
-    where('nature' => nature )
+    where('nature' => nature)
   }
 
   scope :most_recent, lambda{

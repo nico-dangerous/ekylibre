@@ -47,18 +47,16 @@ class ManureApproachApplication < Ekylibre::Record::Base
 
   validates :approach_id, presence: true
 
-  def self.most_relevant_approach(shape,supply_nature)
-    #Return the most relevant model for a given location
+  def self.most_relevant_approach(shape, supply_nature)
+    # Return the most relevant model for a given location
 
     # Here we use multiple queries because we can't use comparison on aggregations efficiently.
     # We extract some results because otherwise we would have to compute it multiple times.
     # For exemple by finding the approach id associated with the largest intersection between an approach shape and the shape(param)
 
     # Return the area (numeric value) for the largest intersection of an approach and the shape
-=begin
-    shape = manure_management_plan_zone.shape
-    supply_nature = manure_management_plan_nature.supply_nature
-=end
+    #     shape = manure_management_plan_zone.shape
+    #     supply_nature = manure_management_plan_nature.supply_nature
     max = ActiveRecord::Base.connection.execute("(SELECT MAX(ST_AREA(ST_Intersection(Ap.shape,#{Charta.new_geometry(shape).geom}))) FROM Approaches Ap)").values.first.first
 
     # Returns the approaches that intersect the most (with larger area) with the shape
@@ -77,29 +75,25 @@ class ManureApproachApplication < Ekylibre::Record::Base
 
     min_couple = intersecting_with_largest_area.first
     intersecting_with_largest_area.each do |couple|
-      if couple[1] < min_couple[1]
-        min_couple = couple
-      end
+      min_couple = couple if couple[1] < min_couple[1]
     end
-    if min_couple.nil?
-      return nil
-    end
-    return min_couple[0]
+    return nil if min_couple.nil?
+    min_couple[0]
   end
 
   def compute
     approach = Calculus::ManureManagementPlan::Approach.build_approach(self)
-    return {:needs => approach.estimated_needs,
-            :yields => approach.estimate_expected_yield,
-            :supply => approach.estimated_supply,
-            :input => approach.estimated_input}
+    { needs: approach.estimated_needs,
+      yields: approach.estimate_expected_yield,
+      supply: approach.estimated_supply,
+      input: approach.estimated_input }
   end
 
   def self.humanize_result(key_result)
-    I18n.translate("MMP.#{name}.results.#{key_result}",default:["MMP.results.#{key_result}","labels.#{key_result}",key_result.to_s.humanize])
+    I18n.translate("MMP.#{name}.results.#{key_result}", default: ["MMP.results.#{key_result}", "labels.#{key_result}", key_result.to_s.humanize])
   end
 
   def self.humanize_question(key_question)
-    I18n.translate("MMP.#{name}.question.#{key_question}",default:["MMP.question.#{key_question}","labels.#{key_question}",key_question.to_s.humanize])
+    I18n.translate("MMP.#{name}.question.#{key_question}", default: ["MMP.question.#{key_question}", "labels.#{key_question}", key_question.to_s.humanize])
   end
 end

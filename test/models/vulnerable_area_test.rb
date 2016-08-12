@@ -6,6 +6,6 @@ class VulnerableZoneTest < ActiveSupport::TestCase
   # end
   test 'geom exists' do
     vulnerable_zone = VulnerableZones.last
-    assert_not_nil vulnerable_zone, "Expect not nil. Got : #{ vulnerable_area }"
+    assert_not_nil vulnerable_zone, "Expect not nil. Got : #{vulnerable_area}"
   end
 end

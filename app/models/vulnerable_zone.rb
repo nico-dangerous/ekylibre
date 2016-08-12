@@ -29,5 +29,4 @@
 #
 
 class VulnerableZone < RegulatoryZone
-
 end

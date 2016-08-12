@@ -1545,6 +1545,7 @@ arb:
     journal_id: "الدفتر اليومي" #?
     journals: "الدفاتر اليومية" #?
     key: "المفتاح"
+    # kind: "Kind"
     label: "الملصق"
     land_parcel_number: "عدد قطعة أرض"
     land_parcels: "الكتل"
@@ -1622,6 +1623,8 @@ arb:
     managed: "تمكنت"
     managed_sales: "مبيعات المدارة"
     mandates: "تفويضات" #?
+    # manure_management_plan: "Manure management plan"
+    # manure_management_plan_zone: "Manure management plan zone"
     manure_management_plan_zones: "مناطق خطة إدارة السماد"
     marketable: "تسويق"
     marketable_items_count: "البنود تسويق عد"
@@ -1914,6 +1917,7 @@ arb:
     quantity_unit_name: "الكمية اسم الوحدة"
     quantity_value: "قيمة الكمية"
     query: "التساؤل"
+    # questions: "Questions"
     range: "فترة فاصلة" #?
     rank_number: "عدد رتبة"
     rate: "معدل سعر الصرف" #?
@@ -2122,6 +2126,7 @@ arb:
     supplier_address: "عنوان المورد"
     supplier_id: "ممول" #?
     suppliers: "الممولين"
+    # supply_nature: "Supply nature"
     support: "الدعم"
     support_nature: "نوع الدعم"
     support_shape: "شكل الدعم"
