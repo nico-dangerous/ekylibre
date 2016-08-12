@@ -8,6 +8,11 @@
     - variants += activities.where.not(id: @activities).where(id: ActivityProduction.select(:activity_id).of_campaign(preceding)).order(:name).map { |a| [a.name, { source_activity_id: a.id }] }
     - if variants.any?
       = t.duplicate params: { controller: :activities, campaign_id: current_campaign.id, source_campaign_id: preceding.id, redirect: request.fullpath }, variants: variants, label: :copy_from_previous_campaign.tl, method: :post
+  - if (ManureManagementPlan.find_by_campaign_id(current_campaign.id).nil?)
+    - if tmp = ManureManagementPlan.can_be_created(current_campaign)
+      =  link_to  "Manuring", {controller: :manure_management_plans, action: :new}, class: :btn
+  - else
+    =  link_to "Manuring", {controller: :manure_management_plans, action: :new, id: ManureManagementPlan.find_by_campaign_id(current_campaign.id).id}, class: :btn
 
 - main_campaign_selector
 
