@@ -109,11 +109,11 @@ class ManureManagementPlan < Ekylibre::Record::Base
     manure_natures.each do |manure_nature|
       mmp_nature = manure_management_plan.natures.new(supply_nature: manure_nature)
       manure_management_plan.zones.each do |zone|
-        approach = if approach_name.nil?
-                     ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature)
-                   else
-                     Approach.find_by_name(approach_name)
-                   end
+        if approach_name.nil?
+          approach = Approach.find(ManureApproachApplication.most_relevant_approach(zone.support_shape, mmp_nature.supply_nature))
+        else
+          approach = Approach.find_by_name(approach_name)
+        end
         zone.manure_approach_applications.new(manure_management_plan_nature: mmp_nature,
                                               parameters: {},
                                               results: {},

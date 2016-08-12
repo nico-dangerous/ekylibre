@@ -526,16 +526,9 @@ class ActivityProduction < Ekylibre::Record::Base
       variety ||= 'grass'
     end
     # get current campaign
-    ap_budgets = activity.budget_of(campaign)
-    if ap_budgets.any?
-      values = []
-      for ap_budget in ap_budgets
-        values << ap_budget.estimate_yield(variety, options)
-      end
-      return values.compact.sum
-    else
-      return nil
-    end
+    ap_budget = activity.budget_of(campaign)
+    return ap_budget.estimate_yield(variety, options) unless ap_budget.nil?
+    return nil
   end
 
   def current_cultivation

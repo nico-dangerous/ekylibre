@@ -21,6 +21,14 @@ module Calculus
       def budget_estimate_expected_yield
         manure_management_plan_zone.activity_production.estimate_yield
       end
+
+      def self.humanize_result(key_result)
+        I18n.translate("MMP.results.#{key_result}", default: ["labels.#{key_result}", key_result.to_s.humanize])
+      end
+
+      def self.humanize_question(key_question)
+        I18n.translate("MMP.approach.question.#{key_question}")
+      end
     end
   end
 end

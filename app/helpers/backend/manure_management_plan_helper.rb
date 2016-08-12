@@ -110,7 +110,7 @@ module Backend
                    else
                      ''
                    end
-            approaches_properties['group'][approach.supply_nature][label] = { 'unit' => unit, 'widget' => approach.questions[label]['widget'], 'value' => approach_app.parameters[label], 'text' => ManureApproachApplication.humanize_question(approach.questions[label]['text']), 'label' => label }
+            approaches_properties['group'][approach.supply_nature][label] = { 'unit' => unit, 'widget' => approach.questions[label]['widget'], 'value' => approach_app.parameters[label], 'text' => Calculus::ManureManagementPlan::Approach.humanize_question(approach.questions[label]['text']), 'label' => label }
           end
         end
       end
@@ -162,7 +162,7 @@ module Backend
         property[:manure_zone_id] = manure_zone.id
         property[:name] = manure_zone.name
 
-        property_modal[:vulnerable_zone] = { 'text' => 'attributes.cultivation_variety'.t, 'type' => 'label', 'value' => mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).to_s }
+        property_modal[:vulnerable_zone] = { 'text' => Calculus::ManureManagementPlan::Approach.humanize_question(:is_in_vulnerable_zone), 'type' => 'label', 'value' => mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).l}
         property_modal[:variety] = { 'text' => 'attributes.cultivation_variety'.t, 'type' => 'label', 'value' => manure_zone.cultivation_variety_name }
         property_modal[:soil_nature] = { 'text' => 'attributes.soil_nature'.t, 'type' => 'label', 'value' => Nomen::SoilNature.find(manure_zone.soil_nature).human_name }
 
@@ -186,7 +186,7 @@ module Backend
       approach_applications.each do |approach_app|
         application_results = { 'modalAttributes' => { 'group' => { approach_app.supply_nature => {} } } }
         zone_results[approach_app.id].each_key do |key|
-          application_results['modalAttributes']['group'][approach_app.supply_nature][key] = { 'text' => ManureApproachApplication.humanize_result(key), 'widget' => 'label', 'value' => zone_results[approach_app.id][key], 'unit' => unit }
+          application_results['modalAttributes']['group'][approach_app.supply_nature][key] = { 'text' => Calculus::ManureManagementPlan::Approach.humanize_result(key), 'widget' => 'label', 'value' => zone_results[approach_app.id][key], 'unit' => unit }
         end
         properties.merge!(application_results)
       end

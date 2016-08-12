@@ -239,9 +239,7 @@ class Activity < Ekylibre::Record::Base
 
   def budget_of(campaign)
     if campaign && campaign.is_a?(Campaign)
-      budgets.where(campaign_id: campaign.id)
-    else
-      puts "No campaign found for #{campaign.inspect}"
+      return budgets.find_by(campaign_id: campaign.id)
     end
   end
 

@@ -83,17 +83,12 @@ class ManureApproachApplication < Ekylibre::Record::Base
 
   def compute
     approach = Calculus::ManureManagementPlan::Approach.build_approach(self)
-    { needs: approach.estimated_needs,
+    return {
+      needs: approach.estimated_needs,
       yields: approach.estimate_expected_yield,
       supply: approach.estimated_supply,
       input: approach.estimated_input }
   end
 
-  def self.humanize_result(key_result)
-    I18n.translate("MMP.#{name}.results.#{key_result}", default: ["MMP.results.#{key_result}", "labels.#{key_result}", key_result.to_s.humanize])
-  end
 
-  def self.humanize_question(key_question)
-    I18n.translate("MMP.#{name}.question.#{key_question}", default: ["MMP.question.#{key_question}", "labels.#{key_question}", key_question.to_s.humanize])
-  end
 end
