@@ -113,6 +113,7 @@ class Intervention < Ekylibre::Record::Base
   scope :of_activity_production, lambda { |production|
     where(id: InterventionTarget.of_activity_production(production).select(:intervention_id))
   }
+  scope :of_actions, lambda { |*actions| where('actions ~ E?', actions.map { |a| "\\\\m#{a}\\\\M" }.join('.*')) }
   scope :of_activity, lambda { |activity|
     where(id: InterventionTarget.of_activity(activity).select(:intervention_id))
   }
