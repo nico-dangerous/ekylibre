@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160810084131) do
+ActiveRecord::Schema.define(version: 20160812164101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1969,6 +1969,73 @@ ActiveRecord::Schema.define(version: 20160810084131) do
   add_index "manure_approach_applications", ["approach_id"], name: "index_manure_plan_approach_on_approach", using: :btree
   add_index "manure_approach_applications", ["manure_management_plan_nature_id"], name: "index_manure_approach_application_on_manure_plan_nature", using: :btree
   add_index "manure_approach_applications", ["manure_management_plan_zone_id"], name: "index_manure_plan_approach_on_manure_plan_zone", using: :btree
+
+  create_table "manure_management_plan_animal_balances", force: :cascade do |t|
+    t.integer  "plan_id",                                                                    null: false
+    t.integer  "animal_group_id",                                                            null: false
+    t.decimal  "population",                            precision: 19, scale: 4
+    t.decimal  "large_stock_unit_population",           precision: 19, scale: 4
+    t.decimal  "inside_building_attendance_percentage", precision: 19, scale: 4
+    t.decimal  "quantity",                              precision: 19, scale: 4
+    t.string   "indicator",                                                                  null: false
+    t.string   "unit",                                                                       null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.integer  "lock_version",                                                   default: 0, null: false
+  end
+
+  add_index "manure_management_plan_animal_balances", ["animal_group_id"], name: "index_manure_animal_balance_animal_group", using: :btree
+  add_index "manure_management_plan_animal_balances", ["created_at"], name: "index_manure_management_plan_animal_balances_on_created_at", using: :btree
+  add_index "manure_management_plan_animal_balances", ["creator_id"], name: "index_manure_management_plan_animal_balances_on_creator_id", using: :btree
+  add_index "manure_management_plan_animal_balances", ["plan_id"], name: "index_manure_animal_balance_plan", using: :btree
+  add_index "manure_management_plan_animal_balances", ["updated_at"], name: "index_manure_management_plan_animal_balances_on_updated_at", using: :btree
+  add_index "manure_management_plan_animal_balances", ["updater_id"], name: "index_manure_management_plan_animal_balances_on_updater_id", using: :btree
+
+  create_table "manure_management_plan_intervention_targets", force: :cascade do |t|
+    t.integer  "manuring_zone_id",                                                              null: false
+    t.integer  "manuring_intervention_id",                                                      null: false
+    t.geometry "spreading_zone",           limit: {:srid=>4326, :type=>"geometry"}
+    t.datetime "created_at",                                                                    null: false
+    t.datetime "updated_at",                                                                    null: false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.integer  "lock_version",                                                      default: 0, null: false
+  end
+
+  add_index "manure_management_plan_intervention_targets", ["created_at"], name: "index_manure_management_plan_intervention_targets_on_created_at", using: :btree
+  add_index "manure_management_plan_intervention_targets", ["creator_id"], name: "index_manure_management_plan_intervention_targets_on_creator_id", using: :btree
+  add_index "manure_management_plan_intervention_targets", ["manuring_intervention_id"], name: "index_manure_intervention_target_intervention", using: :btree
+  add_index "manure_management_plan_intervention_targets", ["manuring_zone_id"], name: "index_manure_intervention_target_zone", using: :btree
+  add_index "manure_management_plan_intervention_targets", ["updated_at"], name: "index_manure_management_plan_intervention_targets_on_updated_at", using: :btree
+  add_index "manure_management_plan_intervention_targets", ["updater_id"], name: "index_manure_management_plan_intervention_targets_on_updater_id", using: :btree
+
+  create_table "manure_management_plan_interventions", force: :cascade do |t|
+    t.string   "name",                                                   null: false
+    t.string   "procedure_name",                                         null: false
+    t.string   "actions"
+    t.integer  "plan_id",                                                null: false
+    t.datetime "started_at",                                             null: false
+    t.datetime "stopped_at",                                             null: false
+    t.integer  "variant_id",                                             null: false
+    t.decimal  "quantity",          precision: 19, scale: 4
+    t.string   "variant_indicator",                                      null: false
+    t.string   "variant_unit",                                           null: false
+    t.text     "description"
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.integer  "lock_version",                               default: 0, null: false
+  end
+
+  add_index "manure_management_plan_interventions", ["created_at"], name: "index_manure_management_plan_interventions_on_created_at", using: :btree
+  add_index "manure_management_plan_interventions", ["creator_id"], name: "index_manure_management_plan_interventions_on_creator_id", using: :btree
+  add_index "manure_management_plan_interventions", ["plan_id"], name: "index_manure_intervention_plan", using: :btree
+  add_index "manure_management_plan_interventions", ["updated_at"], name: "index_manure_management_plan_interventions_on_updated_at", using: :btree
+  add_index "manure_management_plan_interventions", ["updater_id"], name: "index_manure_management_plan_interventions_on_updater_id", using: :btree
+  add_index "manure_management_plan_interventions", ["variant_id"], name: "index_manure_intervention_variant", using: :btree
 
   create_table "manure_management_plan_natures", force: :cascade do |t|
     t.string  "supply_nature"

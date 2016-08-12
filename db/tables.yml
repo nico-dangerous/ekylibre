@@ -549,19 +549,6 @@ activity_tactics:
   updater_id:
     type: integer
     references: user
-administrative_areas:
-  id:
-    type: integer
-    required: true
-  name:
-    type: string
-  shape:
-    type: geometry
-    limit:
-      srid: 4326
-      type: multi_polygon
-  type:
-    type: string
 affairs:
   accounted_at:
     type: datetime
@@ -787,23 +774,6 @@ analysis_items:
   updater_id:
     type: integer
     references: user
-approaches:
-  classname:
-    type: string
-  id:
-    type: integer
-    required: true
-  name:
-    type: string
-  questions:
-    type: jsonb
-  shape:
-    type: geometry
-    limit:
-      srid: 4326
-      type: geometry
-  supply_nature:
-    type: string
 attachments:
   created_at:
     type: datetime
@@ -3842,6 +3812,140 @@ manure_approach_applications:
     type: jsonb
   supply_nature:
     type: string
+manure_management_plan_animal_balances:
+  animal_group_id:
+    type: integer
+    references: animal_group
+    required: true
+  created_at:
+    type: datetime
+    required: true
+  creator_id:
+    type: integer
+    references: user
+  id:
+    type: integer
+    required: true
+  indicator:
+    type: string
+    required: true
+  inside_building_attendance_percentage:
+    type: decimal
+    precision: 19
+    scale: 4
+  large_stock_unit_population:
+    type: decimal
+    precision: 19
+    scale: 4
+  lock_version:
+    type: integer
+    required: true
+  plan_id:
+    type: integer
+    references: manure_management_plan
+    required: true
+  population:
+    type: decimal
+    precision: 19
+    scale: 4
+  quantity:
+    type: decimal
+    precision: 19
+    scale: 4
+  unit:
+    type: string
+    required: true
+  updated_at:
+    type: datetime
+    required: true
+  updater_id:
+    type: integer
+    references: user
+manure_management_plan_intervention_targets:
+  created_at:
+    type: datetime
+    required: true
+  creator_id:
+    type: integer
+    references: user
+  id:
+    type: integer
+    required: true
+  lock_version:
+    type: integer
+    required: true
+  manuring_intervention_id:
+    type: integer
+    references: manure_management_plan_intervention
+    required: true
+  manuring_zone_id:
+    type: integer
+    references: manure_management_plan_zone
+    required: true
+  spreading_zone:
+    type: geometry
+    limit:
+      srid: 4326
+      type: geometry
+  updated_at:
+    type: datetime
+    required: true
+  updater_id:
+    type: integer
+    references: user
+manure_management_plan_interventions:
+  actions:
+    type: string
+  created_at:
+    type: datetime
+    required: true
+  creator_id:
+    type: integer
+    references: user
+  description:
+    type: text
+  id:
+    type: integer
+    required: true
+  lock_version:
+    type: integer
+    required: true
+  name:
+    type: string
+    required: true
+  plan_id:
+    type: integer
+    references: manure_management_plan
+    required: true
+  procedure_name:
+    type: string
+    required: true
+  quantity:
+    type: decimal
+    precision: 19
+    scale: 4
+  started_at:
+    type: datetime
+    required: true
+  stopped_at:
+    type: datetime
+    required: true
+  updated_at:
+    type: datetime
+    required: true
+  updater_id:
+    type: integer
+    references: user
+  variant_id:
+    type: integer
+    references: product_nature_variant
+    required: true
+  variant_indicator:
+    type: string
+    required: true
+  variant_unit:
+    type: string
+    required: true
 manure_management_plan_natures:
   id:
     type: integer
@@ -5672,19 +5776,6 @@ purchases:
   updater_id:
     type: integer
     references: user
-regulatory_zones:
-  id:
-    type: integer
-    required: true
-  name:
-    type: string
-  shape:
-    type: geometry
-    limit:
-      srid: 4326
-      type: geometry
-  type:
-    type: string
 roles:
   created_at:
     type: datetime

@@ -96,6 +96,9 @@
 - loan_repayment
 - manure_approach_application
 - manure_management_plan
+- manure_management_plan_animal_balance
+- manure_management_plan_intervention
+- manure_management_plan_intervention_target
 - manure_management_plan_nature
 - manure_management_plan_zone
 - map_background
