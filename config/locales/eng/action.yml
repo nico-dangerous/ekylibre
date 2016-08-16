@@ -1581,7 +1581,6 @@ eng:
     variants: "Variants" #?
     view: "View"
     # vine_yield: "Vine yield"
-    # vulnerable_zone: "Vulnerable zone"
     watering_concentration: "Water use" #?
     # wear: "Wear"
     weather: "Weather"

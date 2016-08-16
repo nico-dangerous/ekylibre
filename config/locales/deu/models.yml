@@ -1136,6 +1136,7 @@ deu:
     source: "Quelle"
     source_product: "Source Produkt"
     # spaced_iban: "Spaced IBAN"
+    # spreading_zone: "Spreading zone"
     sql_type: "SQL-Typ"
     start: "Anfang"
     started_at: "Beginn"

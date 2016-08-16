@@ -1140,6 +1140,7 @@ spa:
     source: "Fuente"
     source_product: "Producto de código"
     # spaced_iban: "Spaced IBAN"
+    # spreading_zone: "Spreading zone"
     sql_type: "Tipo de SQL"
     start: "Comienzo"
     started_at: "Empezó a las"

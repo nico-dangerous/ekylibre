@@ -1391,6 +1391,7 @@ fra:
     source: "Source"
     source_product: "Produit Source"
     spaced_iban: "IBAN"
+    # spreading_zone: "Spreading zone"
     sql_type: "Type SQL"
     start: "Début"
     start_junction: "Jonction de départ" #?

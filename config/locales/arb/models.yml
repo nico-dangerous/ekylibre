@@ -2079,6 +2079,7 @@ arb:
     source: "المصدر"
     source_product: "مصدر المنتج"
     spaced_iban: "متباعدة IBAN"
+    # spreading_zone: "Spreading zone"
     sql_type: "SQL نوع"
     start: "البداية"
     started_at: "ابتدأ يوم"

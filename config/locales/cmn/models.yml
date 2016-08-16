@@ -1136,6 +1136,7 @@ cmn:
     source: "资源"
     source_product: "产品来源"
     spaced_iban: "间隔IBAN"
+    # spreading_zone: "Spreading zone"
     sql_type: "SQL类型"
     start: "开始"
     started_at: "在开始"

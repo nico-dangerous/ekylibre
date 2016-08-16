@@ -1136,6 +1136,7 @@ jpn:
     source: "ソース"
     source_product: "ソース製品"
     spaced_iban: "間隔をあけIBAN"
+    # spreading_zone: "Spreading zone"
     sql_type: "SQLタイプ"
     start: "開始"
     started_at: "で開始"

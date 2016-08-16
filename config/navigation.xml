@@ -1775,21 +1775,12 @@
   </inaccessible-actions>
   <untreated-actions>
     <group>
-      <item name="affairs">
-        <page to="backend/affairs#detach_gaps"/>
-      </item>
       <item name="manure_management_plans">
         <page to="backend/manure_management_plans#compute"/>
         <page to="backend/manure_management_plans#create_georeading"/>
         <page to="backend/manure_management_plans#delete_georeadings"/>
         <page to="backend/manure_management_plans#update_georeadings"/>
         <page to="backend/manure_management_plans#update_question"/>
-      </item>
-      <item name="sale_opportunities">
-        <page to="backend/sale_opportunities#detach_gaps"/>
-      </item>
-      <item name="sale_tickets">
-        <page to="backend/sale_tickets#detach_gaps"/>
       </item>
     </group>
   </untreated-actions>
