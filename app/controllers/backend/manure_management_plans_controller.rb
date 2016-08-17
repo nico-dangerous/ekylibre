@@ -76,8 +76,16 @@ module Backend
       soil_natures = {}
       permitted_params['zones_attributes'].values.map { |zone| soil_natures[zone['activity_production_id']] = zone['soil_nature'] }
       manure_natures = permitted_params.delete('natures').reject { |nature| nature.empty? || nature.nil? }
-
-      @manure_management_plan = ManureManagementPlan.create_for_campaign(campaign: current_campaign, user: current_user, soil_natures: {}, manure_natures: manure_natures)
+      @manure_management_plan = ManureManagementPlan.create_for_campaign(campaign: current_campaign,
+                                                                         user: current_user,
+                                                                         soil_natures: soil_natures,
+                                                                         manure_natures: manure_natures,
+                                                                         params: {
+                                                                             milk_annual_production_in_liter: permitted_params[:milk_annual_production_in_liter],
+                                                                             external_building_attendance_in_month: permitted_params[:external_building_attendance_in_month]
+                                                                         }
+      )
+      byebug
       @manure_management_plan.save
       redirect_to action: :edit, id: @manure_management_plan.id
     end

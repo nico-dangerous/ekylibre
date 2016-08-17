@@ -411,6 +411,7 @@ eng:
       show: "Manure management plan: %{name}"
       # update_georeadings: "Update georeadings manure management plan: %{name}"
       # update_question: "Update question manure management plan: %{name}"
+      # update_questions: "Update questions manure management plan: %{name}"
     backend/map_backgrounds:
       edit: "Edit map background: %{name}"
       index: "Map backgrounds"
@@ -1938,6 +1939,7 @@ eng:
       update: "Update"
       # update_georeadings: "Update georeadings"
       # update_question: "Update question"
+      # update_questions: "Update questions"
       # upload: "Upload"
       win: "Win"
   unrolls:

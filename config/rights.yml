@@ -104,6 +104,7 @@
 #     - "backend/manure_management_plans#delete_georeadings"
 #     - "backend/manure_management_plans#update_georeadings"
 #     - "backend/manure_management_plans#update_question"
+#     - "backend/manure_management_plans#update_questions"
 #     - "backend/map_editors#upload"
 #     - "backend/matters#take"
 #     - "backend/notifications#destroy"

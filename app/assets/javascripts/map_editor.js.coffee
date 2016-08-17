@@ -217,8 +217,8 @@
       # console.log "viewed"
       this._refreshControls()
       # console.log "controlled"
-      
-      
+
+
 
       @updateAttributesSeries = (e) =>
         return unless e.which == 1 || e.which == 13
@@ -342,7 +342,7 @@
           return
 
       return containerLayer
-      
+
     get_map: () ->
       return this.map
 

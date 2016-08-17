@@ -22,19 +22,21 @@
 #
 # == Table: manure_management_plans
 #
-#  annotation     :text
-#  campaign_id    :integer          not null
-#  created_at     :datetime         not null
-#  creator_id     :integer
-#  data_unit      :string
-#  id             :integer          not null, primary key
-#  lock_version   :integer          default(0), not null
-#  locked         :boolean          default(FALSE), not null
-#  name           :string           not null
-#  opened_at      :datetime         not null
-#  recommender_id :integer          not null
-#  updated_at     :datetime         not null
-#  updater_id     :integer
+#  annotation                            :text
+#  campaign_id                           :integer          not null
+#  created_at                            :datetime         not null
+#  creator_id                            :integer
+#  data_unit                             :string
+#  external_building_attendance_in_month :decimal(19, 4)
+#  id                                    :integer          not null, primary key
+#  lock_version                          :integer          default(0), not null
+#  locked                                :boolean          default(FALSE), not null
+#  milk_annual_production_in_liter       :integer
+#  name                                  :string           not null
+#  opened_at                             :datetime         not null
+#  recommender_id                        :integer          not null
+#  updated_at                            :datetime         not null
+#  updater_id                            :integer
 #
 class ManureManagementPlan < Ekylibre::Record::Base
   include Attachable
@@ -45,7 +47,9 @@ class ManureManagementPlan < Ekylibre::Record::Base
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :annotation, length: { maximum: 500_000 }, allow_blank: true
   validates :data_unit, length: { maximum: 500 }, allow_blank: true
+  validates :external_building_attendance_in_month, numericality: { greater_than: -1_000_000_000_000_000, less_than: 1_000_000_000_000_000 }, allow_blank: true
   validates :locked, inclusion: { in: [true, false] }
+  validates :milk_annual_production_in_liter, numericality: { only_integer: true, greater_than: -2_147_483_649, less_than: 2_147_483_648 }, allow_blank: true
   validates :name, presence: true, length: { maximum: 500 }
   validates :opened_at, presence: true, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
   validates :campaign, :recommender, presence: true
@@ -78,7 +82,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
     results
   end
 
-  def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [], approach_name: nil)
+  def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [], approach_name: nil,params: {})
     # soil_natures is a hash like { <(string)activity_production_id> => <(string)soil_nature>}
     if campaign.nil?
       campaign = Campaign.last
@@ -94,7 +98,10 @@ class ManureManagementPlan < Ekylibre::Record::Base
                                                       data_unit: :kilogram_per_hectare,
                                                       opened_at: Time.new(campaign.harvest_year, 2, 1).to_datetime,
                                                       recommender_id: user.person_id,
-                                                      name: 'Fumure ' + campaign['harvest_year'].to_s)
+                                                      name: 'Fumure ' + campaign['harvest_year'].to_s,
+                                                      milk_annual_production_in_liter: params[:milk_annual_production_in_liter] || 0,
+                                                      external_building_attendance_in_month: params[:external_building_attendance_in_month])
+
 
     ActivityProduction.of_campaign(campaign).of_activity_families('plant_farming').each do |activity_production|
       admin_area = Nomen::AdministrativeArea.find_by(code: activity_production.support.administrative_area)

@@ -4037,6 +4037,10 @@ manure_management_plans:
     references: user
   data_unit:
     type: string
+  external_building_attendance_in_month:
+    type: decimal
+    precision: 19
+    scale: 4
   id:
     type: integer
     required: true
@@ -4047,6 +4051,8 @@ manure_management_plans:
     type: boolean
     required: true
     default: false
+  milk_annual_production_in_liter:
+    type: integer
   name:
     type: string
     required: true

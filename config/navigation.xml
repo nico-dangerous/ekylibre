@@ -1781,6 +1781,7 @@
         <page to="backend/manure_management_plans#delete_georeadings"/>
         <page to="backend/manure_management_plans#update_georeadings"/>
         <page to="backend/manure_management_plans#update_question"/>
+        <page to="backend/manure_management_plans#update_questions"/>
       </item>
     </group>
   </untreated-actions>

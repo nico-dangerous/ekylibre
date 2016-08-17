@@ -608,6 +608,7 @@ eng:
     exportable_columns: "Exportable columns"
     exportable_fields: "Exportable fields"
     external: "External"
+    # external_building_attendance_in_month: "External building attendance in month"
     failed_attempts: "Failed attempts"
     family: "Family"
     farm_name: "Farm name"
@@ -868,6 +869,7 @@ eng:
     memberships: "Memberships"
     message: "Message"
     metadata: "Metadata"
+    # milk_annual_production_in_liter: "Milk annual production in liter"
     min_zoom: "Min zoom"
     mineral_nitrogen_at_opening: "Mineral nitrogen at opening" #?
     minimal_length: "Minimal length"
