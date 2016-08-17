@@ -589,6 +589,7 @@ Rails.application.routes.draw do
         post :update_georeadings
         delete :delete_georeadings
         post :create_georeading
+        post :update_questions
       end
     end
 

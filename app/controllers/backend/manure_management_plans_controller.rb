@@ -89,6 +89,8 @@ module Backend
       render :results
     end
 
+
+
     def update_question
       geojson = params['shape']
       rgeo_coder = RGeo::GeoJSON::Coder.new(json_parser: :json)
@@ -193,5 +195,26 @@ module Backend
         end
       end
     end
+
+    def update_questions
+      manure_zone = ManureManagementPlanZone.find(params["zone_id"])
+      questions = params["questions"]
+      manure_zone.approach_applications.each do |approach|
+        supply_nature = approach.supply_nature
+        approach_answers = questions[supply_nature]
+        approach_answers.each_key do |answer_key|
+          approach.parameters[answer_key] = approach_answers[answer_key]
+        end
+      end
+      respond_to do |format|
+        if manure_zone.save
+          format.json { render json: { status: :success } }
+        else
+          format.json { render json: { status: :error }, status: 500 }
+        end
+      end
+    end
+
+
   end
 end

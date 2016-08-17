@@ -217,6 +217,8 @@
       # console.log "viewed"
       this._refreshControls()
       # console.log "controlled"
+      
+      
 
       @updateAttributesSeries = (e) =>
         return unless e.which == 1 || e.which == 13
@@ -225,7 +227,7 @@
         $newFields = $(e.currentTarget).closest('.popup-content').find('.updateAttributesSerieLabelInput')
 
         layer = this.findLayer(featureId)
-
+        console.log(layer)
         for field in $newFields
           this.updateFeatureProperties(featureId, $(field).attr('name'), $(field).val())
 
@@ -236,8 +238,6 @@
           layer.closePopup()
 
         this.popupizeSerie layer.feature, layer
-
-
 
 
       @updateAttributes = (e) =>
@@ -342,6 +342,9 @@
           return
 
       return containerLayer
+      
+    get_map: () ->
+      return this.map
 
     navigateToLayer: (layer) ->
       this.map.panInsideBounds layer.getBounds(), animate: true
@@ -384,24 +387,45 @@
 
     popupizeSerie: (feature, layer) ->
       popup = ""
-      popup += "<div class='popup-header'>"
-      popup += "<span class='popup-block-content' data-internal-id='#{feature.properties.internal_id}'>#{feature.properties.name || ''}</span>"
-      popup += "<span class='leaflet-popup-warning right hide'></span>"
-      popup += "</div>"
-      popup += "<div class='popup-content'>"
-      for attribute in feature.properties['popupAttributes']
-        popup += "<div>"
-        popup += "<label for='#{attribute.property_value}'>#{attribute.property_label} : </label>"
-        switch attribute.type
-         when 'input'
-          popup += "<input type='text' name='#{attribute.property_value}' class='updateAttributesSerieLabelInput' value='#{feature.properties[attribute.property_value] || ""}'/>"
-         else
-            # include label
-            popup += "<span>#{feature.properties[attribute.property_value] || ''}</span>"
+      if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
+        layer.eachLayer (layer) =>
+          if layer.options.popup
+            layer.on 'click', (e) =>
+              this.element.trigger "mapeditor:popup_creating", feature, layer
+            jquery_content = $($.parseHTML(feature.properties.popup_content))
+            jquery_content.find('.leaflet-popup-warning').attr('internal_id',feature.internal_id)
+            popup = jquery_content.html()
+      else if layer.options.popup
+        layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
+        layer.on 'click', (e) =>
+          this.element.trigger "mapeditor:popup_creating", feature, layer
+        jquery_content = $($.parseHTML(feature.properties.popup_content))
+        jquery_content.find('.leaflet-popup-warning') 'each', (header) ->
+          header.attr('internal_id',feature.internal_id)
+        console.log()
+        popup = jquery_content.html()
+      else
+        popup += "<div class='popup-header'>"
+        popup += "<span class='popup-block-content' data-internal-id='#{feature.properties.internal_id}'>#{feature.properties.name || ''}</span>"
+        popup += "<span class='leaflet-popup-warning right hide'></span>"
         popup += "</div>"
+        popup += "<div class='popup-content'>"
 
-      popup += "<input class='updateAttributesSerieInPopup' type='button' value='ok'/>"
-      popup += "</div>"
+        for attribute in feature.properties['popupAttributes']
+            popup += "<div>"
+            popup += "<label for='#{attribute.property_value}'>#{attribute.property_label} : </label>"
+            switch attribute.type
+             when 'input'
+              popup += "<input type='text' name='#{attribute.property_value}' class='updateAttributesSerieLabelInput' value='#{feature.properties[attribute.property_value] || ""}'/>"
+             else
+                # include label
+                popup += "<span>#{feature.properties[attribute.property_value] || ''}</span>"
+            if feature.properties[attribute.unit]
+              popup += "<span>#{feature.properties[attribute.unit] || ''}</span>"
+            popup += "</div>"
+
+        popup += "<input class='updateAttributesSerieInPopup' type='button' value='ok'/>"
+        popup += "</div>"
 
       if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
         layer.eachLayer (layer) ->
@@ -440,7 +464,6 @@
               body += "</div>"
 
         else
-          console.log(properties)
           body += "<div class='{MODAL_ITEM_CLS}'>"
           body += "<label for='#{properties.label}'>#{properties.text} : </label>"
           switch properties.widget

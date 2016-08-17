@@ -9,7 +9,7 @@
                                                         'update-url':url_for(:action => 'update_georeadings'),
                                                         'delete-url':url_for(:action => 'delete_georeadings'),
                                                         'create-url':url_for(:action => 'create_georeading'),
-                                                        'update_question':url_for(:action => 'update_question'),
+                                                        'update_questions':url_for(:action => 'update_questions'),
                                                          map_editor: {
                                                             customClass:'manure-map',
                                                             allowAttributesPopup: true,
@@ -28,7 +28,8 @@
                                                                   action_menu: true,
                                                                   type: :simple,
                                                                   fillColor: '#0A0',
-                                                                  modal: true
+                                                                  popup: {url: {get: :popup_content_url,
+                                                                                send: :update_from_popup_url}}
                                                                  },
                                                                   { name: :regulatory_zone,
                                                                   label: :regulatory_zone.tl,

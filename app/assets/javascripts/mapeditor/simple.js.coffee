@@ -12,7 +12,8 @@ class mapeditor.Simple
           if feature.properties.name
             label = new L.GhostLabel(className: 'leaflet-ghost-label', toBack: false).setContent(feature.properties.name).toCentroidOfBounds(layer.getLatLngs())
             widget.ghostLabelCluster.bind label, layer
-          feature.properties['popupAttributes'] = globalStyle.popup || []
+          if !(feature.properties['popupAttributes'])
+            feature.properties['popupAttributes'] = globalStyle.popup || []
           if  @layer.action_menu
            feature.properties['actionMenu'] = true
           widget.popupizeSerie(feature, layer) if @layer.popup

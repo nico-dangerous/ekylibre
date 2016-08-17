@@ -14,7 +14,7 @@ class AddManureManagementPlanInterventions < ActiveRecord::Migration
       t.text :description
       t.stamps
     end
-    
+
     create_table :manure_management_plan_intervention_targets do |t|
       t.references :manuring_zone,                  null: false, index: { name: 'index_manure_intervention_target_zone' }
       t.references :manuring_intervention,          null: false, index: { name: 'index_manure_intervention_target_intervention' }

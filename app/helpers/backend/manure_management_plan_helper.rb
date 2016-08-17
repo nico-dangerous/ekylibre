@@ -88,40 +88,48 @@ module Backend
     end
 
     def manure_zone_questions_properties(manure_zone)
-      # Fill two hashes using the approach of the manure zone
-      # approach_modal_fields contains the text and approaches_properties the answer
-
-      approaches_properties = {}
+      approaches_questions_properties = []
       approach_applications = manure_zone.manure_approach_applications
-      approaches_properties['group'] = {}
       approach_applications.each do |approach_app|
         approach = approach_app.approach
         if approach.nil?
-          approaches_properties['group'][approach_app.supply_nature] = { 'error' => {
-            'widget' => 'label',
-            'text' => 'error'.tl,
-            'value' => 'no_approach_found'.tl
-          } }
+          approaches_properties << {
+            :type => :label,
+            :property_label => approach.supply_nature,
+            :property_value => 'no_approach_found'.tl
+          }
         else
-          approaches_properties['group'][approach.supply_nature] = {}
+          approach_popup_group_item = {
+              :type => :group,
+              :property_value => [],
+              :property_label => approach.supply_nature
+          }
           approach.questions.each_key do |label|
             unit = if approach.questions[label]['data-type'] == 'quantity'
                      Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
                    else
                      ''
                    end
-            approaches_properties['group'][approach.supply_nature][label] = { 'unit' => unit, 'widget' => approach.questions[label]['widget'], 'value' => approach_app.parameters[label], 'text' => Calculus::ManureManagementPlan::Approach.humanize_question(approach.questions[label]['text']), 'label' => label }
+            approach_popup_group_item[:property_value] << { :unit => unit,
+                                                             :type => approach.questions[label]['widget'],
+                                                             :property_value => approach_app.parameters[label],
+                                                             :text => Calculus::ManureManagementPlan::Approach.humanize_question(approach.questions[label]["text"]),
+                                                             :property_label => label}
           end
+          approaches_questions_properties << approach_popup_group_item
         end
       end
-      approaches_properties
+      approaches_questions_properties
+    end
+
+    def manure_popup(manure_zone_popup_properties,properties)
+      render "backend/manure_management_plans/zone_popup", properties: manure_zone_popup_properties , popup_properties: properties
     end
 
     def manure_feature_description(manure_management_plan)
       regulatory_zones_shape, regulatory_zone_info = *regulatory_zones_feature_collection(manure_management_plan)
       cultivable_zones_properties = []
       georeadings_properties = []
-      modal_fields = {}
       mmpz_in_vulnerable_area = manure_management_plan.zones_in_vulnerable_area
 
       # mmpz_in_vulnerable_area is an array of array of one element, so we convert it into a simple array
@@ -141,13 +149,7 @@ module Backend
       manure_management_plan.zones.each do |manure_zone|
         property = {}
 
-        #         :popup => [{type: :label, property_label: :vulnerable_zone.tl, property_value: :vulnerable_zone},
-        #                    {type: :input, property_label: "nomenclatures.dimensions.items.surface_area".t, property_value: :area},
-        #                    {type: :label, property_label: "attributes.cultivation_variety".t, property_value: :variety},
-        #                    {type: :label, property_label: "attributes.soil_nature".t, property_value: :soil_nature}],
-
-        # Create fields for modal
-        approach_app_prop = manure_zone_questions_properties(manure_zone)
+        # Create fields for popup
 
         # add properties calculated by regulatory zone
         unless regulatory_zone_info.nil?
@@ -157,18 +159,29 @@ module Backend
             property[ActiveSupport::Inflector.singularize(key)] = value.values.first.to_s
           end
         end
-        property_modal = {}
         # Is the mmpz in a vulnerable_zone ?
         property[:manure_zone_id] = manure_zone.id
         property[:name] = manure_zone.name
+        property_popup = []
+        property_popup << { :property_label => :is_in_vulnerable_zone,
+                            :text => Calculus::ManureManagementPlan::Approach.humanize_question(:is_in_vulnerable_zone),
+                            :type => :label,
+                            :property_value =>  mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).l}
+        property_popup << { :property_label => :cultivation_variety,
+                            :type => :label,
+                            :text => 'attributes.cultivation_variety'.t,
+                            :property_value => manure_zone.cultivation_variety_name}
+        property_popup << { :property_label => :soil_nature,
+                            :text => 'attributes.soil_nature'.t,
+                            :type => :label,
+                            :property_value => Nomen::SoilNature.find(manure_zone.soil_nature).human_name}
 
-        property_modal[:vulnerable_zone] = { 'text' => Calculus::ManureManagementPlan::Approach.humanize_question(:is_in_vulnerable_zone), 'type' => 'label', 'value' => mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).l}
-        property_modal[:variety] = { 'text' => 'attributes.cultivation_variety'.t, 'type' => 'label', 'value' => manure_zone.cultivation_variety_name }
-        property_modal[:soil_nature] = { 'text' => 'attributes.soil_nature'.t, 'type' => 'label', 'value' => Nomen::SoilNature.find(manure_zone.soil_nature).human_name }
+        approach_app_prop = manure_zone_questions_properties(manure_zone)
+        property_popup += approach_app_prop
+        popup_content = manure_popup(property,property_popup)
 
-        property_modal = { 'modalAttributes' => property_modal }
-        property_modal['modalAttributes'] = property_modal['modalAttributes'].merge(approach_app_prop)
-        cultivable_zones_properties << property.merge(property_modal)
+        property["popup_content"] = popup_content
+        cultivable_zones_properties << property
       end
       {
         georeadings: objects_to_feature_collection(georeadings, georeadings_properties),
@@ -184,9 +197,9 @@ module Backend
       unit = Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
 
       approach_applications.each do |approach_app|
-        application_results = { 'modalAttributes' => { 'group' => { approach_app.supply_nature => {} } } }
+        application_results = { 'popupAttributes' => { 'group' => { approach_app.supply_nature => {} } } }
         zone_results[approach_app.id].each_key do |key|
-          application_results['modalAttributes']['group'][approach_app.supply_nature][key] = { 'text' => Calculus::ManureManagementPlan::Approach.humanize_result(key), 'widget' => 'label', 'value' => zone_results[approach_app.id][key], 'unit' => unit }
+          application_results['popupAttributes']['group'][approach_app.supply_nature][key] = { 'text' => Calculus::ManureManagementPlan::Approach.humanize_result(key), 'widget' => 'label', 'value' => zone_results[approach_app.id][key], 'unit' => unit }
         end
         properties.merge!(application_results)
       end

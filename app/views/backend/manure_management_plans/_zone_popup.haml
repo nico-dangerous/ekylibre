@@ -1,0 +1,22 @@
+.manure-popup
+  .popup-header
+    %span{:class => "popup-block-content" } #{properties[:name]}
+    %span{:class => "leaflet-popup-warning right hide", :internal_id => ''}
+  %div{class: 'popup-content', :manure_zone_id => properties[:manure_zone_id]}
+    -popup_properties.each do |popup_property|
+      .form-group.form_properties
+        %label{:class => 'col-form-label',:for => popup_property[:property_label] } #{popup_property[:text]}
+        - if popup_property[:type] == :input
+          %input{:class => 'form-control question_input', :type => 'text', :name => popup_property[:property_label], :value => popup_property[:property_value] || ""}
+        -elsif popup_property[:type] == :label
+          %span #{popup_property[:property_value] || ''}
+        -elsif popup_property[:type] == :group
+          -supply_nature = popup_property[:property_label]
+          -question_group = popup_property[:property_value]
+          %div{:class => "question_group", :supply_nature => supply_nature}
+            -question_group.each do |question|
+              .form-group
+                %label{:class => 'col-form-label', :for => question[:property_label]} #{question[:text]}
+                %input{:class => 'form-control question_input',:supply_nature => supply_nature, :type => 'text', :name => question[:property_label], :value => question[:property_value]}
+
+    %input{:class => 'update-questions', :type => 'button', :value => 'ok'}

@@ -14,7 +14,8 @@ class mapeditor.Categories
           if feature.properties.name
             label = new L.GhostLabel(className: 'leaflet-ghost-label', toBack: false).setContent(feature.properties.name).toCentroidOfBounds(layer.getLatLngs())
             widget.ghostLabelCluster.bind label, layer
-          feature.properties['popupAttributes'] = globalStyle.popup || []
+          if !(feature.properties['popupAttributes'])
+            feature.properties['popupAttributes'] = globalStyle.popup || []
           widget.popupizeSerie(feature, layer) if @layer.popup
 
           @items.push({name: feature.properties[@layer.reference], fillColor: feature.properties.color}) unless this.itemFor(feature.properties[@layer.reference])
