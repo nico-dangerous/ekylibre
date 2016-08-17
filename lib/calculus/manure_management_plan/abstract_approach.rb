@@ -16,6 +16,10 @@ module Calculus
       def estimated_input
         raise NotImplemented
       end
+      
+      def animal_output
+        raise NotImplemented
+      end
     end
   end
 end

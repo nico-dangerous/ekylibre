@@ -87,7 +87,8 @@ class ManureApproachApplication < Ekylibre::Record::Base
       needs: approach.estimated_needs,
       yields: approach.estimate_expected_yield,
       supply: approach.estimated_supply,
-      input: approach.estimated_input }
+      input: approach.estimated_input,
+      animal_output: approach.animal_output }
   end
 
 
