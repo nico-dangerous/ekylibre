@@ -393,16 +393,14 @@
             layer.on 'click', (e) =>
               this.element.trigger "mapeditor:popup_creating", feature, layer
             jquery_content = $($.parseHTML(feature.properties.popup_content))
-            jquery_content.find('.leaflet-popup-warning').attr('internal_id',feature.internal_id)
+            jquery_content.find('.leaflet-popup-warning').attr("internal_id", feature.properties.internal_id)
             popup = jquery_content.html()
       else if layer.options.popup
         layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
         layer.on 'click', (e) =>
           this.element.trigger "mapeditor:popup_creating", feature, layer
         jquery_content = $($.parseHTML(feature.properties.popup_content))
-        jquery_content.find('.leaflet-popup-warning') 'each', (header) ->
-          header.attr('internal_id',feature.internal_id)
-        console.log()
+        jquery_content.find('.leaflet-popup-warning').attr("internal_id", feature.properties.internal_id)
         popup = jquery_content.html()
       else
         popup += "<div class='popup-header'>"
