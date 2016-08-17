@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812164101) do
+ActiveRecord::Schema.define(version: 20160817135601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2066,18 +2066,20 @@ ActiveRecord::Schema.define(version: 20160812164101) do
   add_index "manure_management_plan_zones", ["updater_id"], name: "index_manure_management_plan_zones_on_updater_id", using: :btree
 
   create_table "manure_management_plans", force: :cascade do |t|
-    t.string   "name",                           null: false
-    t.integer  "campaign_id",                    null: false
-    t.integer  "recommender_id",                 null: false
-    t.datetime "opened_at",                      null: false
-    t.boolean  "locked",         default: false, null: false
+    t.string   "name",                                                                           null: false
+    t.integer  "campaign_id",                                                                    null: false
+    t.integer  "recommender_id",                                                                 null: false
+    t.datetime "opened_at",                                                                      null: false
+    t.boolean  "locked",                                                         default: false, null: false
     t.text     "annotation"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                                                     null: false
+    t.datetime "updated_at",                                                                     null: false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.integer  "lock_version",   default: 0,     null: false
+    t.integer  "lock_version",                                                   default: 0,     null: false
     t.string   "data_unit"
+    t.integer  "milk_annual_production_in_liter"
+    t.decimal  "external_building_attendance_in_month", precision: 19, scale: 4
   end
 
   add_index "manure_management_plans", ["campaign_id"], name: "index_manure_management_plans_on_campaign_id", using: :btree

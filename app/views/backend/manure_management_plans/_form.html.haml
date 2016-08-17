@@ -6,4 +6,11 @@
   = f.custom_fields
   = f.referenced_association :campaign, as: :hidden
   = f.input :opened_at, as: :hidden, value: f.object.opened_at
+  - if Activity.of_family(:animal_farming)
+    = f.input(:milk_annual_production, wrapper: :append) do
+      = f.input_field :milk_annual_production_in_liter
+      %span.add-on= Nomen::Unit[:liter].l
+    = f.input(:external_building_attendance, wrapper: :append) do
+      = f.input_field :external_building_attendance_in_month
+      %span.add-on= :months.tl
 = render "zones_form", f: f
