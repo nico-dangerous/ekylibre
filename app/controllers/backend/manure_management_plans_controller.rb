@@ -53,6 +53,8 @@ module Backend
       t.column :nitrogen_input
     end
 
+    STEPS = [:parameters, :questions_filling, :previsionnal_interventions, :bilan].freeze
+
     def new
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
       redirect_to action: :edit, id: @manure_management_plan.id unless @manure_management_plan.nil?
@@ -85,7 +87,6 @@ module Backend
                                                                              external_building_attendance_in_month: permitted_params[:external_building_attendance_in_month]
                                                                          }
       )
-      byebug
       @manure_management_plan.save
       redirect_to action: :edit, id: @manure_management_plan.id
     end
@@ -220,6 +221,12 @@ module Backend
         else
           format.json { render json: { status: :error }, status: 500 }
         end
+      end
+    end
+
+    def step_breadcrumbs_tag
+      content_for(:before_title) do
+        render partial: 'breadcrumbs'
       end
     end
 
