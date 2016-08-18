@@ -517,7 +517,7 @@ class ActivityProduction < Ekylibre::Record::Base
 
   # TODO: Which yield is computed? usage ,is not very good to determine yields
   #   because many yields can be computed...
-  def estimate_yield(options = {}, campaign = self.campaign)
+  def estimate_yield(campaign = self.campaign, options = {})
     variety = options.delete(:variety)
     # compute variety for estimate yield
     if usage == 'grain' || usage == 'seed'

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<migration name="Add missing manuring input variant">
+  <item-creation item="varieties#digestate"	parent="excrement" derivative_of="bioproduct" />
+  <item-change item="product_nature_variants#wine_vinasse" variety="pomace" derivative_of="grape" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.02percent" />
+  <item-change item="product_nature_variants#sugar_vinasse" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 2.0percent" />
+  <item-change item="product_nature_variants#pig_slurry" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.35percent" />
+  <item-change item="product_nature_variants#urban_compost" derivative_of="bioproduct" />
+  <item-creation item="product_nature_variants#calf_slurry" nature="organic_fertilizer" variety="slurry" derivative_of="bos" frozen_indicators_values="net_volume: 1.00cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.15percent" unit_name="cubic_meter"/>
+  <item-creation item="product_nature_variants#poultry_guano" nature="organic_fertilizer" variety="guano" derivative_of="phasianidae" frozen_indicators_values="net_volume: 1.70cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 4.0percent" unit_name="ton"/>
+  <item-creation item="product_nature_variants#poultry_compost" nature="organic_fertilizer" variety="compost" derivative_of="phasianidae" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 2.3percent" unit_name="ton"/>
+  <item-creation item="product_nature_variants#anaerobic_digestion_digestate" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.6percent" unit_name="ton"/>
+  <item-creation item="product_nature_variants#activated_sludge" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1percent" unit_name="cubic_meter"/>
+  <item-creation item="product_nature_variants#digestate_sludge" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1percent" unit_name="cubic_meter"/>
+  <item-creation item="product_nature_variants#mixed_sludge" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1percent" unit_name="cubic_meter"/>
+  <item-creation item="product_nature_variants#digestate_compost" nature="organic_fertilizer" variety="compost" derivative_of="digestate" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1.15percent" unit_name="ton"/>
+</migration>

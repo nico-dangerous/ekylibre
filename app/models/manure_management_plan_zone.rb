@@ -99,6 +99,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
 
   def compute
     results = {}
+    # results[:activity_production_name] = activity_production.name
     approach_applications.map { |approach| results[approach.id] = approach.compute }
     results
   end
