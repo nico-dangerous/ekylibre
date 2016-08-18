@@ -1,9 +1,5 @@
 <?xml version="1.0"?>
-<<<<<<< HEAD
-<nomenclatures xmlns="http://www.ekylibre.org/XML/2013/nomenclatures" version="20160811235701">
-=======
 <nomenclatures xmlns="http://www.ekylibre.org/XML/2013/nomenclatures" version="20160816083232">
->>>>>>> 9082b41d03eaa64b7a31213d4df188a59ebd3f30
   <nomenclature name="abilities" translateable="true">
     <properties>
       <property name="parameters" type="choice_list" choices="variety, issue_nature"/>
