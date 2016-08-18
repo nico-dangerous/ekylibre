@@ -1212,7 +1212,6 @@ spa:
         ex_works: "En fábrica"
         free_carrier: "Libre transportista"
       name: "Modos de entrega"
-
     dimensions:
       items:
         amount_of_substance: "Cantidad de sustancia"

@@ -102,6 +102,7 @@
 #     - "backend/manure_management_plans#compute"
 #     - "backend/manure_management_plans#create_georeading"
 #     - "backend/manure_management_plans#delete_georeadings"
+#     - "backend/manure_management_plans#step_breadcrumbs_tag"
 #     - "backend/manure_management_plans#update_georeadings"
 #     - "backend/manure_management_plans#update_question"
 #     - "backend/manure_management_plans#update_questions"

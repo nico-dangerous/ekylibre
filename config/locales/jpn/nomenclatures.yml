@@ -1213,8 +1213,6 @@ jpn:
         precision: "精度"
         symbol: "シンボル"
     delivery_modes:
-      choices:
-
       items:
         delivered_at_place: "場所でお届け"
         delivered_at_terminal: "ターミナルでお届け"

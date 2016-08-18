@@ -581,7 +581,6 @@ deu:
         eau_de_vie_de_cognac: "Eau de vie de Cognac"
         eau_de_vie_des_charentes: "Eau de vie des Charentes"
       name: "Zertifizierungen"
-
     chemical_elements:
       items:
         actinium: "Aktinium"
@@ -959,8 +958,6 @@ deu:
         number: "Nummer"
         precision: "Präzision"
     delivery_modes:
-      choices:
-
       items:
         delivered_at_place: "Lieferung Vor-Ort"
         delivered_at_terminal: "Geliefert Terminal"
@@ -968,7 +965,6 @@ deu:
         ex_works: "Ab Werk"
         free_carrier: "Freie Träger"
       name: "Versandarten"
-
     dimensions:
       items:
         amount_of_substance: "Menge der Substanz"
@@ -999,7 +995,6 @@ deu:
         volume_concentration: "Volumenkonzentration"
         volume_flow: "Volumenstrom"
       name: "Maße"
-
     document_categories:
       items:
         accountancy: "Buchhaltung"

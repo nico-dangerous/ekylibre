@@ -409,6 +409,7 @@ eng:
       index: "Manure management plans"
       new: "New manure management plan"
       show: "Manure management plan: %{name}"
+      # step_breadcrumbs_tag: "Step breadcrumbs tag manure management plan: %{name}"
       # update_georeadings: "Update georeadings manure management plan: %{name}"
       # update_question: "Update question manure management plan: %{name}"
       # update_questions: "Update questions manure management plan: %{name}"
@@ -1925,6 +1926,7 @@ eng:
       sort: "Sort"
       star: "Star"
       start: "Start"
+      # step_breadcrumbs_tag: "Step breadcrumbs tag"
       stop: "Stop" #?
       suspend: "Suspend"
       take: "Take"
