@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20160817135601) do
+=======
+ActiveRecord::Schema.define(version: 20160817133216) do
+>>>>>>> 9082b41d03eaa64b7a31213d4df188a59ebd3f30
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -981,11 +985,14 @@ ActiveRecord::Schema.define(version: 20160817135601) do
     t.integer  "lock_version",              default: 0,     null: false
     t.string   "title"
     t.jsonb    "custom_fields"
+    t.boolean  "employee",                  default: false, null: false
+    t.integer  "employee_account_id"
   end
 
   add_index "entities", ["client_account_id"], name: "index_entities_on_client_account_id", using: :btree
   add_index "entities", ["created_at"], name: "index_entities_on_created_at", using: :btree
   add_index "entities", ["creator_id"], name: "index_entities_on_creator_id", using: :btree
+  add_index "entities", ["employee_account_id"], name: "index_entities_on_employee_account_id", using: :btree
   add_index "entities", ["full_name"], name: "index_entities_on_full_name", using: :btree
   add_index "entities", ["number"], name: "index_entities_on_number", using: :btree
   add_index "entities", ["of_company"], name: "index_entities_on_of_company", using: :btree
@@ -3011,6 +3018,7 @@ ActiveRecord::Schema.define(version: 20160817135601) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "lock_version",    default: 0,     null: false
+    t.string   "nature",                          null: false
   end
 
   add_index "purchase_natures", ["created_at"], name: "index_purchase_natures_on_created_at", using: :btree
