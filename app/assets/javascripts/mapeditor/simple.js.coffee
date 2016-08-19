@@ -16,6 +16,8 @@ class mapeditor.Simple
             feature.properties['popupAttributes'] = globalStyle.popup || []
           if  @layer.action_menu
            feature.properties['actionMenu'] = true
+          if @layer.accordion
+            feature.properties['accordion'] = true
           widget.popupizeSerie(feature, layer) if @layer.popup
           widget.modalizeSeries(feature,layer) if @layer.modal
 

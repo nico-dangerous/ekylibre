@@ -192,7 +192,7 @@ module Backend
       }
     end
 
-    def results_features(manure_management_plan, results)
+    def results_features(manure_management_plan)
       properties = []
       manure_management_plan.zones.each do |manure_zone|
         zone_properties = {}
