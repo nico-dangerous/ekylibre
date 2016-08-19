@@ -93,6 +93,7 @@ class ManureApproachApplication < Ekylibre::Record::Base
       animal_output: approach.animal_output,
       supply: approach.estimated_supply }
     self.save
+    return self.results
   end
 
 

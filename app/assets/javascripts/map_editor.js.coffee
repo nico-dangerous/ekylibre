@@ -395,7 +395,7 @@
 
     popupizeSerie: (feature, layer) ->
       popup = ""
-      if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon' and layer.feature.popup_content
+      if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon' and layer.feature.properties.popup_content
         layer.eachLayer (layer) =>
           if layer.options.popup
             layer.on 'click', (e) =>
@@ -403,7 +403,7 @@
             jquery_content = $($.parseHTML(feature.properties.popup_content))
             jquery_content.find('.leaflet-popup-warning').attr("internal_id", feature.properties.internal_id)
             popup = jquery_content.html()
-      else if layer.feature.popup_content
+      else if layer.feature.properties.popup_content
         layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
         layer.on 'click', (e) =>
           this.element.trigger "mapeditor:popup_creating", feature, layer

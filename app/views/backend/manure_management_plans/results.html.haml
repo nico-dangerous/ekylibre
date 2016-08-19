@@ -1,4 +1,6 @@
 - results = results_features(@manure_management_plan)
+- properties = results[:properties]
+
 
 = form_tag({action: :compute}, class: "manure_edit") do
   = janus do |j|
@@ -47,6 +49,6 @@
                                                                )
       - j.face :list do
         = main_list
-
+  = render "backend/manure_management_plans/zone_card", properties: properties
   = form_actions do
     = submit_tag(:validate.tl, :name => :validate)

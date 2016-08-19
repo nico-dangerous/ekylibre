@@ -197,6 +197,7 @@ module Backend
       manure_management_plan.zones.each do |manure_zone|
         zone_properties = {}
         zone_properties[:name] = manure_zone.name
+        zone_properties[:id] = manure_zone.id
         zone_properties[:unit] = Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
         zone_properties[:cultivation_variety] = manure_zone.cultivation_variety_name
         zone_properties[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
@@ -207,7 +208,7 @@ module Backend
         properties << zone_properties
       end
 
-      { cultivable_zones: manure_feature_collection(manure_management_plan, properties) }
+      { cultivable_zones: manure_feature_collection(manure_management_plan, properties), properties: properties }
     end
   end
 end
