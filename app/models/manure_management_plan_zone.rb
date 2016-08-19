@@ -99,6 +99,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
 
   def compute
     approach_applications.map { |approach| approach.compute }
+
   end
 
   #     def estimate_expected_yield

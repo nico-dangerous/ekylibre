@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<migration name="Add fertilizer analysis nature">
+  <item-creation item="analysis_natures#fertilizer_analysis" target_variety="excrement" items="potential_hydrogen, organic_matter_concentration, nitrogen_concentration, phosphate_concentration, potash_concentration, magnesium_concentration, boron_concentration, zinc_concentration, manganese_concentration, copper_concentration, iron_concentration" />
+</migration>
