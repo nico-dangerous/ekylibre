@@ -227,7 +227,6 @@
         $newFields = $(e.currentTarget).closest('.popup-content').find('.updateAttributesSerieLabelInput')
 
         layer = this.findLayer(featureId)
-        console.log(layer)
         for field in $newFields
           this.updateFeatureProperties(featureId, $(field).attr('name'), $(field).val())
 
@@ -353,6 +352,15 @@
     removeLayer: (layer) ->
       this.edition.removeLayer layer
 
+    bind_popup_on_layer: (layer, popup) ->
+      if !layer.options.popup_event || layer.popup_event == 'click'
+        layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
+      else if layer.options.popup_event == 'mouse-over'
+        layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane', offset: L.point(-200, 0)
+        layer.on 'mouseover', (e) =>
+          layer.openPopup()
+        layer.on 'mouseout', (e) =>
+          layer.closePopup()
 
     popupize: (feature, layer) ->
       popup = ""
@@ -387,7 +395,7 @@
 
     popupizeSerie: (feature, layer) ->
       popup = ""
-      if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
+      if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon' and layer.feature.popup_content
         layer.eachLayer (layer) =>
           if layer.options.popup
             layer.on 'click', (e) =>
@@ -395,7 +403,7 @@
             jquery_content = $($.parseHTML(feature.properties.popup_content))
             jquery_content.find('.leaflet-popup-warning').attr("internal_id", feature.properties.internal_id)
             popup = jquery_content.html()
-      else if layer.options.popup
+      else if layer.feature.popup_content
         layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
         layer.on 'click', (e) =>
           this.element.trigger "mapeditor:popup_creating", feature, layer
@@ -421,15 +429,22 @@
             if feature.properties[attribute.unit]
               popup += "<span>#{feature.properties[attribute.unit] || ''}</span>"
             popup += "</div>"
+        if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
+          layer.eachLayer (layer) =>
+            unless layer.options.popup_button_ok == false
+             popup += "<input class='updateAttributesSerieInPopup' type='button' value='ok'/>"
+        else
+          popup += "<input class='updateAttributesSerieInPopup' type='button' value='ok'/>"
 
-        popup += "<input class='updateAttributesSerieInPopup' type='button' value='ok'/>"
         popup += "</div>"
 
       if layer.feature and layer.feature.geometry and layer.feature.geometry.type == 'MultiPolygon'
-        layer.eachLayer (layer) ->
-          layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
+        layer.eachLayer (layer) =>
+          this.bind_popup_on_layer(layer,popup)
       else
-        layer.bindPopup popup, keepInView: true, maxWidth: 600, className: 'leaflet-popup-pane'
+        this.bind_popup_on_layer(layer,popup)
+
+
 
     modal_content:(feature,layer) ->
       header = "<div class='{MODAL_CLS}'>" +

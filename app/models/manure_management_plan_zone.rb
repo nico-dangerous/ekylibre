@@ -98,9 +98,7 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   end
 
   def compute
-    results = {}
-    approach_applications.map { |approach| results[approach.id] = approach.compute }
-    results
+    approach_applications.map { |approach| approach.compute }
   end
 
   #     def estimate_expected_yield

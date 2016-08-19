@@ -93,7 +93,7 @@ module Backend
 
     def compute
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
-      @results = @manure_management_plan.compute
+      @manure_management_plan.compute
 
       render :results
     end

@@ -4,7 +4,7 @@
   = janus do |j|
     - j.face :map do
       :ruby
-        haml_io.write shape_field_tag("manure_management_plan", nil, {class: :manuring_step_form,
+        haml_io.write shape_field_tag("manure_management_plan", nil, {class: :manuring_result_form,
                                                         box: {width: '70%'},
                                                         data: {
                                                          map_editor: {
@@ -23,7 +23,16 @@
                                                                   serie: :cultivable_zone_serie,
                                                                   type: :simple,
                                                                   fillColor: '#0A0',
-                                                                  modal: true
+                                                                  popup: [
+                                                                    {property_label: 'attributes.cultivation_variety'.t,
+                                                                    :type => :label,
+                                                                    :property_value => :cultivation_variety},
+                                                                    {property_label: 'attributes.soil_nature'.t,
+                                                                    :type => :label,
+                                                                    :property_value => :soil_nature}
+                                                                  ],
+                                                                  popup_button_ok: false,
+                                                                  popup_event: 'mouse-over'
                                                                  }
                                                                ]},
                                                                useFeatures: true,
@@ -33,10 +42,10 @@
                                                                 measure: { show: false, localization: 'i18n.iso2'.t },
                                                                 importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
                                                                }},
-                                                               }})
+                                                               accordion: { box: {width: '30%'},customClass:'responsive-map'}}},
+                                                               )
       - j.face :list do
         = main_list
-
 
   = form_actions do
     = submit_tag(:validate.tl, :name => :validate)

@@ -83,7 +83,7 @@ class ManureApproachApplication < Ekylibre::Record::Base
 
   def compute
     approach = Calculus::ManureManagementPlan::Approach.build_approach(self)
-    return {
+    results = {
       yields: approach.estimate_expected_yield,
       needs: approach.estimated_needs,
       soil_supplies: approach.soil_supplies,

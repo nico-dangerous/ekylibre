@@ -77,9 +77,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   end
 
   def compute
-    results = {}
-    zones.map { |zone| results[zone.id] = zone.compute }
-    results
+    zones.map { |zone| zone.compute }
   end
 
   def self.create_for_campaign(campaign: nil, user: nil, soil_natures: {}, manure_natures: [], approach_name: nil,params: {})

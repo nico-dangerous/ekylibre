@@ -163,10 +163,12 @@ module Backend
         property[:manure_zone_id] = manure_zone.id
         property[:name] = manure_zone.name
         property_popup = []
+=begin
         property_popup << { :property_label => :is_in_vulnerable_zone,
                             :text => Calculus::ManureManagementPlan::Approach.humanize_question(:is_in_vulnerable_zone),
                             :type => :label,
                             :property_value =>  mmpz_in_vulnerable_area.include?(manure_zone.id.to_s).l}
+=end
         property_popup << { :property_label => :cultivation_variety,
                             :type => :label,
                             :text => 'attributes.cultivation_variety'.t,
@@ -190,30 +192,22 @@ module Backend
       }
     end
 
-    def manure_zone_result_properties(manure_zone, results)
-      properties = {}
-      approach_applications = manure_zone.manure_approach_applications
-      zone_results = results[manure_zone.id]
-      unit = Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
-
-      approach_applications.each do |approach_app|
-        application_results = { 'popupAttributes' => { 'group' => { approach_app.supply_nature => {} } } }
-        zone_results[approach_app.id].each_key do |key|
-          application_results['popupAttributes']['group'][approach_app.supply_nature][key] = { 'text' => Calculus::ManureManagementPlan::Approach.humanize_result(key), 'widget' => 'label', 'value' => zone_results[approach_app.id][key], 'unit' => unit }
-        end
-        properties.merge!(application_results)
-      end
-      properties
-    end
-
     def results_features(manure_management_plan, results)
-      cultivable_zones_properties = []
+      properties = []
       manure_management_plan.zones.each do |manure_zone|
-        property = manure_zone_result_properties(manure_zone, results)
-        property[:name] = manure_zone.name
-        cultivable_zones_properties << property
+        zone_properties = {}
+        zone_properties[:name] = manure_zone.name
+        zone_properties[:unit] = Nomen::Unit.find(manure_zone.plan.data_unit.to_sym).human_name
+        zone_properties[:cultivation_variety] = manure_zone.cultivation_variety_name
+        zone_properties[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
+        manure_zone.manure_approach_applications.each do |approach_app|
+          zone_properties[:results] = {approach_app.supply_nature => approach_app.results}
+        end
+
+        properties << zone_properties
       end
-      { cultivable_zones: manure_feature_collection(manure_management_plan, cultivable_zones_properties) }
+
+      { cultivable_zones: manure_feature_collection(manure_management_plan, properties) }
     end
   end
 end
