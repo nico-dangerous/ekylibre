@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<nomenclatures xmlns="http://www.ekylibre.org/XML/2013/nomenclatures" version="20160816083232">
+<nomenclatures xmlns="http://www.ekylibre.org/XML/2013/nomenclatures" version="20160818170201">
   <nomenclature name="abilities" translateable="true">
     <properties>
       <property name="parameters" type="choice_list" choices="variety, issue_nature"/>
@@ -562,6 +562,7 @@
     </properties>
     <items>
       <item name="cow_milk_analysis" target_variety="milk" target_derivative_of="bos" items="total_bacteria_concentration, inhibitors_presence, fat_matters_concentration, protein_matters_concentration, somatic_cell_concentration, clostridial_spores_concentration, freezing_point_temperature, lipolysis, immunoglobulins_concentration, urea_concentration"/>
+      <item name="fertilizer_analysis" target_variety="excrement" items="potential_hydrogen, organic_matter_concentration, nitrogen_concentration, phosphate_concentration, potash_concentration, magnesium_concentration, boron_concentration, zinc_concentration, manganese_concentration, copper_concentration, iron_concentration"/>
       <item name="grain_analysis" target_variety="grain" target_derivative_of="plant" items="hagberg_falling_number, impurity_concentration, specific_weight, water_content_rate, protein_concentration"/>
       <item name="meteorological_analysis" items="temperature, relative_humidity, atmospheric_pressure, rainfall, wind_speed, wind_direction, average_temperature, minimal_temperature, maximal_temperature, maximal_rainfall, average_atmospheric_pressure, minimal_atmospheric_pressure, maximal_atmospheric_pressure, average_relative_humidity, minimal_relative_humidity, maximal_relative_humidity, average_wind_speed, average_wind_direction, solar_irradiance"/>
       <item name="plant_analysis" target_variety="plant" items="ready_to_harvest, fresh_mass, healthy, plant_growth_level, plant_life_state, plant_reproduction_state, plants_interval, plants_count"/>
@@ -2367,9 +2368,11 @@
       <item name="accommodation_travel" nature="accommodation_travel" unit_name="night"/>
       <item name="acetal" nature="animal_medicine" frozen_indicators_values="net_volume: 1liter, net_mass: 1kilogram, meat_withdrawal_period: 0day, milk_withdrawal_period: 0day" unit_name="1l_dose"/>
       <item name="actilact" nature="animal_medicine" frozen_indicators_values="net_mass: 100g, net_volume: 100ml, meat_withdrawal_period: 0day, milk_withdrawal_period: 0day" unit_name="100g_dose"/>
+      <item name="activated_sludge" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1percent"/>
       <item name="additive" nature="additive" frozen_indicators_values="net_volume: 1.00liter, net_mass: 1.00kilogram" unit_name="liter"/>
       <item name="air_compressor" nature="air_compressor" frozen_indicators_values="" unit_name="equipment"/>
       <item name="all_inclusive_corn_sower" nature="complete_sower" frozen_indicators_values="" unit_name="equipment"/>
+      <item name="anaerobic_digestion_digestate" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.6percent"/>
       <item name="animal_building" nature="building" frozen_indicators_values="" unit_name="building"/>
       <item name="animal_division" nature="animal_building_division" frozen_indicators_values="" unit_name="room"/>
       <item name="animal_fence" nature="land_parcel_construction" frozen_indicators_values="net_mass: 1.00kilogram, net_volume: 1.00liter"/>
@@ -2447,6 +2450,7 @@
       <item name="cabbage_crop" nature="vegetable_crop" variety="brassica_oleracea" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
       <item name="calcium_carbonate_25kg" nature="wine_alkalinizing" frozen_indicators_values="net_mass: 25.00kilogram" unit_name="25kg_bag"/>
       <item name="calf" nature="calf" frozen_indicators_values="livestock_unit: 0.4, reproductor: false" unit_name="head"/>
+      <item name="calf_slurry" nature="organic_fertilizer" variety="slurry" derivative_of="bos" frozen_indicators_values="net_volume: 1.00cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.15percent"/>
       <item name="cap_subsidies" nature="exploitation_subsidies"/>
       <item name="caphorn_wheat_crop" nature="cereal_crop" variety="triticum_aestivum_caphorn" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
       <item name="caphorn_wheat_seed_25" nature="seed" derivative_of="triticum_aestivum_caphorn" frozen_indicators_values="net_mass: 25.00kilogram, thousand_grains_mass: 50gram" unit_name="25kg_bag"/>
@@ -2606,6 +2610,8 @@
       <item name="daily_training_course" nature="training_course" frozen_indicators_values="usage_duration: 1day" unit_name="day"/>
       <item name="dairy_equipment_cleaner" nature="mineral_cleaner" frozen_indicators_values="net_mass: 24kilogram, net_volume: 24.00liter" unit_name="24liter_can"/>
       <item name="diesel" nature="fuel" frozen_indicators_values="energy: 10.67kilowatt_hour, net_volume: 1liter, net_mass: 0.8kilogram" unit_name="liter"/>
+      <item name="digestate_compost" nature="organic_fertilizer" variety="compost" derivative_of="digestate" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1.15percent"/>
+      <item name="digestate_sludge" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1percent"/>
       <item name="disc_harrow" nature="superficial_plow" frozen_indicators_values="" unit_name="equipment"/>
       <item name="discount_and_reduction" nature="discount_and_reduction"/>
       <item name="domain_name_subscription" nature="numeric_subscription" unit_name="domain"/>
@@ -2820,6 +2826,7 @@
       <item name="mixed_chemical_fertilizer" nature="mixed_chemical_fertilizer" frozen_indicators_values="net_volume: 1.00cubic_meter, net_mass: 1.00ton" unit_name="ton"/>
       <item name="mixed_liquid_fertilizer" nature="mixed_liquid_fertilizer" frozen_indicators_values="net_mass: 1.00ton" unit_name="ton"/>
       <item name="mixed_organic_fertilizer" nature="mixed_organic_fertilizer" frozen_indicators_values="net_mass: 1.00kg"/>
+      <item name="mixed_sludge" nature="organic_fertilizer" variety="digestate" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1percent"/>
       <item name="mixture_seed" nature="seed" derivative_of="poa" frozen_indicators_values="net_mass: 1.00kilogram, thousand_grains_mass: 50gram" unit_name="kilogram"/>
       <item name="mixture_vetch_oat_pea_crop" nature="crop" variety="vicia" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
       <item name="molluscicide" nature="molluscicide" frozen_indicators_values="net_volume: 1.00liter, net_mass: 1.00kilogram" unit_name="liter"/>
@@ -2870,7 +2877,7 @@
       <item name="pig_compost" nature="organic_fertilizer" variety="compost" derivative_of="sus" frozen_indicators_values="net_mass: 1.00ton, net_volume: 1.70cubic_meter, nitrogen_concentration: 0.84percent" unit_name="ton"/>
       <item name="pig_herd" nature="pig_herd" frozen_indicators_values="" unit_name="head"/>
       <item name="pig_manure" nature="organic_fertilizer" variety="manure" derivative_of="sus" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.81percent" unit_name="ton"/>
-      <item name="pig_slurry" nature="organic_fertilizer" variety="slurry" derivative_of="sus" frozen_indicators_values="net_volume: 1.00cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.45percent" unit_name="cubic_meter"/>
+      <item name="pig_slurry" nature="organic_fertilizer" variety="slurry" derivative_of="sus" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.35percent" unit_name="cubic_meter"/>
       <item name="piglet_band" nature="piglet_band" frozen_indicators_values="reproductor: false" unit_name="head"/>
       <item name="piglet_meat" nature="pork_meat" derivative_of="sus" frozen_indicators_values="net_volume: 1.00liter, net_mass: 1.00kilogram" unit_name="kilogram"/>
       <item name="plant_medicine_tank" nature="plant_medicine_tank" frozen_indicators_values="" unit_name="equipment"/>
@@ -2897,6 +2904,8 @@
       <item name="potassium_ferrocyanide_25kg" nature="clarification_solution" variety="potassium_ferrocyanide" frozen_indicators_values="net_mass: 25.00kilogram" unit_name="25kg_bag"/>
       <item name="potato" nature="potato" derivative_of="solanum_tuberosum" frozen_indicators_values="net_mass: 1.00ton"/>
       <item name="potato_crop" nature="crop" variety="solanum_tuberosum" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
+      <item name="poultry_compost" nature="organic_fertilizer" variety="compost" derivative_of="phasianidae" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 2.3percent"/>
+      <item name="poultry_guano" nature="organic_fertilizer" variety="guano" derivative_of="phasianidae" frozen_indicators_values="net_volume: 1.70cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 4.0percent"/>
       <item name="poultry_sausage" nature="processed_poultry_meat" frozen_indicators_values="net_mass: 1000gram, net_volume: 100.00centiliter" unit_name="kilogram"/>
       <item name="preparation_division" nature="preparation_division" frozen_indicators_values="" unit_name="room"/>
       <item name="printer" nature="computer"/>
@@ -2980,7 +2989,7 @@
       <item name="stubble_cultivator" nature="superficial_plow" frozen_indicators_values="" unit_name="equipment"/>
       <item name="subscription_professional_society" nature="professional_subscription"/>
       <item name="subsoil_plow" nature="plow" frozen_indicators_values="" unit_name="equipment"/>
-      <item name="sugar_vinasse" nature="organic_fertilizer" variety="pomace" derivative_of="grape" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 4.0percent" unit_name="ton"/>
+      <item name="sugar_vinasse" nature="organic_fertilizer" variety="pomace" derivative_of="grape" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 2.0percent" unit_name="ton"/>
       <item name="sunflower_crop" nature="grain_crop" variety="helianthus" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
       <item name="sunflower_grain" nature="grain" derivative_of="helianthus" frozen_indicators_values="net_mass: 1.00ton" unit_name="ton"/>
       <item name="sunflower_seed_150tg" nature="seed" derivative_of="helianthus" frozen_indicators_values="net_mass: 7.50kilogram, thousand_grains_mass: 50gram" unit_name="150tg_bag"/>
@@ -3004,7 +3013,7 @@
       <item name="truck" nature="truck" frozen_indicators_values="" unit_name="equipment"/>
       <item name="turnip" nature="turnip" derivative_of="brassica_rapa_rapa" frozen_indicators_values="net_mass: 1.00ton"/>
       <item name="uncover" nature="uncover" frozen_indicators_values="" unit_name="equipment"/>
-      <item name="urban_compost" nature="organic_fertilizer" variety="compost" derivative_of="animal" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1.00percent" unit_name="ton"/>
+      <item name="urban_compost" nature="organic_fertilizer" variety="compost" derivative_of="bioproduct" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 1.00percent" unit_name="ton"/>
       <item name="various_loan_interest" nature="various_loan_interest"/>
       <item name="veal_meat" nature="beef_meat" derivative_of="bos_taurus" frozen_indicators_values="net_volume: 1.00liter, net_mass: 1.00kilogram" unit_name="kilogram"/>
       <item name="vibrocultivator" nature="seedbed_preparator" frozen_indicators_values="" unit_name="equipment"/>
@@ -3031,7 +3040,7 @@
       <item name="wine" nature="wine" frozen_indicators_values="net_mass: 100.00 kilogram, net_volume: 100.00liter" unit_name="hectoliter"/>
       <item name="wine_press" nature="wine_press" frozen_indicators_values="" unit_name="equipment"/>
       <item name="wine_storage_division" nature="wine_storage_division" frozen_indicators_values="" unit_name="room"/>
-      <item name="wine_vinasse" nature="organic_fertilizer" variety="grain" derivative_of="raw_matter" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.002percent" unit_name="cubic_meter"/>
+      <item name="wine_vinasse" nature="organic_fertilizer" variety="pomace" derivative_of="grape" frozen_indicators_values="net_volume: 1.50cubic_meter, net_mass: 1.00ton, nitrogen_concentration: 0.02percent" unit_name="cubic_meter"/>
       <item name="winter_barley_crop" nature="cereal_crop" variety="hordeum_hexastichum" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
       <item name="winter_barley_seed_25" nature="seed" derivative_of="hordeum_hexastichum" frozen_indicators_values="net_mass: 25.00kilogram, thousand_grains_mass: 42gram" unit_name="25kg_bag"/>
       <item name="winter_oat_crop" nature="cereal_crop" variety="avena" frozen_indicators_values="net_surface_area: 1.00hectare" unit_name="hectare"/>
@@ -9811,6 +9820,7 @@
       <item name="daucus_carota_yellow_doubs" parent="daucus_carota" itis_tsn="0"/>
       <item name="daucus_carota_yukon" parent="daucus_carota" itis_tsn="29477"/>
       <item name="diervillaceae" parent="plant" itis_tsn="823479"/>
+      <item name="digestate" parent="excrement" derivative_of="bioproduct"/>
       <item name="easement" parent="zone"/>
       <item name="egg" parent="raw_matter" derivative_of="aves"/>
       <item name="elaeagnaceae" parent="plant" itis_tsn="27768"/>

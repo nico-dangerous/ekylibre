@@ -54,7 +54,7 @@
     - c.cobble :weather do
       = cell :weather, params: {id: resource.cultivable_zone.id} unless resource.cultivable_zone.nil?
 
-  - if resource.manure_management_plan_zone
+  -# if resource.manure_management_plan_zone
     - c.cobble :manure_management_plan_chart do
       :ruby
         # prepare an array of hash
