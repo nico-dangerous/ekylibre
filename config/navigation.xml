@@ -1783,6 +1783,7 @@
         <page to="backend/manure_management_plans#compute"/>
         <page to="backend/manure_management_plans#create_georeading"/>
         <page to="backend/manure_management_plans#delete_georeadings"/>
+        <page to="backend/manure_management_plans#step_breadcrumbs_tag"/>
         <page to="backend/manure_management_plans#update_georeadings"/>
         <page to="backend/manure_management_plans#update_question"/>
         <page to="backend/manure_management_plans#update_questions"/>
