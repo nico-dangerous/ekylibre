@@ -1,4 +1,4 @@
-- results = results_features(@manure_management_plan, @results)
+- results = results_features(@manure_management_plan)
 
 = form_tag({action: :compute}, class: "manure_edit") do
   = janus do |j|
@@ -21,6 +21,7 @@
                                                                  { name: :cultivable_zones,
                                                                   label: :cultivable_zones.tl,
                                                                   serie: :cultivable_zone_serie,
+                                                                  accordion: true,
                                                                   type: :simple,
                                                                   fillColor: '#0A0',
                                                                   popup: [
@@ -42,7 +43,7 @@
                                                                 measure: { show: false, localization: 'i18n.iso2'.t },
                                                                 importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
                                                                }},
-                                                               accordion: { box: {width: '30%'},customClass:'responsive-map'}}},
+                                                               accordion: { box: {width: '30%'},customClass:'responsive-map', data_group: true, data_path: 'results', :data_key => ['needs']}}},
                                                                )
       - j.face :list do
         = main_list
