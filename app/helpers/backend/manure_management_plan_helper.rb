@@ -204,11 +204,11 @@ module Backend
         manure_zone.manure_approach_applications.each do |approach_app|
           zone_properties[:results] = {approach_app.supply_nature => approach_app.results}
         end
-
+        zone_properties[:field_set_template] = render "backend/manure_management_plans/zone_card", manure_zone_results: zone_properties
         properties << zone_properties
       end
 
-      { cultivable_zones: manure_feature_collection(manure_management_plan, properties), properties: properties }
+      { cultivable_zones: manure_feature_collection(manure_management_plan, properties)}
     end
   end
 end

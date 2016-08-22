@@ -1,5 +1,21 @@
-#liste des clés (name, id (manure management plan zone), results, cultivation_variety, soil_nature, unit)
 
--properties.each do |property_group|
-  %div{:class => "manure_card hidden", :manure_id => property_group[:id]}
-
+-#liste des clés (name, id (manure management plan zone), results, cultivation_variety, soil_nature, unit)
+= field_set(manure_zone_results[:name],{:collapsed => "collapsed"}) do
+  %div{:class => "manure_card", :id => "manure_zone#{manure_zone_results[:id]}"}
+  - manure_zone_results[:results].each_key do |result_group|
+    - manure_zone_results[:results][result_group].each_key do |attribut_key|
+      -object = manure_zone_results[:results][result_group][attribut_key]
+      .control-group
+        = content_tag :strong, attribut_key, class: 'control-label'
+        -if object.nil?
+          = content_tag(:p, :no_data.tl )
+        -else
+          -if object["value"].nil?
+            .manure-results-sub-group
+              -object.each_key do |sub_key|
+                .control-group
+                  = content_tag :p, sub_key, class: 'control-label'
+                  = content_tag(:p, "#{object[sub_key]["value"].to_f} #{Nomen::Unit.find(object[sub_key]["unit"]).human_name}", class: "controls")
+          -else
+            = content_tag(:p, "#{object["value"].to_f} #{Nomen::Unit.find(object["unit"]).human_name}", class: "controls")
+- #yields needs soil_supplies irrigaNomen::Unit.find(object["unit"]).human_nametion organic_input input animal_output supply

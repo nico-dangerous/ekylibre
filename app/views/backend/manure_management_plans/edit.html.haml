@@ -1,56 +1,6 @@
 -features_description = manure_feature_description(@manure_management_plan)
-= form_tag({action: :compute}, class: "manure_edit") do
-  = janus do |j|
-    - j.face :map do
-      :ruby
-        haml_io.write shape_field_tag("manure_management_plan", features_description[:georeadings], {class: :manuring_step_form,
-                                                        box: {width: '70%'},
-                                                        data: {
-                                                        'update-url':url_for(:action => 'update_georeadings'),
-                                                        'delete-url':url_for(:action => 'delete_georeadings'),
-                                                        'create-url':url_for(:action => 'create_georeading'),
-                                                        'update_questions':url_for(:action => 'update_questions'),
-                                                         map_editor: {
-                                                            customClass:'manure-map',
-                                                            allowAttributesPopup: true,
-                                                            view: {
-                                                                center: Charta.new_geometry(features_description[:cultivable_zones]).centroid
-                                                            },
-                                                            show: {
-                                                               series: {
-                                                                  cultivable_zone_serie:  features_description[:cultivable_zones],
-                                                                  regulatory_zone_serie:  features_description[:regulatory_zones]
-                                                               },
-                                                               layers: [
-                                                                 { name: :cultivable_zones,
-                                                                  label: :cultivable_zones.tl,
-                                                                  serie: :cultivable_zone_serie,
-                                                                  action_menu: true,
-                                                                  type: :simple,
-                                                                  fillColor: '#0A0',
-                                                                  popup: {url: {get: :popup_content_url,
-                                                                                send: :update_from_popup_url}}
-                                                                 },
-                                                                  { name: :regulatory_zone,
-                                                                  label: :regulatory_zone.tl,
-                                                                  serie: :regulatory_zone_serie,
-                                                                  fillColor: '#A00',
-                                                                  type: :simple
-                                                                  }
-                                                               ]},
-                                                               useFeatures: true,
-                                                               defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,
-                                                               overlaySelector: { editionLayer: :georeadings.tl },
-                                                               defaultLabel: :unnamed.tl,
-                                                               controls:{
-                                                                measure: { show: false, localization: 'i18n.iso2'.t },
-                                                                importers: {formats: [:gml, :geojson, :kml], title: :import.tl, okText: :import.tl, cancelText: :close.tl}
-                                                               }},
-                                                                actionmenu: { box: {width: '30%'},customClass:'responsive-map',button: true}}
-                                                               })
-      - j.face :list do
-        = main_list
-
+= form_tag({action: :compute}, class: "manure_map_form") do
+  = render 'backend/manure_management_plans/questions_map', features_description: features_description
 
   = form_actions do
-    = submit_tag(:validate.tl, :name => :validate)
+    = submit_tag(:next.tl, :name => :compute)

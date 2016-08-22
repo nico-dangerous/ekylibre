@@ -846,13 +846,13 @@
       if this.edition?
         unless this.options.controls.reactiveMeasure is false
           this.controls.reactiveMeasureControl = new L.ReactiveMeasureControl(this.edition, this.options.controls.reactiveMeasure)
-        this.controls.draw = new L.Control.Draw($.extend(true, {}, this.options.controls.draw, {edit: {featureGroup: this.edition}}, {edit:{reactiveMeasureControl: this.controls.reactiveMeasureControl}}))
-        this.map.addControl this.controls.draw
+        unless this.options.disable_edition
+          this.controls.draw = new L.Control.Draw($.extend(true, {}, this.options.controls.draw, {edit: {featureGroup: this.edition}}, {edit:{reactiveMeasureControl: this.controls.reactiveMeasureControl}}))
+          this.map.addControl this.controls.draw
       unless this.options.controls.scale is false
         this.controls.scale = new L.Control.Scale(this.options.controls.scale)
         this.map.addControl this.controls.scale
-      unless this.options.controls.importers.gml is false and this.options.controls.importers.geojson is false and this.options.controls.importers.kml is false
-
+      unless !this.options.controls.importers.gml and !this.options.controls.importers.geojson  and !this.options.controls.importers.kml
         this.controls.importers_ctrl = new L.Control.EasyButton "<i class='leaflet-importer-ctrl' title='#{this.options.controls.importers.buttonTitle}'></i>", (btn, map) =>
           args =
             title: this.options.controls.importers.title
@@ -886,7 +886,6 @@
                   this.update()
                   modal.hide()
 
-
                 this.navigateToLayer this.edition
 
             onHide: (evt) ->
@@ -897,7 +896,6 @@
           map.fire 'modal', $.extend(true, {}, this.options.controls.importers, args )
 
         this.controls.importers_ctrl.button['type'] = 'button'
-
         this.map.addControl this.controls.importers_ctrl
         this.map.addControl this.controls.reactiveMeasureControl
 
