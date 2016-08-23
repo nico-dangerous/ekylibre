@@ -15,7 +15,6 @@
                                                         show: {
                                                            series: {
                                                               cultivable_zone_serie:  features_description[:cultivable_zones],
-                                                              regulatory_zone_serie:  features_description[:regulatory_zones]
                                                            },
                                                            layers: [
                                                              { name: :cultivable_zones,
@@ -26,12 +25,6 @@
                                                               fillColor: '#0A0',
                                                               popup: {url: {send: :update_from_popup_url}}
                                                              },
-                                                              { name: :regulatory_zone,
-                                                              label: :regulatory_zone.tl,
-                                                              serie: :regulatory_zone_serie,
-                                                              fillColor: '#A00',
-                                                              type: :simple
-                                                              }
                                                            ]},
                                                            useFeatures: true,
                                                            defaultEditionFeaturePrefix: :cultivable_zone_prefix.tl,

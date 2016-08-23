@@ -113,7 +113,7 @@ module Backend
             approach_popup_group_item[:property_value] << { :unit => unit,
                                                              :type => approach.questions[label]['widget'],
                                                              :property_value => approach_app.parameters[label],
-                                                             :text => Calculus::ManureManagementPlan::Approach.humanize_question(approach.questions[label]["text"]),
+                                                             :text => Calculus::ManureManagementPlan::Approach.humanize_question(label),
                                                              :property_label => label}
           end
           approaches_questions_properties << approach_popup_group_item
@@ -202,6 +202,19 @@ module Backend
         zone_properties[:cultivation_variety] = manure_zone.cultivation_variety_name
         zone_properties[:soil_nature] =  Nomen::SoilNature.find(manure_zone.soil_nature).human_name
         manure_zone.manure_approach_applications.each do |approach_app|
+          approach_app.results.each_key do |result_key|
+            result = approach_app.results[result_key]
+            unless result.nil?
+              if result.key?("value")
+                result["value"] = result["value"].to_f
+              else
+                result.each_key do |res_key|
+                  res = result[res_key]
+                  res["value"] = res["value"].to_f unless res.nil?
+                end
+              end
+            end
+          end
           zone_properties[:results] = {approach_app.supply_nature => approach_app.results}
         end
         zone_properties[:field_set_template] = render "backend/manure_management_plans/zone_card", manure_zone_results: zone_properties

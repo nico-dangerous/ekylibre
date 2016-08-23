@@ -1661,6 +1661,7 @@ fra:
     reflections: "Réflections"
     refresh: "Rafraîchir"
     register_intervention_request: "Enregistrer la demande d'intervention"
+    regulatory_zones: "Zones réglementées"
     related_people: "En lien avec" #?
     relationship: "Tiers"
     relationship_of_entity: "%{relationship} de %{entity}"
