@@ -395,10 +395,11 @@ fra:
       new: "Nouvel emprunt"
       show: "Emprunt\_: %{name}"
     backend/manure_management_plans:
-      edit: "Modifier le plan de fumure\_: %{name}"
+      edit: "Renseigner le plan de fumure"
       index: "Plans de fumure"
-      new: "Nouveau plan de fumure"
+      new: "Parametrage"
       show: "Plan de fumure\_: %{name}"
+      bilan: "Bilan et interventions prévisionnelles"
     backend/map_backgrounds:
       edit: "Modifier le fond de carte\_: %{name}"
       index: "Fonds de carte"

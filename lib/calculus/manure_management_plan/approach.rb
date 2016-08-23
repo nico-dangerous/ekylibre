@@ -23,7 +23,7 @@ module Calculus
       end
 
       def self.humanize_result(key_result)
-        I18n.translate("MMP.results.#{key_result}", default: ["labels.#{key_result}", key_result.to_s.humanize])
+        I18n.translate("MMP.approach.result.#{key_result}")
       end
 
       def self.humanize_question(key_question)

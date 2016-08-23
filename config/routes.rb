@@ -586,8 +586,8 @@ Rails.application.routes.draw do
       member do
         post :get_zone_interventions
         post :update_questions
-        get :compute
-        post :compute
+        get :bilan
+        post :bilan
         post :update_georeadings
         delete :delete_georeadings
         post :create_georeading

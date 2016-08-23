@@ -91,7 +91,7 @@ module Backend
       redirect_to action: :edit, id: @manure_management_plan.id
     end
 
-    def compute
+    def bilan
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
       @manure_management_plan.compute
       render :results
