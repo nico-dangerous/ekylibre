@@ -95,9 +95,16 @@ class LandParcel < Easement
   end
 
   def estimated_soil_nature
-    unless shape.nil?
-      analyse = Analysis.contained_in(shape).of_nature('soil_analysis').most_recent
-      analyse.first.soil_nature unless analyse.empty?
+    soil_nature = nil
+    analyse = Analysis.contained_in(shape).of_nature('soil_analysis').most_recent unless shape.nil?
+    # get soil_nature from last analysis localized in product
+    if analyse.any?
+      soil_nature = analyse.first.soil_nature unless analyse.empty?
+    # get soil_nature from first cultivable zone on production
+    elsif activity_productions.any?
+      cz = activity_productions.first.cultivable_zone
+      soil_nature = cz.soil_nature if cz
     end
+    return soil_nature
   end
 end
