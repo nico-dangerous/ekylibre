@@ -849,6 +849,7 @@
         unless this.options.disable_edition
           this.controls.draw = new L.Control.Draw($.extend(true, {}, this.options.controls.draw, {edit: {featureGroup: this.edition}}, {edit:{reactiveMeasureControl: this.controls.reactiveMeasureControl}}))
           this.map.addControl this.controls.draw
+
       unless this.options.controls.scale is false
         this.controls.scale = new L.Control.Scale(this.options.controls.scale)
         this.map.addControl this.controls.scale

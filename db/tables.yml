@@ -1418,6 +1418,9 @@ cultivable_zones:
     type: jsonb
   description:
     type: text
+  farmer_id:
+    type: integer
+    references: entity
   id:
     type: integer
     required: true
@@ -1427,6 +1430,9 @@ cultivable_zones:
   name:
     type: string
     required: true
+  owner_id:
+    type: integer
+    references: entity
   production_system_name:
     type: string
   shape:
@@ -1435,6 +1441,8 @@ cultivable_zones:
       srid: 4326
       type: multi_polygon
     required: true
+  soil_nature:
+    type: string
   updated_at:
     type: datetime
     required: true

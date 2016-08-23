@@ -614,6 +614,7 @@ eng:
     failed_attempts: "Failed attempts"
     family: "Family"
     farm_name: "Farm name"
+    farmer: "Farmer"
     father: "Father"
     faxes: "Faxes"
     file: "File"
