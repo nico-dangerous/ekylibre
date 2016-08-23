@@ -59,4 +59,6 @@ class ManureManagementPlanIntervention < Ekylibre::Record::Base
 
   delegate :locked?, :opened_at, to: :plan
 
+
+
 end

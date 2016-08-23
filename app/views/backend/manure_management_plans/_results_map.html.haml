@@ -2,6 +2,7 @@
   haml_io.write shape_field_tag("manure_management_plan", nil, {class: :manuring_result_form,
                                                   box: {width: '70%'},
                                                   data: {
+                                                  'get_zone_interventions-url':url_for(:action => 'get_zone_interventions'),
                                                    map_editor: {
                                                       customClass:'manure-map',
                                                       view: {

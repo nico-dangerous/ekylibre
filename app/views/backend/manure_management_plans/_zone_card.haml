@@ -1,7 +1,6 @@
-
 -#liste des clés (name, id (manure management plan zone), results, cultivation_variety, soil_nature, unit)
-= field_set(manure_zone_results[:name],{:collapsed => "collapsed"}) do
-  %div{:class => "manure_card", :id => "manure_zone#{manure_zone_results[:id]}"}
+= field_set(manure_zone_results[:name],{:class => "manure_zone#{manure_zone_results[:id]}" ,:collapsed => "collapsed"}) do
+  %div{:class => "manure_card"}
   - manure_zone_results[:results].each_key do |result_group|
     - manure_zone_results[:results][result_group].each_key do |attribut_key|
       -object = manure_zone_results[:results][result_group][attribut_key]

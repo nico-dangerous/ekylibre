@@ -21,7 +21,7 @@
 # along with this program.  If not, see http://www.gnu.org/licenses.
 #
 # == Table: manure_management_plan_intervention_targets
-#
+
 #  created_at               :datetime         not null
 #  creator_id               :integer
 #  id                       :integer          not null, primary key
@@ -39,5 +39,14 @@ class ManureManagementPlanInterventionTarget < Ekylibre::Record::Base
   validates :manuring_intervention, :manuring_zone, presence: true
   # ]VALIDATORS]
   has_geometry :spreading_zone, type: :multi_polygon
+
+  scope :to_zone, lambda{ |manure_zone|
+    if manure_zone.is_a?(Fixnum)
+      where(manuring_zone_id: manure_zone)
+    else
+      where(manuring_zone_id: manure_zone.id)
+    end
+  }
+
 
 end

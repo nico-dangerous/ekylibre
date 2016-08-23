@@ -127,6 +127,19 @@ module Backend
       end
     end
 
+    def get_zone_interventions
+      result = {interventions: {}}
+      manure_zone = ManureManagementPlanZone.find(params["zone_id"])
+      manure_zone_target_association = ManureManagementPlanInterventionTarget.to_zone(manure_zone)
+      if manure_zone_target_association.count > 0
+        manure_interventions = manure_zone_target_association.first.manuring_intervention
+        result = { interventions: manure_interventions }
+      end
+      respond_to do |format|
+          format.json { render json: result }
+      end
+    end
+
     def create_georeading
       file_saved = false
 
@@ -223,11 +236,13 @@ module Backend
       end
     end
 
+=begin
     def step_breadcrumbs_tag
       content_for(:before_title) do
         render partial: 'breadcrumbs'
       end
     end
+=end
 
 
   end

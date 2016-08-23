@@ -57,7 +57,6 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   delegate :support_shape, :irrigated, to: :activity_production
 
   alias_attribute :approach_applications, :manure_approach_applications
-  alias_attribute :approach_applications, :manure_approach_applications
 
   accepts_nested_attributes_for :manure_approach_applications
 
