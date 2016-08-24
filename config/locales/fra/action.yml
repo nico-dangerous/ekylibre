@@ -395,11 +395,11 @@ fra:
       new: "Nouvel emprunt"
       show: "Emprunt\_: %{name}"
     backend/manure_management_plans:
+      bilan: "Bilan et interventions prévisionnelles"
       edit: "Renseigner le plan de fumure"
       index: "Plans de fumure"
       new: "Parametrage"
       show: "Plan de fumure\_: %{name}"
-      bilan: "Bilan et interventions prévisionnelles"
     backend/map_backgrounds:
       edit: "Modifier le fond de carte\_: %{name}"
       index: "Fonds de carte"
@@ -1661,7 +1661,7 @@ fra:
     reflections: "Réflections"
     refresh: "Rafraîchir"
     register_intervention_request: "Enregistrer la demande d'intervention"
-    regulatory_zones: "Zones réglementées"
+    regulatory_zones: "Zones réglementées" #?
     related_people: "En lien avec" #?
     relationship: "Tiers"
     relationship_of_entity: "%{relationship} de %{entity}"

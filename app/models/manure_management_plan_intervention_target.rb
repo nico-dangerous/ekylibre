@@ -21,6 +21,17 @@
 # along with this program.  If not, see http://www.gnu.org/licenses.
 #
 # == Table: manure_management_plan_intervention_targets
+#
+#  created_at               :datetime         not null
+#  creator_id               :integer
+#  id                       :integer          not null, primary key
+#  lock_version             :integer          default(0), not null
+#  manuring_intervention_id :integer          not null
+#  manuring_zone_id         :integer          not null
+#  spreading_zone           :geometry({:srid=>4326, :type=>"geometry"})
+#  updated_at               :datetime         not null
+#  updater_id               :integer
+#
 
 #  created_at               :datetime         not null
 #  creator_id               :integer

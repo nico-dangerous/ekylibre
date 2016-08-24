@@ -90,7 +90,7 @@ class ManureApproachApplication < Ekylibre::Record::Base
       irrigation: approach.estimate_irrigation_water_nitrogen ,
       organic_input: approach.estimate_organic_fertilizer_mineral_fraction ,
       input: approach.estimated_input,
-      animal_output: approach.animal_output,
+      annual_nitrogen_animal_output: approach.annual_nitrogen_animal_output,
       supply: approach.estimated_supply }
     self.save
     return self.results

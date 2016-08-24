@@ -402,15 +402,15 @@ eng:
       new: "New loan"
       show: "Loan: %{name}"
     backend/manure_management_plans:
-      # compute: "Compute manure management plan: %{name}"
+      bilan: "Balance sheet and forecast intervention"
       # create_georeading: "Create georeading manure management plan: %{name}"
+      # create_manure_intervention: "Create manure intervention manure management plan: %{name}"
       # delete_georeadings: "Delete georeadings manure management plan: %{name}"
       edit: "Edit manure management plan: %{name}"
+      # get_zone_interventions: "Get zone interventions manure management plan: %{name}"
       index: "Manure management plans"
       new: "Configuration of the manure management plan"
       show: "Manure management plan: %{name}"
-      bilan: "Balance sheet and forecast intervention"
-      # step_breadcrumbs_tag: "Step breadcrumbs tag manure management plan: %{name}"
       # update_georeadings: "Update georeadings manure management plan: %{name}"
       # update_question: "Update question manure management plan: %{name}"
       # update_questions: "Update questions manure management plan: %{name}"
@@ -1411,7 +1411,6 @@ eng:
     reflections: "Reflections" #?
     refresh: "Refresh" #?
     register_intervention_request: "Register intervention request" #?!
-    # regulatory_zone: "Regulatory zone"
     relationship: "Relationship"
     relationship_of_entity: "%{relationship} of %{entity}"
     relationship_of_entity_as_inverse_post: "%{relationship} of %{entity} (%{inverse_post})"
@@ -1884,6 +1883,7 @@ eng:
       # add_to_variant: "Add to variant"
       attach: "Attach"
       # autocomplete: "Autocomplete"
+      # bilan: "Bilan"
       bookkeep: "Bookkeep"
       cancel: "Cancel"
       # change: "Change"
@@ -1899,6 +1899,7 @@ eng:
       correct: "Correct"
       create: "Create"
       # create_georeading: "Create georeading"
+      # create_manure_intervention: "Create manure intervention"
       # current: "Current"
       # delete_georeadings: "Delete georeadings"
       destroy: "Destroy"
@@ -1915,6 +1916,7 @@ eng:
       family: "Family"
       finish: "Finish"
       generate_last_journal_entry: "Generate last journal entry"
+      # get_zone_interventions: "Get zone interventions"
       give: "Give"
       import: "Import"
       incorporate: "Incorporate"
@@ -1963,7 +1965,6 @@ eng:
       sort: "Sort"
       star: "Star"
       start: "Start"
-      # step_breadcrumbs_tag: "Step breadcrumbs tag"
       stop: "Stop" #?
       suspend: "Suspend"
       take: "Take"

@@ -18,7 +18,7 @@ module Calculus
         raise NotImplemented
       end
 
-      def animal_output
+      def annual_nitrogen_animal_output
         raise NotImplemented
       end
 
