@@ -1,20 +1,5 @@
 -#liste des clés (name, id (manure management plan zone), results, cultivation_variety, soil_nature, unit)
-= field_set(manure_zone_results[:name],{:class => "manure_zone#{manure_zone_results[:id]}" ,:collapsed => "collapsed"}) do
-  %div{:class => "manure_card"}
-  - manure_zone_results[:results].each_key do |result_group|
-    - manure_zone_results[:results][result_group].each_key do |attribut_key|
-      -object = manure_zone_results[:results][result_group][attribut_key]
-      .control-group
-        = content_tag :strong, "#{Calculus::ManureManagementPlan::Approach.humanize_result(attribut_key)}", class: 'control-label'
-        -if object.nil?
-          = content_tag(:p, :no_data.tl )
-        -else
-          -if object["value"].nil?
-            .manure-results-sub-group
-              -object.each_key do |sub_key|
-                .control-group
-                  = content_tag :p, "#{Calculus::ManureManagementPlan::Approach.humanize_result(sub_key)}", class: 'control-label'
-                  - m = Measure.new(object[sub_key]["value"].to_f, object[sub_key]["unit"])
-                  = content_tag(:p, m.l, class: "controls")
-          -else
-            = content_tag(:p, "#{object["value"]} #{Nomen::Unit.find(object["unit"]).human_name}", class: "controls")
+.intervention_bar
+  =# content_tag(:i,"", class: "add_intervention_button")
+  =# content_tag(:div, "Manure intervention menu".tl, class: "manure_intervention_menu")
+

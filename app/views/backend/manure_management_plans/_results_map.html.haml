@@ -5,7 +5,7 @@
     {
       class: :manuring_result_form,
 
-         box: {width: '70%'},
+         box: {width: '100%'},
          data: {
         'get_zone_interventions-url':url_for(:action => 'get_zone_interventions'),
          map_editor: {
@@ -47,7 +47,10 @@
                     kml: false
                   }
                   },
-               accordion: { box: {width: '30%'},customClass:'manure-accordion responsive-map', data_group: true, data_path: 'results', :data_key => ['needs']},
-               intervention_menu: { box: {width: '50%'},customClass:'manure-intervention-menu'}
+               accordion: { box: {width: '100%'}, data_group: true, data_path: 'results', :data_key => ['needs']},
+               intervention_menu: { box: {width: '100%'},
+                                     customClass:'manure-intervention-menu',
+                                     template: render('backend/manure_management_plans/intervention_menu'),
+                                     intervention_template: render('backend/manure_management_plans/intervention_field')}
                }},
                )
