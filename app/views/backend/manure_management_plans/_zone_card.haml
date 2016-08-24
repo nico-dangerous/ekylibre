@@ -14,6 +14,7 @@
               -object.each_key do |sub_key|
                 .control-group
                   = content_tag :p, "#{Calculus::ManureManagementPlan::Approach.humanize_result(sub_key)}", class: 'control-label'
-                  = content_tag(:p, "#{object[sub_key]["value"]} #{Nomen::Unit.find(object[sub_key]["unit"]).human_name}", class: "controls")
+                  - m = Measure.new(object[sub_key]["value"].to_f, object[sub_key]["unit"])
+                  = content_tag(:p, m.l, class: "controls")
           -else
             = content_tag(:p, "#{object["value"]} #{Nomen::Unit.find(object["unit"]).human_name}", class: "controls")

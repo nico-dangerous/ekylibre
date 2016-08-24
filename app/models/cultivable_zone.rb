@@ -59,7 +59,7 @@ class CultivableZone < Ekylibre::Record::Base
   validates :shape, presence: true
   # ]VALIDATORS]
   validates :uuid, presence: true
-
+  
   scope :of_current_activity_productions, -> { where(id: ActivityProduction.select(:cultivable_zone_id).current) }
   scope :of_campaign, ->(campaign) { where(id: ActivityProduction.select(:cultivable_zone_id).of_campaign(campaign)) }
   scope :of_production_system, ->(production_system) { where('production_system_name IS NULL OR production_system_name = ? OR production_system_name = ?', '', production_system) }
@@ -70,12 +70,33 @@ class CultivableZone < Ekylibre::Record::Base
   end
 
   alias net_surface_area shape_area
-
-  # get the first object with variety 'plant', availables
-  def current_cultivations
-    Plant.contained_by(current_supports)
+  
+  
+  def previous_productions
+    activity_productions.where.not(id: activity_productions.current.pluck(:id)).reorder(:started_on)
   end
-
+  
+  def current_productions
+    activity_productions.current
+  end
+  
+  def previous_alive_intersecting_cultivation
+    all_intersecting_cultivations.alive.reorder(:born_at)[-2]
+  end
+  
+  def current_cultivations
+    all_intersecting_cultivations.alive.reorder(:born_at)
+  end
+  
+  # get the first object with variety 'plant', availables
+  def current_alive_intersecting_cultivation
+    all_intersecting_cultivations.alive.reorder(:born_at).last
+  end
+  
+  def all_intersecting_cultivations
+    Plant.shape_intersecting(shape)
+  end
+  
   # Returns last created islet number from cap statements
   def cap_number
     islets = CapIslet.shape_matching(shape).order(id: :desc)

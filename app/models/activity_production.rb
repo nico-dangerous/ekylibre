@@ -535,12 +535,20 @@ class ActivityProduction < Ekylibre::Record::Base
   end
 
   def current_cultivation
-    # get the first object with variety 'plant', availables
-    if cultivation = support.contents.where(type: Plant).of_variety(cultivation_variety).availables.reorder(:born_at).first
-      return cultivation
-    else
-      return nil
+    c = nil
+    d = distributions.pluck(:target_id)
+    p = Plant.where(id: d).reorder(:born_at) if d.any?
+    # 1/ get the last plant in target distributions
+    if d.any? && p.any?
+      c = p.last
+    # 2/ get the last plant intersecting support_shape
+    elsif c_shape = Plant.of_variety(cultivation_variety).of_campaign(campaign).shape_intersecting(support_shape).reorder(:born_at)
+      c = c_shape.last
+    # 3/ get the last object with variety 'plant', availables in the support
+    elsif s = support.contents.where(type: Plant).of_variety(cultivation_variety).reorder(:born_at)
+      c = s.last
     end
+    return c
   end
 
   def unified_size_unit
