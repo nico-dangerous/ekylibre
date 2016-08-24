@@ -1,5 +1,5 @@
 -#liste des clés (name, id (manure management plan zone), results, cultivation_variety, soil_nature, unit)
-.intervention_bar
-  =# content_tag(:i,"", class: "add_intervention_button")
-  =# content_tag(:div, "Manure intervention menu".tl, class: "manure_intervention_menu")
+.intervention_menu
+  -#=form_for @manure_intervention, url: url_for("create_manure_intervention") do |f|
 
+    -#= f.submit t('.validate_intervention', default: "Enregistrer l'intervention prévisionnelle")

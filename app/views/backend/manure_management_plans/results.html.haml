@@ -3,7 +3,7 @@
   .manure-widgets
     #left-group.widget-group
       =render "backend/manure_management_plans/results_map", results: results
-      .intervention_menu
+      =#render('backend/manure_management_plans/intervention_menu', @manure_intervention)
     #right-group.widget-group
       .manure-accordion
   = form_actions do

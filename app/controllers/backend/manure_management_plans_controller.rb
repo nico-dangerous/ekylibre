@@ -94,10 +94,13 @@ module Backend
     def bilan
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
       @manure_management_plan.compute
+    #  @manure_intervention = ManureManagementPlanIntervention.new
       render :results
     end
 
+    def create_manure_intervention
 
+    end
 
     def update_question
       geojson = params['shape']

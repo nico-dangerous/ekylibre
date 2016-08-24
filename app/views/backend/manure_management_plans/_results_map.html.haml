@@ -50,7 +50,7 @@
                accordion: { box: {width: '100%'}, data_group: true, data_path: 'results', :data_key => ['needs']},
                intervention_menu: { box: {width: '100%'},
                                      customClass:'manure-intervention-menu',
-                                     template: render('backend/manure_management_plans/intervention_menu'),
+                                     template: render('backend/manure_management_plans/intervention_menu', @manure_intervention),
                                      intervention_template: render('backend/manure_management_plans/intervention_field')}
                }},
                )
