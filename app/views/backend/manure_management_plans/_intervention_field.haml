@@ -5,17 +5,17 @@
     - manure_zone_results[:results][result_group].each_key do |attribut_key|
       -object = manure_zone_results[:results][result_group][attribut_key]
       .control-group
-        = content_tag :strong, "#{Calculus::ManureManagementPlan::Approach.humanize_result(attribut_key)}", class: 'control-label result-label'
+        = content_tag :strong, "#{Calculus::ManureManagementPlan::Approach.humanize_result(attribut_key)}", class: 'control-label'
         -if object.nil?
           = content_tag(:p, :no_data.tl )
         -else
           -if object["value"].nil?
-            .mrsg
+            .manure-results-sub-group
               -object.each_key do |sub_key|
                 .control-group
                   = content_tag :p, "#{Calculus::ManureManagementPlan::Approach.humanize_result(sub_key)}", class: 'control-label'
                   - m = Measure.new(object[sub_key]["value"].to_f, object[sub_key]["unit"])
-                  = content_tag(:p, m.l, class: "controls result_value")
+                  = content_tag(:p, m.l, class: "controls")
           -else
             - m = Measure.new(object["value"].to_f, object["unit"])
-            = content_tag(:p, m.l, class: "controls result_value")
+            = content_tag(:p, m.l, class: "controls")
