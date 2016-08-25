@@ -2,7 +2,8 @@
 = form_tag({action: :bilan}, class: "manure_map_form") do
   .manure-widgets
     .widget-group
-      = render 'backend/manure_management_plans/questions_map', features_description: features_description
+      .map-group
+        = render 'backend/manure_management_plans/questions_map', features_description: features_description
 
   = form_actions do
     = submit_tag(:next.tl, :name => :bilan)
