@@ -32,16 +32,6 @@
 #  updated_at               :datetime         not null
 #  updater_id               :integer
 #
-
-#  created_at               :datetime         not null
-#  creator_id               :integer
-#  id                       :integer          not null, primary key
-#  lock_version             :integer          default(0), not null
-#  manuring_intervention_id :integer          not null
-#  manuring_zone_id         :integer          not null
-#  spreading_zone           :geometry({:srid=>4326, :type=>"geometry"})
-#  updated_at               :datetime         not null
-#  updater_id               :integer
 #
 class ManureManagementPlanInterventionTarget < Ekylibre::Record::Base
   belongs_to :manuring_intervention, class_name: 'ManureManagementPlanIntervention', foreign_key: :manuring_intervention_id

@@ -43,7 +43,7 @@
 class ManureManagementPlanIntervention < Ekylibre::Record::Base
   belongs_to :plan, class_name: 'ManureManagementPlan', inverse_of: :manuring_interventions
   belongs_to :variant, class_name: 'ProductNatureVariant'
-  has_many :targets, class_name: 'ManureManagementPlanInterventionTarget'
+  has_many :targets, class_name: 'ManureManagementPlanInterventionTarget', inverse_of: :manuring_intervention, foreign_key: :manuring_intervention_id
   has_one :campaign, through: :plan
   enumerize :procedure_name, in: Procedo.procedure_names, i18n_scope: ['procedures']
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
@@ -59,6 +59,17 @@ class ManureManagementPlanIntervention < Ekylibre::Record::Base
 
   delegate :locked?, :opened_at, to: :plan
 
+  def self.create_for_plan(params)
+    manure_management_plan = ManureManagementPlan.find(params["id"])
+    intervention = ManureManagementPlanIntervention.new(params["manure_management_plan_intervention"])
 
+    intervention.plan = manure_management_plan
+    params["manure_zones_ids"].split(',').each do |mmpz_id|
+      intervention.targets.new({manuring_intervention: intervention,manuring_zone: ManureManagementPlanZone.find(mmpz_id)})
+    end
+
+    intervention.save
+    return intervention
+  end
 
 end

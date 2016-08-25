@@ -44,6 +44,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   belongs_to :recommender, class_name: 'Entity'
   has_many :manure_management_plan_natures
   has_many :zones, class_name: 'ManureManagementPlanZone', dependent: :destroy, inverse_of: :plan, foreign_key: :plan_id
+  has_many :manuring_interventions, class_name: 'ManureManagementPlanIntervention', dependent: :destroy, inverse_of: :plan, foreign_key: :plan_id
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :annotation, length: { maximum: 500_000 }, allow_blank: true
   validates :data_unit, length: { maximum: 500 }, allow_blank: true
@@ -55,7 +56,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
   validates :campaign, :recommender, presence: true
   # ]VALIDATORS]
 
-  accepts_nested_attributes_for :zones, :manure_management_plan_natures
+  accepts_nested_attributes_for :zones, :manure_management_plan_natures, :manuring_interventions
   alias_attribute :natures, :manure_management_plan_natures
 
   protect do

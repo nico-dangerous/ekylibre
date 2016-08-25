@@ -94,12 +94,22 @@ module Backend
     def bilan
       @manure_management_plan = ManureManagementPlan.of_campaign(current_campaign).first
       @manure_management_plan.compute
-    #  @manure_intervention = ManureManagementPlanIntervention.new
+      @manure_intervention = ManureManagementPlanIntervention.new
       render :results
     end
 
-    def create_manure_intervention
+    def create_manuring_intervention
+      params.permit!
 
+      intervention = ManureManagementPlanIntervention.create_for_plan(params)
+      respond_to do |format|
+        byebug
+        if intervention.persisted?
+          format.json { render json: { status: 'success' } }
+        else
+          format.json { render json: { status: 'errors' }, status: 500 }
+        end
+      end
     end
 
     def update_question

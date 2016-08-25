@@ -589,7 +589,7 @@ Rails.application.routes.draw do
         get :bilan
         post :bilan
         post :update_georeadings
-        post :create_manure_intervention
+        post :create_manuring_intervention
         delete :delete_georeadings
         post :create_georeading
       end

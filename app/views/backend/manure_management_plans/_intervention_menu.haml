@@ -1,5 +1,11 @@
 -#liste des clés (name, id (manure management plan zone), results, cultivation_variety, soil_nature, unit)
 .intervention_menu
-  -#=form_for @manure_intervention, url: url_for("create_manure_intervention") do |f|
-
-    -#= f.submit t('.validate_intervention', default: "Enregistrer l'intervention prévisionnelle")
+  = backend_form_for(@manure_intervention, remote: true, url: url_for("create_manuring_intervention")) do |f|
+    = f.input :name
+    = f.input :procedure_name
+    = f.referenced_association :variant
+    = f.input :quantity
+    = f.input :started_at
+    = f.input :stopped_at
+    %input#manure_zone_ids_input.hidden{name: :manure_zones_ids}
+    = f.submit id: :intervention_submit_button

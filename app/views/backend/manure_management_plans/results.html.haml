@@ -1,10 +1,8 @@
 - results = results_features(@manure_management_plan)
-= form_tag({action: :bilan}, class: "manure_map_form") do
-  .manure-widgets
-    #left-group.widget-group
+.manure-widgets
+  #left-group.widget-group
+    .map-group
       =render "backend/manure_management_plans/results_map", results: results
-      =#render('backend/manure_management_plans/intervention_menu', @manure_intervention)
-    #right-group.widget-group
-      .manure-accordion
-  = form_actions do
-    = submit_tag(:validate.tl, :name => :validate)
+    =render('backend/manure_management_plans/intervention_menu')
+  #right-group.widget-group
+    .manure-accordion
