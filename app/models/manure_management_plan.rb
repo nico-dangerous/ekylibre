@@ -79,7 +79,7 @@ class ManureManagementPlan < Ekylibre::Record::Base
 
   def compute
     results = []
-    zones.map { |zone| results << {self.id => zone.compute}}
+    zones.map { |zone| results << {zone.id => zone.compute}}
     return results
   end
 

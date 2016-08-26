@@ -32,7 +32,6 @@
 #  updated_at               :datetime         not null
 #  updater_id               :integer
 #
-#
 class ManureManagementPlanInterventionTarget < Ekylibre::Record::Base
   belongs_to :manuring_intervention, class_name: 'ManureManagementPlanIntervention', foreign_key: :manuring_intervention_id
   belongs_to :manuring_zone, class_name: 'ManureManagementPlanZone', foreign_key: :manuring_zone_id
@@ -41,13 +40,6 @@ class ManureManagementPlanInterventionTarget < Ekylibre::Record::Base
   # ]VALIDATORS]
   has_geometry :spreading_zone, type: :multi_polygon
 
-  scope :to_zone, lambda{ |manure_zone|
-    if manure_zone.is_a?(Fixnum)
-      where(manuring_zone_id: manure_zone)
-    else
-      where(manuring_zone_id: manure_zone.id)
-    end
-  }
 
 
 end

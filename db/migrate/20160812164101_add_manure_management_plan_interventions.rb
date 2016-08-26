@@ -9,8 +9,6 @@ class AddManureManagementPlanInterventions < ActiveRecord::Migration
       t.datetime :stopped_at,           null: false
       t.references :variant,            null: false, index: { name: 'index_manure_intervention_variant' }
       t.decimal :quantity,              precision: 19, scale: 4
-     # t.string :variant_indicator,      null: false
-     # t.string :variant_unit,           null: false
       t.text :description
       t.stamps
     end

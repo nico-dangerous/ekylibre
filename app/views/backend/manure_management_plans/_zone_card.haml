@@ -18,4 +18,7 @@
                   = content_tag(:p, m.l, class: "controls result_value")
           -else
             - m = Measure.new(object["value"].to_f, object["unit"])
-            = content_tag(:p, m.l, class: "controls result_value")
+            = content_tag(:p, m.l, class: "controls result_value", label: attribut_key)
+
+
+

@@ -22,23 +22,21 @@
 #
 # == Table: manure_management_plan_interventions
 #
-#  actions           :string
-#  created_at        :datetime         not null
-#  creator_id        :integer
-#  description       :text
-#  id                :integer          not null, primary key
-#  lock_version      :integer          default(0), not null
-#  name              :string           not null
-#  plan_id           :integer          not null
-#  procedure_name    :string           not null
-#  quantity          :decimal(19, 4)
-#  started_at        :datetime         not null
-#  stopped_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  updater_id        :integer
-#  variant_id        :integer          not null
-#  variant_indicator :string           not null
-#  variant_unit      :string           not null
+#  actions        :string
+#  created_at     :datetime         not null
+#  creator_id     :integer
+#  description    :text
+#  id             :integer          not null, primary key
+#  lock_version   :integer          default(0), not null
+#  name           :string           not null
+#  plan_id        :integer          not null
+#  procedure_name :string           not null
+#  quantity       :decimal(19, 4)
+#  started_at     :datetime         not null
+#  stopped_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  updater_id     :integer
+#  variant_id     :integer          not null
 #
 class ManureManagementPlanIntervention < Ekylibre::Record::Base
   belongs_to :plan, class_name: 'ManureManagementPlan', inverse_of: :manuring_interventions
@@ -49,7 +47,7 @@ class ManureManagementPlanIntervention < Ekylibre::Record::Base
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :actions, length: { maximum: 500 }, allow_blank: true
   validates :description, length: { maximum: 500_000 }, allow_blank: true
-  validates :name, :variant_indicator, :variant_unit, presence: true, length: { maximum: 500 }
+  validates :name, presence: true, length: { maximum: 500 }
   validates :plan, :procedure_name, :variant, presence: true
   validates :quantity, numericality: { greater_than: -1_000_000_000_000_000, less_than: 1_000_000_000_000_000 }, allow_blank: true
   validates :started_at, presence: true, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }

@@ -100,14 +100,19 @@ module Backend
 
     def create_manuring_intervention
       params.permit!
-
       intervention = ManureManagementPlanIntervention.create_for_plan(params)
+      cards = []
       respond_to do |format|
-        byebug
         if intervention.persisted?
-          format.json { render json: { status: 'success' } }
+          params["manure_zones_ids"].split(',').each do |mmpz_id|
+            mmpz = ManureManagementPlanZone.find(mmpz_id)
+            results = mmpz.compute
+            card = render_to_string :template => "backend/manure_management_plans/_zone_card", locals: {manure_zone_results: {name: mmpz.name, id: mmpz.id, results: results}}
+            cards << {id: mmpz.id,card: card, inputs: results.map{|approach, values| [approach, values["input"]["value"].to_i.in(values["input"]["unit"]).to_f]}.to_h}
+          end
+          format.json { render json: { results: {cards: cards} } }
         else
-          format.json { render json: { status: 'errors' }, status: 500 }
+          format.json { render json: { status: 'errors' }, "errors" => intervention.errors}
         end
       end
     end
@@ -141,13 +146,8 @@ module Backend
     end
 
     def get_zone_interventions
-      result = {interventions: {}}
       manure_zone = ManureManagementPlanZone.find(params["zone_id"])
-      manure_zone_target_association = ManureManagementPlanInterventionTarget.to_zone(manure_zone)
-      if manure_zone_target_association.count > 0
-        manure_interventions = manure_zone_target_association.first.manuring_intervention
-        result = { interventions: manure_interventions }
-      end
+      result = { interventions: manure_zone.manuring_interventions }
       respond_to do |format|
           format.json { render json: result }
       end

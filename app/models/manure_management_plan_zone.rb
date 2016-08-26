@@ -43,6 +43,8 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   has_one :support, through: :activity_production
   has_one :cultivable_zone, through: :activity_production, source: :support
   has_many :manure_approach_applications
+  has_many :targets, foreign_key: :manuring_zone_id, class_name: "ManureManagementPlanInterventionTarget"
+  has_many :manuring_interventions, through: :targets, class_name: "ManureManagementPlanIntervention"
   refers_to :soil_nature
   refers_to :cultivation_variety, class_name: 'Variety'
   refers_to :administrative_area
@@ -97,10 +99,12 @@ class ManureManagementPlanZone < Ekylibre::Record::Base
   end
 
   def compute
-    results = []
-    approach_applications.map { |approach| results << {id => approach.compute} }
+    results = {}
+    approach_applications.map { |approach| results[approach.supply_nature] = approach.compute}
     return results
   end
+
+
 
   #     def estimate_expected_yield
   #       if computation_method
