@@ -52,7 +52,7 @@
 #  updater_id                          :integer
 #
 class ProductNatureCategory < Ekylibre::Record::Base
-  include Customizable
+  include Customizable, Deduplicatable
   # Be careful with the fact that it depends directly on the nomenclature definition
   enumerize :pictogram, in: Nomen::ProductNatureCategory.pictogram.choices
   # refers_to :pictogram, class_name: 'ProductPictograms'

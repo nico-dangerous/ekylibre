@@ -56,7 +56,7 @@
 #
 
 class ProductNature < Ekylibre::Record::Base
-  include Customizable
+  include Customizable, Deduplicatable
   refers_to :variety
   refers_to :derivative_of, class_name: 'Variety'
   refers_to :reference_name, class_name: 'ProductNature'
