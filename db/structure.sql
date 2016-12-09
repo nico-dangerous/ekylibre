@@ -1957,14 +1957,14 @@ CREATE TABLE document_templates (
     creator_id integer,
     updater_id integer,
     lock_version integer DEFAULT 0 NOT NULL,
-    jrxml_file_path_file_name character varying,
-    jrxml_file_path_content_type character varying,
-    jrxml_file_path_file_size integer,
-    jrxml_file_path_updated_at timestamp without time zone,
-    jasper_file_path_file_name character varying,
-    jasper_file_path_content_type character varying,
-    jasper_file_path_file_size integer,
-    jasper_file_path_updated_at timestamp without time zone
+    compiled_file_name character varying,
+    compiled_content_type character varying,
+    compiled_file_size integer,
+    compiled_updated_at timestamp without time zone,
+    source_file_name character varying,
+    source_content_type character varying,
+    source_file_size integer,
+    source_updated_at timestamp without time zone
 );
 
 
@@ -16453,4 +16453,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161122161646');
 INSERT INTO schema_migrations (version) VALUES ('20161122203438');
 
 INSERT INTO schema_migrations (version) VALUES ('20161205085335');
+
+INSERT INTO schema_migrations (version) VALUES ('20161205101535');
 
