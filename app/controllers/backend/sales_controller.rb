@@ -139,10 +139,10 @@ module Backend
       t.column :unit_amount, currency: true, hidden: true
       t.column :reduction_percentage
       t.column :pretax_amount, currency: true
+      t.column :pretax_amount_by_working_area, currency: true, if: :pretax_amount_by_working_area
       t.column :amount, currency: true
       t.column :activity_budget, hidden: true
       t.column :team, hidden: true
-      t.column :pretax_amount_by_working_area, currency: true, if: :pretax_amount_by_working_area
     end
 
     # Displays details of one sale selected with +params[:id]+

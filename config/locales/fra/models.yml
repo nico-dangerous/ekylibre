@@ -163,6 +163,7 @@ fra:
         items: "Lignes de vente" #?
       sale_item:  #?
         amount: "Montant TTC" #?
+        pretax_amount_by_working_area: "Montant HT par surface"
         label: "Produit" #?
         price: "Prix" #?
       sale_nature:

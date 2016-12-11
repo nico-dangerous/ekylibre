@@ -46,11 +46,11 @@
   - c.cobble :items, title: Sale.human_attribute_name(:items) do
     = cobble_list :items do
       %tr.total
-        %th{colspan: 5}= :total.tl
+        %th{colspan: 7}= :total.tl
         %td= resource.pretax_amount.l(currency: resource.currency)
-        %td= resource.amount.l(currency: resource.currency)
         - if resource.pretax_amount_by_working_area
           %td= resource.pretax_amount_by_working_area.l(currency: resource.currency)
+        %td= resource.amount.l(currency: resource.currency)
 
   - if resource.subscriptions.any?
     - c.cobble :subscriptions, title: :x_subscriptions.tl(count: resource.subscriptions.count) do
