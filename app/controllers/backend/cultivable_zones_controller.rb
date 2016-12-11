@@ -21,13 +21,32 @@ module Backend
     manage_restfully(t3e: { name: :name })
 
     unroll
+    
+    # params:
+    #   :q Text search
+    #   :owner_id
+    #   :farmer_id
+    def self.cultivable_zones_conditions
+      code = ''
+      code = search_conditions(cultivable_zones: [:name, :work_number]) + " ||= []\n"
+      code << "  if params[:farmer_id].to_i > 0\n"
+      code << "    c[0] << \" AND \#{CultivableZone.table_name}.farmer_id = ?\"\n"
+      code << "    c << params[:farmer_id].to_i\n"
+      code << "  end\n"
+      code << "  if params[:owner_id].to_i > 0\n"
+      code << "    c[0] << \" AND \#{CultivableZone.table_name}.owner_id = ?\"\n"
+      code << "    c << params[:owner_id].to_i\n"
+      code << "  end\n"
+      code << "c\n"
+      code.c
+    end
 
-    list do |t|
+    list(conditions: cultivable_zones_conditions) do |t|
       t.action :edit
       t.action :destroy, if: :destroyable?
       t.column :name, url: true
       t.column :work_number
-      t.column :human_shape_area, datatype: :measure
+      t.column :human_shape_area, datatype: :measure, on_select: :sum
       # FIXME: Remove use of "_name" for nomen columns
       t.column :production_system_name
       t.column :farmer, url: true

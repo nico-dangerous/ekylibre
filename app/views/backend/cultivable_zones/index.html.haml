@@ -9,4 +9,16 @@
       - j.face :chart do
         = cell :cropping_plan_on_cultivable_zones, params: {campaign_id: current_campaign.id}
   - j.face :list do
+    = kujaku do |k|
+      - k.text
+      - farmers = Entity.where(id: CultivableZone.pluck(:farmer_id).compact.uniq)
+      - if farmers.any?
+        - k.helper do
+          %label= :farmer.tl
+          = select_tag(:farmer_id, options_for_select([[]] + farmers.order(:name).collect{|u| [u.full_name, u.id]}, params[:farmer_id]))
+      - owners = Entity.where(id: CultivableZone.pluck(:owner_id).compact.uniq)
+      - if owners.any?
+        - k.helper do
+          %label= :owner.tl
+          = select_tag(:owner_id, options_for_select([[]] + owners.order(:name).collect{|u| [u.full_name, u.id]}, params[:owner_id]))
     = main_list
