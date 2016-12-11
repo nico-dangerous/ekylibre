@@ -427,6 +427,10 @@ class Sale < Ekylibre::Record::Base
   def taxes_amount
     amount - pretax_amount
   end
+  
+  def pretax_amount_by_working_area
+    items.map(&:pretax_amount_by_working_area).compact.sum.round(2)
+  end
 
   def usable_payments
     client.incoming_payments.where('COALESCE(used_amount, 0)<COALESCE(amount, 0)').joins(mode: :cash).where(currency: self.currency).order('to_bank_at')

@@ -822,7 +822,7 @@ class Intervention < Ekylibre::Record::Base
                         .collect { |intv| (intv.is_a?(self) ? intv : find(intv)) }
                         .sort_by(&:stopped_at)
         planned_at = interventions.last.stopped_at
-
+        
         owners = interventions.map do |intervention|
           intervention.targets.map do |target|
             if target.product.is_a?(LandParcel)
@@ -835,7 +835,7 @@ class Intervention < Ekylibre::Record::Base
           end
         end
         owners = owners.flatten.uniq
-        client = owners.first unless owners.count > 1
+        client = owners.first if owners.count > 1
         unless nature = SaleNature.actives.first
           unless journal = Journal.sales.opened_at(planned_at).first
             raise 'No sale journal'
@@ -849,12 +849,30 @@ class Intervention < Ekylibre::Record::Base
             name: SaleNature.tc('default.name', default: SaleNature.model_name.human)
           )
         end
+        
+        # create custom field to store working area
+        working_area_field = CustomField.find_or_create_by(
+                                                               name: :working_area.tl,
+                                                               column_name: 'working_area',
+                                                               nature: :decimal,
+                                                               customized_type: Sale,
+                                                               minimal_value: 0,
+                                                               maximal_value: 10000
+                                                               )
+            
+        # compute working_area_in_hectare
+        working_area_in_hectare = interventions.map(&:working_zone_area).compact.sum
+            
         sale = nature.sales.new(
           client: client,
+          custom_fields: {
+            working_area_field.column_name => working_area_in_hectare.to_f.round(2)
+          },
           address: client && client.default_mail_address,
           description: %(#{Intervention.model_name.plural.tl}:
 \t- #{interventions.map(&:name).join("\n\t - ")})
         )
+        puts sale.inspect.red
         # Adds items
         interventions.each do |intervention|
           hourly_params = {
@@ -890,4 +908,5 @@ class Intervention < Ekylibre::Record::Base
       sale
     end
   end
+
 end

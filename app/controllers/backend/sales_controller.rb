@@ -142,13 +142,14 @@ module Backend
       t.column :amount, currency: true
       t.column :activity_budget, hidden: true
       t.column :team, hidden: true
+      t.column :pretax_amount_by_working_area, currency: true, if: :pretax_amount_by_working_area
     end
 
     # Displays details of one sale selected with +params[:id]+
     def show
       return unless @sale = find_and_check
       @sale.other_deals
-      respond_with(@sale, methods: [:taxes_amount, :affair_closed, :client_number, :sales_conditions, :sales_mentions],
+      respond_with(@sale, methods: [:taxes_amount, :affair_closed, :client_number, :sales_conditions, :sales_mentions, :pretax_amount_by_working_area],
                           include: { address: { methods: [:mail_coordinate] },
                                      nature: { include: { payment_mode: { include: :cash } } },
                                      supplier: { methods: [:picture_path], include: { default_mail_address: { methods: [:mail_coordinate] }, websites: {}, emails: {}, mobiles: {} } },
@@ -161,7 +162,7 @@ module Backend
                                      } },
                                      affair: { methods: [:balance], include: [incoming_payments: { include: :mode }] },
                                      invoice_address: { methods: [:mail_coordinate] },
-                                     items: { methods: [:taxes_amount, :tax_name, :tax_short_label], include: [:variant, parcel_items: { include: [:product, :parcel] }] } }) do |format|
+                                     items: { methods: [:taxes_amount, :tax_name, :tax_short_label, :pretax_amount_by_working_area], include: [:variant, parcel_items: { include: [:product, :parcel] }] } }) do |format|
         format.html do
           t3e @sale.attributes, client: @sale.client.full_name, state: @sale.state_label, label: @sale.label
         end
