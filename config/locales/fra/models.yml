@@ -38,6 +38,7 @@ fra:
       document_archive:  #?
         file_pages_count: "Nombre de page" #?
       document_template:
+        compiled: "Fichier Jasper compilé" #?
         managed: "Géré par le système"
       entity:  #?
         active: "Active" #?
@@ -232,6 +233,7 @@ fra:
         too_long: "%{attribute} est trop long (%{count} caractères maximum)"
         too_short: "%{attribute} est trop court (%{count} caractères minimum)"
         unitary_in_parcel: "Articles unitaires ne peuvent être envoyés un par un"
+        wrong_jasper_content_type: "Le fichier doit contenir l'extension .jasper"
         wrong_length: "%{attribute} n’est pas d’une bon longueur (%{count} caractères)"
       models:
         activity:

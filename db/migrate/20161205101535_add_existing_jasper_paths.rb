@@ -51,7 +51,7 @@ class AddExistingJasperPaths < ActiveRecord::Migration
           update("
             UPDATE document_templates
             SET compiled_file_name = '#{new_compiled_file_name}',
-                compiled_content_type = 'application/xml',
+                compiled_content_type = 'application/octet-stream',
                 compiled_file_size = #{compiled_file_size},
                 compiled_updated_at = '#{DateTime.now}',
                 source_file_name = '#{new_source_file_name}',

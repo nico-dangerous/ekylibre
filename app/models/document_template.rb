@@ -55,7 +55,10 @@ class DocumentTemplate < Ekylibre::Record::Base
 
 
   has_attached_file :compiled, path: ':tenant/:class/:id.jasper'
-  do_not_validate_attachment_file_type :compiled
+  validates_attachment_file_name :compiled,
+    matches: [/jasper\z/],
+    :message => :wrong_jasper_content_type
+
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :active, :by_default, :managed, inclusion: { in: [true, false] }
@@ -105,9 +108,11 @@ class DocumentTemplate < Ekylibre::Record::Base
     end
   end
 
-  # Always after protect on destroy
-  after_destroy do
-    # FileUtils.rm_rf(source_dir) if source_dir.exist?
+  def check_compiled_content_type
+   validates_attachment_file_name :compiled, matches: [/jasper\z/]
+   if !['jasper'].include?(self.compiled_content_type)
+    errors.add_to_base(t('activerecord.errors.messages.wrong_jasper_content_type')) # or errors.add
+   end
   end
 
   # Install the source of a document template
@@ -241,12 +246,25 @@ class DocumentTemplate < Ekylibre::Record::Base
       locale = (options[:locale] || Preference[:language] || I18n.locale).to_s
       Ekylibre::Record::Base.transaction do
         manageds = where(managed: true).select(&:destroyable?)
+        source_dir = manageds.map(&:source_dir).uniq.first
+
         for nature in self.nature.values
           if source = template_fallbacks(nature, locale).detect(&:exist?)
             File.open(source, 'rb:UTF-8') do |f|
               unless template = find_by(nature: nature, managed: true)
                 template = new(nature: nature, managed: true, active: true, by_default: false, archiving: 'last')
               end
+
+              unless template.source_file_name.nil?
+                xml_file_path = source_dir.join(template.source_file_name)
+                File.delete(xml_file_path) if File.exist?(xml_file_path)
+              end
+
+              unless template.compiled_file_name.nil?
+                jasper_file_path = source_dir.join(template.compiled_file_name)
+                File.delete(jasper_file_path) if File.exist?(jasper_file_path)
+              end
+
               manageds.delete(template)
               template.attributes = { compiled: f, language: locale }
               template.name ||= template.nature.l
