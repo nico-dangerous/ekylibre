@@ -860,13 +860,16 @@ class Intervention < Ekylibre::Record::Base
                                                                maximal_value: 10000
                                                                )
             
-        # compute working_area_in_hectare
+        # compute working_area_in_hectare and uniq_target_area_in_hectare
         working_area_in_hectare = interventions.map(&:working_zone_area).compact.sum
-            
+        t = InterventionTarget.where(intervention_id: interventions.map(&:id)).uniq
+        lp = LandParcel.where(id: t.pluck(:product_id).uniq)
+        uniq_target_area_in_hectare = lp.map(&:initial_shape_area).compact.sum.in(:hectare) 
+        
         sale = nature.sales.new(
           client: client,
           custom_fields: {
-            working_area_field.column_name => working_area_in_hectare.to_f.round(2)
+            working_area_field.column_name => uniq_target_area_in_hectare.to_f.round(2)
           },
           address: client && client.default_mail_address,
           description: %(#{Intervention.model_name.plural.tl}:
