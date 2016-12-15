@@ -5428,7 +5428,8 @@ CREATE TABLE purchases (
     quantity_gap_on_invoice_journal_entry_id integer,
     payment_delay character varying,
     payment_at timestamp without time zone,
-    contract_id integer
+    contract_id integer,
+    tax_payability character varying NOT NULL
 );
 
 
@@ -5516,7 +5517,8 @@ CREATE TABLE sale_items (
     credited_quantity numeric(19,4),
     activity_budget_id integer,
     team_id integer,
-    codes jsonb
+    codes jsonb,
+    compute_from character varying NOT NULL
 );
 
 
@@ -16460,4 +16462,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161124093205');
 INSERT INTO schema_migrations (version) VALUES ('20161201142213');
 
 INSERT INTO schema_migrations (version) VALUES ('20161205185328');
+
+INSERT INTO schema_migrations (version) VALUES ('20161212183910');
+
+INSERT INTO schema_migrations (version) VALUES ('20161214091911');
 
