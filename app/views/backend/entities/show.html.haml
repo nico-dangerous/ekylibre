@@ -96,9 +96,11 @@
             - l.attribute :authorized_payments_count unless resource.authorized_payments_count.blank?
             - l.attribute :deliveries_conditions unless resource.deliveries_conditions.blank?
             - l.attribute :client_account, url: true
+            - l.attribute :client_accountancy_balance
           - l.attribute :supplier
           - if resource.supplier
             - l.attribute :supplier_account, url: true
+            - l.attribute :supplier_accountancy_balance
           - l.attribute :transporter
 
       -# if cash = resource.cash
