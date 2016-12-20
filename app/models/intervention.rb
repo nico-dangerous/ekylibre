@@ -822,7 +822,7 @@ class Intervention < Ekylibre::Record::Base
                         .collect { |intv| (intv.is_a?(self) ? intv : find(intv)) }
                         .sort_by(&:stopped_at)
         planned_at = interventions.last.stopped_at
-        
+
         owners = interventions.map do |intervention|
           intervention.targets.map do |target|
             if target.product.is_a?(LandParcel)
@@ -849,23 +849,23 @@ class Intervention < Ekylibre::Record::Base
             name: SaleNature.tc('default.name', default: SaleNature.model_name.human)
           )
         end
-        
+
         # create custom field to store working area
         working_area_field = CustomField.find_or_create_by(
-                                                               name: :working_area.tl,
-                                                               column_name: 'working_area',
-                                                               nature: :decimal,
-                                                               customized_type: Sale,
-                                                               minimal_value: 0,
-                                                               maximal_value: 10000
-                                                               )
-            
+          name: :working_area.tl,
+          column_name: 'working_area',
+          nature: :decimal,
+          customized_type: Sale,
+          minimal_value: 0,
+          maximal_value: 10_000
+        )
+
         # compute working_area_in_hectare and uniq_target_area_in_hectare
         working_area_in_hectare = interventions.map(&:working_zone_area).compact.sum
         t = InterventionTarget.where(intervention_id: interventions.map(&:id)).uniq
         lp = LandParcel.where(id: t.pluck(:product_id).uniq)
-        uniq_target_area_in_hectare = lp.map(&:initial_shape_area).compact.sum.in(:hectare) 
-        
+        uniq_target_area_in_hectare = lp.map(&:initial_shape_area).compact.sum.in(:hectare)
+
         sale = nature.sales.new(
           client: client,
           custom_fields: {
@@ -875,7 +875,7 @@ class Intervention < Ekylibre::Record::Base
           description: %(#{Intervention.model_name.plural.tl}:
 \t- #{interventions.map(&:name).join("\n\t - ")})
         )
-        puts sale.inspect.red
+        # puts sale.inspect.red
         # Adds items
         interventions.each do |intervention|
           hourly_params = {
@@ -911,5 +911,4 @@ class Intervention < Ekylibre::Record::Base
       sale
     end
   end
-
 end

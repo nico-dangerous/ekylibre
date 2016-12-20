@@ -21,7 +21,7 @@ module Backend
     manage_restfully(t3e: { name: :name })
 
     unroll
-    
+
     # params:
     #   :q Text search
     #   :owner_id

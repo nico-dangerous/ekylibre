@@ -11,10 +11,10 @@
     - l.attribute :started_on
     - l.attribute :stopped_on
     - l.attribute :description
-    
+
   - if resource.purchase_item
     .info
-      %span.title= :purchase.tl
+      %span.title= FixedAsset.human_attribute_name(:purchase)
       %span.value= link_to(resource.purchase_item.purchase.number, {controller: :purchases, action: :show, id: resource.purchase_item.purchase.id})
 
 = cobbles do |c|

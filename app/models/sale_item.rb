@@ -225,13 +225,11 @@ class SaleItem < Ekylibre::Record::Base
   def taxes_amount
     amount - pretax_amount
   end
-  
+
   def pretax_amount_by_working_area
-    area_in_hectare = sale.custom_fields["working_area"].to_f if sale.custom_fields?
+    area_in_hectare = sale.custom_fields['working_area'].to_f if sale.custom_fields?
     if area_in_hectare && area_in_hectare > 0
       (pretax_amount / area_in_hectare).to_f.round(2)
-    else
-      nil
     end
   end
 

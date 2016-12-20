@@ -429,7 +429,7 @@ class Sale < Ekylibre::Record::Base
   def taxes_amount
     amount - pretax_amount
   end
-  
+
   def pretax_amount_by_working_area
     items.map(&:pretax_amount_by_working_area).compact.sum.round(2)
   end

@@ -1195,6 +1195,7 @@ eng:
     expired_since: "Expired since" #?
     expired_within: "Expired within" #?
     export: "Export documents" #?
+    # farmer: "Farmer"
     field_distribution: "Field distribution"
     file_nature: "File type"
     file_preview: "Preview" #?
@@ -1444,6 +1445,7 @@ eng:
     outgoing_parcels: "Outgoing parcels"
     outgoing_payment: "Outgoing payment" #?
     outgoing_payments: "Outgoing payments"
+    # owner: "Owner"
     page_title: "%{company_code} · %{menu} · %{action}"
     page_title_by_default: "Ekylibre · %{action}"
     page_title_special: "%{company_code} · %{action}"
@@ -1511,7 +1513,7 @@ eng:
     products: "Products"
     profile: "Profile"
     profits_and_losses: "Profits and losses"
-    purchase: "Purchase" #?
+    purchase: "Purchase"
     purchase_items: "Purchase items" #?
     purchase_number: "Purchase number" #?
     purchases: "Purchases"
@@ -1761,6 +1763,7 @@ eng:
     wind_speed: "Wind speed"
     with_fixed_assets_depreciations: "With fixed assets depreciations"
     workers: "Workers"
+    # working_area: "Working area"
     working_duration: "Working duration"
     working_sets_stocks: "Working sets stocks" #?
     x_cashes:

@@ -318,13 +318,13 @@ class Entity < Ekylibre::Record::Base
     amount += purchase_invoices.sum(:amount)
     amount
   end
-  
+
   def client_accountancy_balance
-    self.client_account.totals[:balance]
+    client_account.totals[:balance]
   end
-  
+
   def supplier_accountancy_balance
-    self.supplier_account.totals[:balance]
+    supplier_account.totals[:balance]
   end
 
   def has_another_tracking?(serial, product_id)

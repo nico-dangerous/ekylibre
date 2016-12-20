@@ -21,7 +21,7 @@ module Backend
     manage_restfully currency: 'Preference[:currency]'.c, depreciation_method: 'linear'
 
     unroll
-    
+
     # params:
     #   :q Text search
     #   :s State search
