@@ -229,6 +229,8 @@ Rails.application.routes.draw do
     # resources :affairs, concerns: [:affairs, :list], only: [:show, :index]
     resources :affairs, only: [:unroll]
 
+    resources :affair_natures, concerns: [:list, :unroll]
+
     resources :analyses, concerns: [:list, :unroll] do
       member do
         get :list_items
@@ -822,6 +824,7 @@ Rails.application.routes.draw do
     resources :sale_opportunities, concerns: [:affairs, :list], path: 'sale-opportunities' do
       member do
         get :list_tasks
+        get :list_events
         post :prospect
         post :evaluate
         post :lose

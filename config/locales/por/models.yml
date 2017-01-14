@@ -1130,6 +1130,7 @@ por:
     progression_percentage: "Progressão (%)"
     proposer: "Proponente"
     prospect: "Prospecto"
+    # provider: "Provider"
     provisional: "Provisório"
     provisional_intervention: "Intervenção provisória"
     purchasable: "Comprável"

@@ -1389,6 +1389,7 @@ fra:
     progression_percentage: "Progression (%)"
     proposer: "Parrain"
     prospect: "Prospect"
+    # provider: "Provider"
     provisional: "Prévisionnel"
     provisional_intervention: "Intervention prévisionnelle"
     provisional_procedure: "Procédure prévisionnelle" #?

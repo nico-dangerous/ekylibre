@@ -39,10 +39,12 @@
 #  letter                 :string
 #  lock_version           :integer          default(0), not null
 #  name                   :string
+#  nature_id              :integer
 #  number                 :string           not null
 #  origin                 :string
 #  pretax_amount          :decimal(19, 4)   default(0.0)
 #  probability_percentage :decimal(19, 4)   default(0.0)
+#  provider_id            :integer
 #  responsible_id         :integer
 #  state                  :string
 #  third_id               :integer          not null
@@ -70,6 +72,8 @@ class Affair < Ekylibre::Record::Base
   belongs_to :journal_entry
   belongs_to :responsible, -> { contacts }, class_name: 'Entity'
   belongs_to :third, class_name: 'Entity'
+  belongs_to :provider, class_name: 'Entity'
+  belongs_to :nature, class_name: 'AffairNature'
   # FIXME: Gap#affair_id MUST NOT be mandatory
   has_many :events
   has_many :gaps,              inverse_of: :affair # , dependent: :delete_all
@@ -78,6 +82,8 @@ class Affair < Ekylibre::Record::Base
   has_many :purchases,         inverse_of: :affair, dependent: :nullify
   has_many :sales,             inverse_of: :affair, dependent: :nullify
   has_many :regularizations,   inverse_of: :affair, dependent: :destroy
+  has_many :labellings, class_name: 'AffairLabelling', dependent: :destroy, inverse_of: :affair
+  has_many :labels, through: :labellings
   # has_many :tax_declarations,  inverse_of: :affair, dependent: :nullify
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :accounted_at, :closed_at, :dead_line_at, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }, allow_blank: true
@@ -90,6 +96,8 @@ class Affair < Ekylibre::Record::Base
   validates :pretax_amount, :probability_percentage, numericality: { greater_than: -1_000_000_000_000_000, less_than: 1_000_000_000_000_000 }, allow_blank: true
   # ]VALIDATORS]
   validates :currency, length: { allow_nil: true, maximum: 3 }
+
+  accepts_nested_attributes_for :labellings, allow_destroy: true
 
   acts_as_numbered
   scope :closeds, -> { where(closed: true) }

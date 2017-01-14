@@ -549,6 +549,57 @@ activity_tactics:
   updater_id:
     type: integer
     references: user
+affair_labellings:
+  affair_id:
+    type: integer
+    references: affair
+    required: true
+  created_at:
+    type: datetime
+    required: true
+  creator_id:
+    type: integer
+    references: user
+  id:
+    type: integer
+    required: true
+  label_id:
+    type: integer
+    references: label
+    required: true
+  lock_version:
+    type: integer
+    required: true
+  updated_at:
+    type: datetime
+    required: true
+  updater_id:
+    type: integer
+    references: user
+affair_natures:
+  created_at:
+    type: datetime
+    required: true
+  creator_id:
+    type: integer
+    references: user
+  description:
+    type: text
+  id:
+    type: integer
+    required: true
+  lock_version:
+    type: integer
+    required: true
+  name:
+    type: string
+    required: true
+  updated_at:
+    type: datetime
+    required: true
+  updater_id:
+    type: integer
+    references: user
 affairs:
   accounted_at:
     type: datetime
@@ -600,6 +651,9 @@ affairs:
     required: true
   name:
     type: string
+  nature_id:
+    type: integer
+    references: affair_nature
   number:
     type: string
     required: true
@@ -613,6 +667,9 @@ affairs:
     type: decimal
     precision: 19
     scale: 4
+  provider_id:
+    type: integer
+    references: entity
   responsible_id:
     type: integer
     references: entity

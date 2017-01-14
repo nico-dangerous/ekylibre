@@ -691,6 +691,76 @@ ALTER SEQUENCE activity_tactics_id_seq OWNED BY activity_tactics.id;
 
 
 --
+-- Name: affair_labellings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE affair_labellings (
+    id integer NOT NULL,
+    affair_id integer NOT NULL,
+    label_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    creator_id integer,
+    updater_id integer,
+    lock_version integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: affair_labellings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE affair_labellings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: affair_labellings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE affair_labellings_id_seq OWNED BY affair_labellings.id;
+
+
+--
+-- Name: affair_natures; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE affair_natures (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    description text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    creator_id integer,
+    updater_id integer,
+    lock_version integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: affair_natures_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE affair_natures_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: affair_natures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE affair_natures_id_seq OWNED BY affair_natures.id;
+
+
+--
 -- Name: affairs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -721,7 +791,9 @@ CREATE TABLE affairs (
     type character varying,
     state character varying,
     probability_percentage numeric(19,4) DEFAULT 0.0,
-    letter character varying
+    letter character varying,
+    nature_id integer,
+    provider_id integer
 );
 
 
@@ -6513,6 +6585,20 @@ ALTER TABLE ONLY activity_tactics ALTER COLUMN id SET DEFAULT nextval('activity_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY affair_labellings ALTER COLUMN id SET DEFAULT nextval('affair_labellings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affair_natures ALTER COLUMN id SET DEFAULT nextval('affair_natures_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY affairs ALTER COLUMN id SET DEFAULT nextval('affairs_id_seq'::regclass);
 
 
@@ -7527,6 +7613,22 @@ ALTER TABLE ONLY activity_seasons
 
 ALTER TABLE ONLY activity_tactics
     ADD CONSTRAINT activity_tactics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: affair_labellings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affair_labellings
+    ADD CONSTRAINT affair_labellings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: affair_natures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affair_natures
+    ADD CONSTRAINT affair_natures_pkey PRIMARY KEY (id);
 
 
 --
@@ -9069,6 +9171,90 @@ CREATE INDEX index_activity_tactics_on_updater_id ON activity_tactics USING btre
 
 
 --
+-- Name: index_affair_labellings_on_affair_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_labellings_on_affair_id ON affair_labellings USING btree (affair_id);
+
+
+--
+-- Name: index_affair_labellings_on_affair_id_and_label_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_affair_labellings_on_affair_id_and_label_id ON affair_labellings USING btree (affair_id, label_id);
+
+
+--
+-- Name: index_affair_labellings_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_labellings_on_created_at ON affair_labellings USING btree (created_at);
+
+
+--
+-- Name: index_affair_labellings_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_labellings_on_creator_id ON affair_labellings USING btree (creator_id);
+
+
+--
+-- Name: index_affair_labellings_on_label_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_labellings_on_label_id ON affair_labellings USING btree (label_id);
+
+
+--
+-- Name: index_affair_labellings_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_labellings_on_updated_at ON affair_labellings USING btree (updated_at);
+
+
+--
+-- Name: index_affair_labellings_on_updater_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_labellings_on_updater_id ON affair_labellings USING btree (updater_id);
+
+
+--
+-- Name: index_affair_natures_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_natures_on_created_at ON affair_natures USING btree (created_at);
+
+
+--
+-- Name: index_affair_natures_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_natures_on_creator_id ON affair_natures USING btree (creator_id);
+
+
+--
+-- Name: index_affair_natures_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_natures_on_name ON affair_natures USING btree (name);
+
+
+--
+-- Name: index_affair_natures_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_natures_on_updated_at ON affair_natures USING btree (updated_at);
+
+
+--
+-- Name: index_affair_natures_on_updater_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affair_natures_on_updater_id ON affair_natures USING btree (updater_id);
+
+
+--
 -- Name: index_affairs_on_cash_session_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9104,10 +9290,24 @@ CREATE INDEX index_affairs_on_name ON affairs USING btree (name);
 
 
 --
+-- Name: index_affairs_on_nature_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affairs_on_nature_id ON affairs USING btree (nature_id);
+
+
+--
 -- Name: index_affairs_on_number; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_affairs_on_number ON affairs USING btree (number);
+
+
+--
+-- Name: index_affairs_on_provider_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_affairs_on_provider_id ON affairs USING btree (provider_id);
 
 
 --
@@ -16637,4 +16837,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161231223002');
 INSERT INTO schema_migrations (version) VALUES ('20161231233003');
 
 INSERT INTO schema_migrations (version) VALUES ('20161231234533');
+
+INSERT INTO schema_migrations (version) VALUES ('20170113183701');
 

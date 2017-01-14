@@ -1134,6 +1134,7 @@ spa:
     progression_percentage: "Progresión (%)"
     proposer: "Proponente"
     prospect: "Perspectiva"
+    # provider: "Provider"
     # provisional: "Provisional"
     provisional_intervention: "La intervención provisional"
     purchasable: "Comprable"

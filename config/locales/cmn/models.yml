@@ -1130,6 +1130,7 @@ cmn:
     progression_percentage: "进展（％）"
     proposer: "投保人"
     prospect: "展望"
+    # provider: "Provider"
     provisional: "临时"
     provisional_intervention: "临时干预"
     purchasable: "购买"

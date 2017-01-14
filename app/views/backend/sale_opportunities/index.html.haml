@@ -1,8 +1,16 @@
 = kujaku do |k|
   - k.text
+  - entities = Entity.where(id: SaleOpportunity.all.pluck(:provider_id).compact.uniq).reorder(:full_name)
+  - responsibles = Entity.users.where(id: SaleOpportunity.all.pluck(:responsible_id).compact.uniq).reorder(:last_name)
   - k.helper do
     %label= SaleOpportunity.human_attribute_name(:responsible)
-    = select_tag(:responsible_id, options_for_select([[]] + Entity.users.all.collect{|u| [u.label, u.id]}, params[:responsible_id]))
+    = select_tag(:responsible_id, options_for_select([[]] + responsibles.collect{|u| [u.label, u.id]}, params[:responsible_id]))
+  - k.helper do
+    %label= SaleOpportunity.human_attribute_name(:provider)
+    = select_tag(:provider_id, options_for_select([[]] + entities.collect{|u| [u.full_name, u.id]}, params[:provider_id]))
+  - k.helper do
+    %label= SaleOpportunity.human_attribute_name(:nature)
+    = select_tag(:nature_id, options_for_select([[]] + AffairNature.all.collect{|u| [u.name, u.id]}, params[:nature_id]))
 
 - main_toolbar do |t|
   = t.new params: { redirect: nil }

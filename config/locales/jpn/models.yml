@@ -1130,6 +1130,7 @@ jpn:
     progression_percentage: "進行（％）"
     proposer: "提案者"
     prospect: "見通し"
+    # provider: "Provider"
     provisional: "仮"
     provisional_intervention: "暫定介入"
     purchasable: "購入"

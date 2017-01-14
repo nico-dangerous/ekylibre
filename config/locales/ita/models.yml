@@ -1161,6 +1161,7 @@ ita:
     progression_percentage: "Progressione (%)"
     proposer: "proponente"
     prospect: "Prospettiva"
+    # provider: "Provider"
     provisional: "Provvisorio"
     provisional_intervention: "intervento provvisorio"
     purchasable: "acquistabile"

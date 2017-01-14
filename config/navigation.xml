@@ -1909,12 +1909,26 @@
   </inaccessible-actions>
   <untreated-actions>
     <group>
+      <item name="affair_natures">
+        <page to="backend/affair_natures#index"/>
+        <page to="backend/affair_natures#create"/>
+        <page to="backend/affair_natures#destroy"/>
+        <page to="backend/affair_natures#edit"/>
+        <page to="backend/affair_natures#list"/>
+        <page to="backend/affair_natures#new"/>
+        <page to="backend/affair_natures#show"/>
+        <page to="backend/affair_natures#unroll"/>
+        <page to="backend/affair_natures#update"/>
+      </item>
       <item name="bank_reconciliation_gaps">
         <page to="backend/bank_reconciliation_gaps#create"/>
       </item>
       <item name="quick_affairs">
         <page to="backend/quick_affairs#create"/>
         <page to="backend/quick_affairs#new"/>
+      </item>
+      <item name="sale_opportunities">
+        <page to="backend/sale_opportunities#list_events"/>
       </item>
     </group>
   </untreated-actions>

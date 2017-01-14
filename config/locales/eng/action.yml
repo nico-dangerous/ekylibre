@@ -49,6 +49,11 @@ eng:
       # index: "Activity seasons"
       # new: "New activity season"
       # show: "Activity season: %{name}"
+    backend/affair_natures:
+      # edit: "Edit affair nature: %{name}"
+      # index: "Affair natures"
+      # new: "New affair nature"
+      # show: "Affair nature: %{name}"
     backend/affairs:
       attach: "Attach to affair %{number}"
       detach: "Detach from affair %{number}"

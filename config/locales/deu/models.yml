@@ -1130,6 +1130,7 @@ deu:
     # progression_percentage: "Progression (%)"
     proposer: "Antragsteller"
     prospect: "Aussicht"
+    # provider: "Provider"
     provisional: "vorläufig"
     provisional_intervention: "Vorläufige Intervention"
     purchasable: "käuflich"

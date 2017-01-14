@@ -2024,6 +2024,7 @@ arb:
     proposer: "الكفيل"
     proposer_id: "الكفيل" #?
     prospect: "الراعي"
+    # provider: "Provider"
     provisional: "مؤقت"
     provisional_intervention: "تدخل المؤقت"
     published: "تم نشره" #?

@@ -187,6 +187,8 @@ eng:
       activity_season: "Activity season"
       activity_tactic: "Activity cropping technique"
       affair: "Affair"
+      # affair_labelling: "Affair labelling"
+      # affair_nature: "Affair nature"
       alert: "Alert"
       alert_phase: "Alert phase"
       analysis: "Analysis"
@@ -1147,7 +1149,7 @@ eng:
     progression_percentage: "Progression (%)"
     proposer: "Proposer"
     prospect: "Prospect"
-    # provider: "Provider"
+    provider: "Provider"
     provisional: "Provisional" #?
     provisional_intervention: "Provisional intervention" #?
     purchasable: "Purchasable"

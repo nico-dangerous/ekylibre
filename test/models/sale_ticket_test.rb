@@ -39,10 +39,12 @@
 #  letter                 :string
 #  lock_version           :integer          default(0), not null
 #  name                   :string
+#  nature_id              :integer
 #  number                 :string           not null
 #  origin                 :string
 #  pretax_amount          :decimal(19, 4)   default(0.0)
 #  probability_percentage :decimal(19, 4)   default(0.0)
+#  provider_id            :integer
 #  responsible_id         :integer
 #  state                  :string
 #  third_id               :integer          not null
