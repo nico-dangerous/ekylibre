@@ -1,7 +1,7 @@
+- responsibles = Entity.users.where(id: SaleOpportunity.all.pluck(:responsible_id).compact.uniq).reorder(:last_name)
 = kujaku do |k|
   - k.text
   - entities = Entity.where(id: SaleOpportunity.all.pluck(:provider_id).compact.uniq).reorder(:full_name)
-  - responsibles = Entity.users.where(id: SaleOpportunity.all.pluck(:responsible_id).compact.uniq).reorder(:last_name)
   - k.helper do
     %label= SaleOpportunity.human_attribute_name(:responsible)
     = select_tag(:responsible_id, options_for_select([[]] + responsibles.collect{|u| [u.label, u.id]}, params[:responsible_id]))
@@ -15,4 +15,33 @@
 - main_toolbar do |t|
   = t.new params: { redirect: nil }
 
-= main_list
+= janus do |j|
+  - j.face :list do
+    = main_list
+
+  - j.face :chart do
+    :ruby
+      all_sale_opportunities = SaleOpportunity.all
+      series = []
+      unit = Nomen::Currency[all_sale_opportunities.first.currency]
+      # states = all_sale_opportunities.pluck(:state).uniq.delete("won").delete("lost").sort!
+      # responsibles = Entity.users.where(id: SaleOpportunity.all.pluck(:responsible_id).compact.uniq).reorder(:last_name)
+      categories = ["prospecting", "qualification", "value_proposition", "price_quote", "negociation"]
+
+      responsibles.each do |responsible|
+        data = []
+        h = all_sale_opportunities.where(responsible_id: responsible.id).reorder(:state).group(:state).sum(:pretax_amount)
+        categories.each do |category|
+          if h[category]
+            data << h[category].to_s.to_f
+          else
+            data << 0
+          end
+        end
+        series << {name: responsible.full_name, data: data}
+      end
+
+    - if series.any?
+      = column_highcharts(series, y_axis: {title: {text: :pretax_amount.tl}, stack_labels: {enabled: true, format: "{total} #{unit.symbol}"}, labels: { format: "{value} #{unit.symbol}" }}, x_axis: { categories: categories.map(&:tl)}, legend: true, plot_options: { column: {stacking: 'normal'}})
+    - else
+      = no_data

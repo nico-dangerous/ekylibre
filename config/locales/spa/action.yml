@@ -1337,6 +1337,7 @@ spa:
     nb_purchases:  #?
       one: "Una compra en espera de recepción" #?
       other: "%{count} Compras en espera de recepción" #?
+    # negociation: "Negociation"
     net_margin: "Margen neto" #?
     net_mass: "Masa neta"
     net_surface_area: "Área de superficie Net"
@@ -1483,6 +1484,7 @@ spa:
     price: "Precio"
     price_amount: "Precio HT" #?
     price_amount_with_taxes: "PrecioTTC" #?
+    # price_quote: "Price quote"
     prices: "Precios"
     print: "Impresion de documentos"
     print_at: "el" #?
@@ -1502,6 +1504,7 @@ spa:
     products: "Productos"
     profile: "Perfil"
     profits_and_losses: "Las pérdidas y ganancias"
+    # prospecting: "Prospecting"
     provisionnal_budget: "Presupuesto Provisionnal" #?
     purchase: "Compra"
     purchase_items: "Artículos de la compra"
@@ -1510,6 +1513,7 @@ spa:
       products: "Creación de la compra" #?
       summary: "Desembolsos" #?
     purchases: "Compras"
+    # qualification: "Qualification"
     quality: "Calidad"
     # quandl: "Quandl"
     quantity: "Quantidades"
@@ -1809,6 +1813,7 @@ spa:
       # other: "Validate crumbs for %{count} interventions"
     validate_selected_entries: "Validar la escrituras seleccionadas"
     validated: "Validado"
+    # value_proposition: "Value proposition"
     values: "Valores"
     variable_indicators: "Indicadores variables"
     variants: "Variantes"

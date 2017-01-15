@@ -1394,6 +1394,7 @@ eng:
     nature: "Type"
     nature_changed: "Le type des animaux a changé" #?!
     natures: "Types" #?
+    negociation: "Negociation" #?
     net_mass: "Net mass"
     net_surface_area: "Net surface area"
     new: "New"
@@ -1522,6 +1523,7 @@ eng:
     pretax_amount: "Pre-tax amount"
     previous: "Previous"
     price: "Price" #?
+    price_quote: "Price quote" #?
     prices: "Prices" #?
     print: "Print" #?
     printing_document: "Printing %{document}"
@@ -1540,10 +1542,12 @@ eng:
     products: "Products"
     profile: "Profile"
     profits_and_losses: "Profits and losses"
+    prospecting: "Prospecting" #?
     purchase: "Purchase"
     purchase_items: "Purchase items" #?
     purchase_number: "Purchase number" #?
     purchases: "Purchases"
+    qualification: "Qualification" #?
     quality: "Quality"
     quandl: "Quandl" #?
     quantity: "Quantity" #?
@@ -1779,6 +1783,7 @@ eng:
       other: "Validate crumbs for %{count} interventions"
     validate_selected_entries: "Validate selected entries"
     validated: "Validated"
+    value_proposition: "Value proposition" #?
     values: "Values"
     variable_indicators: "Variable indicators"
     variants: "Variants" #?

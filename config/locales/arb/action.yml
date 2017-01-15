@@ -1640,6 +1640,7 @@ arb:
       one: "تم تسجيل منتج واحد" #?
       other: "%{count} تم تسجيل منتجات اخرى" #?
       zero: "لم يتم تسجيل اي منتج" #?
+    # negociation: "Negociation"
     net_margin: "هامش صافي" #?
     net_mass: "الكتلة الصافية"
     net_surface_area: "مساحة صافية"
@@ -1826,6 +1827,7 @@ arb:
     price_amount: "Prix HT" #?
     price_amount_with_taxes: "القيمة مع كامل الضريبة" #?
     price_create: "اضافة تسعيرة هذا النوع" #?
+    # price_quote: "Price quote"
     prices: "السار المنتجات"
     prices_export: "CSV اسعار التصدير ضمن" #?
     prices_import: "CSV استيراد بيان الاسعار  ضمن" #?
@@ -1852,6 +1854,7 @@ arb:
     products: "فئة المنتج"
     profile: "الملف الشخصي"
     profits_and_losses: "الأرباح والخسائر"
+    # prospecting: "Prospecting"
     provisionnal_budget: "الميزانية Provisionnal" #?
     purchase: "الطلب"
     purchase_create: "اضافة شراء جديد" #?
@@ -1867,6 +1870,7 @@ arb:
     purchases: "المشتريات"
     purchases_number: "" #?
     purchases_price_create: "اضافة سعر الشراء" #?
+    # qualification: "Qualification"
     quality: "جودة"
     # quandl: "Quandl"
     quantity: "الكمية"
@@ -2217,6 +2221,7 @@ arb:
       # other: "Validate crumbs for %{count} interventions"
     validate_selected_entries: "التحقق من المدخلات المختارة"
     validated: "التحقق من صحة"
+    # value_proposition: "Value proposition"
     values: "القيم"
     variable_indicators: "مؤشرات متغيرة"
     variants: "المتغيرات"

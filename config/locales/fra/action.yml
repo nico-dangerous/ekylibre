@@ -1509,6 +1509,7 @@ fra:
     natures: "Types"
     need_building_to_create_production: "Vous devez créer un lieu de stockage pour pouvoir enregistrer vos productions" #?
     need_entities_to_consult_mandates: "Vous devez créer des fiches clients/fournisseurs avant" #?
+    negociation: "Négociation"
     net_margin: "Marge nette" #?
     net_mass: "Masse nette"
     net_surface_area: "Surface nette"
@@ -1693,6 +1694,7 @@ fra:
     price: "Prix"
     price_amount: "Prix HT" #?
     price_amount_with_taxes: "Prix TTC" #?
+    price_quote: "Devis"
     prices: "Prix"
     prices_evolutions: "Évolutions des prix" #?
     prices_export: "Exporter vos tarifs au format CSV" #?
@@ -1727,6 +1729,7 @@ fra:
     profile: "Profil"
     profitability: "Rentabilité" #?
     profits_and_losses: "Les profits et pertes"
+    prospecting: "Prospection"
     protein_matters_concentration: "Teneur en matières protéïques" #?
     provisional_grains_yield: "Rendement prévisionnel en grains" #?
     provisionnal_budget: "Budget prévisionnel" #?
@@ -1747,6 +1750,7 @@ fra:
       invoice: "Facture" #?
       order: "Commande" #?
       refused: "Refusée" #?
+    qualification: "Qualification"
     quality: "Qualité"
     quandl: "Quandl"
     quantity: "Quantité"
@@ -2123,6 +2127,7 @@ fra:
       other: "Valider mes miettes pour %{count} interventions"
     validate_selected_entries: "Valider les écritures sélectionnées"
     validated: "Validé"
+    value_proposition: "Proposition de valeur"
     values: "Valeurs"
     variable_indicators: "Indicateurs variables"
     variants: "Variantes"
