@@ -2209,7 +2209,9 @@ CREATE TABLE entity_addresses (
     updated_at timestamp without time zone NOT NULL,
     creator_id integer,
     updater_id integer,
-    lock_version integer DEFAULT 0 NOT NULL
+    lock_version integer DEFAULT 0 NOT NULL,
+    latitude double precision,
+    longitude double precision
 );
 
 
@@ -16839,4 +16841,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161231233003');
 INSERT INTO schema_migrations (version) VALUES ('20161231234533');
 
 INSERT INTO schema_migrations (version) VALUES ('20170113183701');
+
+INSERT INTO schema_migrations (version) VALUES ('20170115181701');
 

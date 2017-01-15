@@ -2248,9 +2248,13 @@ entity_addresses:
   id:
     type: integer
     required: true
+  latitude:
+    type: float
   lock_version:
     type: integer
     required: true
+  longitude:
+    type: float
   mail_auto_update:
     type: boolean
     required: true

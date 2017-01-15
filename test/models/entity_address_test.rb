@@ -30,7 +30,9 @@
 #  deleted_at          :datetime
 #  entity_id           :integer          not null
 #  id                  :integer          not null, primary key
+#  latitude            :float
 #  lock_version        :integer          default(0), not null
+#  longitude           :float
 #  mail_auto_update    :boolean          default(FALSE), not null
 #  mail_country        :string
 #  mail_geolocation    :geometry({:srid=>4326, :type=>"point"})

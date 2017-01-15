@@ -45,3 +45,36 @@
       = column_highcharts(series, y_axis: {title: {text: :pretax_amount.tl}, stack_labels: {enabled: true, format: "{total} #{unit.symbol}"}, labels: { format: "{value} #{unit.symbol}" }}, x_axis: { categories: categories.map(&:tl)}, legend: true, plot_options: { column: {stacking: 'normal'}})
     - else
       = no_data
+  - j.face :map do
+    :ruby
+      data = SaleOpportunity.all.collect do |s|
+        a = s.client.default_mail_address
+        next unless a && a.mail_geolocation
+        
+        popup_content = []
+        popup_content << {label: SaleOpportunity.human_attribute_name(:pretax_amount), value: s.pretax_amount}
+        popup_content << {label: SaleOpportunity.human_attribute_name(:probability_percentage), value: s.probability_percentage}
+        popup_content << {label: SaleOpportunity.human_attribute_name(:state_label), value: s.state_label}
+        popup_content << {value: labels_info(s.labels)} if s.labels.any?
+        popup_content << {value: lights(s.status)}
+        popup_content << render('popup', opportunity: s)
+        
+        {
+          name: s.client.full_name,
+          shape: a.mail_geolocation,
+          pretax_amount: s.pretax_amount.to_s.to_f,
+          popup: {header: true, content: popup_content}
+        }
+      end
+    = visualization(box: {height: "100%"}) do |v|
+      - v.serie :main, data
+      - v.bubbles :pretax_amount, :main
+      - v.control :zoom
+      - v.control :scale
+      - v.control :fullscreen
+      - v.control :layer_selector
+      
+      
+      
+      
+      
