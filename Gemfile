@@ -166,6 +166,7 @@ gem 'mechanize'
 gem 'rest-client', require: false
 gem 'rubyntlm', '>= 0.3.2'
 gem 'savon'
+gem 'mqtt'
 
 gem 'luhn'
 
