@@ -169,6 +169,8 @@ gem 'savon'
 
 gem 'luhn'
 
+gem 'octopush-ruby'
+
 group :development do
   gem 'quiet_assets'
   # gem 'rack-mini-profiler'
