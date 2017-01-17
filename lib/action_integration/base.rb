@@ -7,6 +7,7 @@ module ActionIntegration
 
     include_protocol ActionIntegration::Protocols::HTML
     include_protocol ActionIntegration::Protocols::JSON
+    include_protocol ActionIntegration::Protocols::MQTT
     include_protocol ActionIntegration::Protocols::Savon
 
     def initialize(call)
