@@ -1,3 +1,4 @@
+# Sending SMS.
 class OctopushService
   Struct.new('SMSMode', :code, :name, :mandatory_message)
 
