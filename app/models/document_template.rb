@@ -150,6 +150,8 @@ class DocumentTemplate < Ekylibre::Record::Base
   # Store if needed by template
   # @param datasource XML representation of data used by the template
   def export(datasource, key, format = :pdf, options = {})
+    copy_to_tempfile
+
     # Load the report
     report = Beardley::Report.new(source_path, locale: 'i18n.iso2'.t)
     # Call it with datasource
@@ -202,6 +204,25 @@ class DocumentTemplate < Ekylibre::Record::Base
     document
   end
 
+  def copy_to_tempfile
+    byebug
+
+    tenant_path = Rails.root.join('tmp', Ekylibre::Tenant.current)
+    FileUtils.mkdir_p(tenant_path)
+
+    tmpfile_path = Ekylibre::Tenant.current + "/" + self.compiled.original_filename
+
+    dest = Tempfile.new(tmpfile_path)
+    dest.binmode
+
+    byebug
+
+    self.compiled.copy_to_local_file(self.id.to_s, dest.path)
+  
+    dest
+  end
+
+
   @@load_path = []
   mattr_accessor :load_path
 
@@ -209,7 +230,9 @@ class DocumentTemplate < Ekylibre::Record::Base
     # Print document with default active template for the given nature
     # Returns nil if no template found.
     def print(nature, datasource, key, format = :pdf, options = {})
+      puts "Passe par la 2".green
       if template = find_by(nature: nature, by_default: true, active: true)
+        template.copy_to_tempfile
         return template.print(datasource, key, format, options)
       end
       nil
