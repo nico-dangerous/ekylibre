@@ -1,4 +1,4 @@
-- if resource.parameters.present?
+- if resource.parameter_keys.present?
   = field_set :informations do
     - nature = params[:nature] || resource.nature
     - parameters = resource.parameters || {}
