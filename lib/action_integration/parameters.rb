@@ -45,7 +45,13 @@ module ActionIntegration
       @values[name] = new_val
     end
 
+    delegate :present?, :blank?, :empty?, to: :values
+
     private
+
+    def values
+      @values
+    end
 
     def self.encode(value)
       Base64.encode64(value)
