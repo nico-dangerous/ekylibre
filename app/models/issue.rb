@@ -131,6 +131,26 @@ class Issue < Ekylibre::Record::Base
     if target && dead && (!target.dead_at || target.dead_at > observed_at)
       target.update_columns dead_at: observed_at
     end
+
+    # API-AGRO - HIVEMAP #
+
+    if Integration.find_by(nature: :api_agro)
+      if nature == :beehive_intoxication
+        payload = {
+          ekylibre_instance_name: :demo,
+          ekylibre_issue_id: id,
+          shape: geolocation,
+          date: observed_at,
+          symptoms: ['massive bee deaths', 'physiological trouble', 'behavioral trouble'],
+          number_of_affected_beehives: (0..Animal.of_variety(:apis).count).to_a.sample,
+          number_of_dead_beehives: (0..Animal.of_variety(:apis).count).to_a.sample,
+          number_of_healthy_beehives: (0..Animal.of_variety(:apis).count).to_a.sample
+        }
+        ApiAgro::ApiAgroIntegration.push(:incidents_apiculture, payload).execute
+      end
+    end
+
+    ######################
   end
 
   after_destroy do

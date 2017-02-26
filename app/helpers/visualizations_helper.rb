@@ -78,6 +78,10 @@ module Visualization
       layer(name, serie, options.merge(type: :point_group))
     end
 
+    def marked_circle(name, serie, options = {})
+      layer(name, serie, options.merge(type: :marked_circle))
+    end
+
     def sensor_group(name, serie, options = {})
       layer(name, serie, options.merge(type: :sensor_group))
     end

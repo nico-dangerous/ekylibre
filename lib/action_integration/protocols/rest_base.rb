@@ -4,8 +4,8 @@ module ActionIntegration
     module RestBase
       private
 
-      def get_base(path, &block)
-        action_base(path, nil, :get, &block)
+      def get_base(path, options = {}, &block)
+        action_base(path, nil, :get, options, &block)
       end
 
       def post_base(path, data, options = {}, &block)
@@ -27,6 +27,7 @@ module ActionIntegration
       def action_base(path, data, action, options = {}, &block)
         url = URI.parse(path)
         http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = true if options[:use_ssl]
 
         action_class = "Net::HTTP::#{action.to_s.camelize}".constantize
 

@@ -11,6 +11,7 @@
 #= require visualization/paths
 #= require visualization/points
 #= require visualization/point_group
+#= require visualization/marked_circle
 #= require visualization/simple
 
 ((V, $) ->

@@ -40,6 +40,26 @@
       sensor_data += (items || []).compact
     end
 
+    intox_data = []
+    other_intoxications = nil
+
+    if Integration.find_by_nature(:api_agro)
+      my_intoxications = Issue.where(nature: :beehive_intoxication).map { |int| int.geolocation }
+      ApiAgro::ApiAgroIntegration.fetch(:incidents_apiculture).execute do |c|
+        c.success do |intoxications|
+          other_intoxications = intoxications
+        end
+      end
+
+      intoxications = other_intoxications.reject { |int| int['ekylibre_instance_name'].to_sym == Ekylibre::Tenant.current.to_sym }.map { |int| int['shape'] }
+      intoxications = intoxications + my_intoxications
+
+
+      intox_data += intoxications.map do |int|
+        { name: 'Rûche intoxiquée', shape: int, shape_color: '#FF6666', group: 'Intoxications', popup: {header: 'Zone intoxiquée', content: '<strong>HELLO</strong><em>is it me you\'re looking for???</em>'.html_safe } }
+      end
+    end
+
     activity_productions.of_campaign(@campaigns).find_each do |support|
       next unless support.support_shape
       popup_content = []
@@ -167,6 +187,10 @@
     - unless sensor_data.blank?
       - v.serie :sensor_data, sensor_data
       - v.point_group :sensors, :sensor_data
+
+    - unless intox_data.blank?
+      - v.serie :intox, intox_data
+      - v.marked_circle :intoxications, :intox
 
     - if params[:visualization] == "nitrogen_footprint"
       - v.choropleth :interventions_count, :main

@@ -48,8 +48,8 @@ class CallMessage < Ekylibre::Record::Base
   enumerize :nature, in: [:incoming, :outgoing], predicates: true
 
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
-  validates :body, length: { maximum: 500_000 }, allow_blank: true
-  validates :format, :headers, :ip_address, :ssl, :status, :url, :verb, length: { maximum: 500 }, allow_blank: true
+  validates :body, :headers, length: { maximum: 500_000 }, allow_blank: true
+  validates :format, :ip_address, :ssl, :status, :url, :verb, length: { maximum: 500 }, allow_blank: true
   validates :nature, presence: true
   # ]VALIDATORS]
 end

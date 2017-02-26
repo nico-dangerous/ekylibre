@@ -37,7 +37,7 @@ module Backend
     end
 
     def create
-      @integration = resource_model.new(permitted_params)
+      @integration = resource_model.new(params[:integration].permit!)
       t3e(@integration.attributes.merge(name: @integration.nature.camelize))
       return if save_and_redirect(@integration, url: :backend_integrations)
       render(locals: { cancel_url: :backend_integrations })
