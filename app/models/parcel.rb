@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -65,8 +65,8 @@ class Parcel < Ekylibre::Record::Base
   include Customizable
   attr_readonly :currency
   refers_to :currency
-  enumerize :nature, in: [:incoming, :outgoing], predicates: true, scope: true, default: :incoming
-  enumerize :delivery_mode, in: [:transporter, :us, :third], predicates: { prefix: true }, scope: true, default: :us
+  enumerize :nature, in: %i[incoming outgoing], predicates: true, scope: true, default: :incoming
+  enumerize :delivery_mode, in: %i[transporter us third], predicates: { prefix: true }, scope: true, default: :us
   belongs_to :address, class_name: 'EntityAddress'
   belongs_to :delivery
   belongs_to :journal_entry, dependent: :destroy
@@ -187,36 +187,51 @@ class Parcel < Ekylibre::Record::Base
   # | outgoing parcel        | stock_movement (603X/71X)  | stock (3X)                |
   bookkeep do |b|
     # For purchase_not_received or sale_not_emitted
-    journal = unsuppress { Journal.used_for_unbilled_payables!(currency: self.currency) }
-    list = []
-    if Preference[:permanent_stock_inventory] && given?
-      label = tc(:undelivered_invoice,
-                 resource: self.class.model_name.human,
-                 number: number, entity: entity.full_name, mode: nature.l)
-      account = Account.find_or_import_from_nomenclature(:suppliers_invoices_not_received)
-      items.each do |item|
-        amount = (item.trade_item && item.trade_item.pretax_amount) || item.stock_amount
-        next unless item.variant && item.variant.charge_account && amount.nonzero?
-        list << [:add_credit, label, account.id, amount, resource: item, as: :unbilled]
-        list << [:add_debit, label, item.variant.charge_account.id, amount, resource: item, as: :expense]
+    invoice = lambda do |usage, order|
+      lambda do |entry|
+        label = tc(:undelivered_invoice,
+                   resource: self.class.model_name.human,
+                   number: number, entity: entity.full_name, mode: nature.l)
+        account = Account.find_or_import_from_nomenclature(usage)
+        items.each do |item|
+          amount = (item.trade_item && item.trade_item.pretax_amount) || item.stock_amount
+          next unless item.variant && item.variant.charge_account && amount.nonzero?
+          if order
+            entry.add_credit label, account.id, amount, resource: item, as: :unbilled
+            entry.add_debit  label, item.variant.charge_account.id, amount, resource: item, as: :expense
+          else
+            entry.add_debit  label, account.id, amount, resource: item, as: :unbilled
+            entry.add_credit label, item.variant.charge_account.id, amount, resource: item, as: :expense
+          end
+        end
       end
     end
-    b.journal_entry(journal, printed_on: printed_on, list: list, as: :undelivered_invoice)
 
+    ufb_accountable = Preference[:unbilled_payables] && given?
+    # For unbilled payables
+    journal = unsuppress { Journal.used_for_unbilled_payables!(currency: self.currency) }
+    b.journal_entry(journal, printed_on: printed_on, as: :undelivered_invoice, if: ufb_accountable && incoming?, &invoice.call(:suppliers_invoices_not_received, true))
+
+    b.journal_entry(journal, printed_on: printed_on, as: :undelivered_invoice, if: ufb_accountable && outgoing?, &invoice.call(:invoice_to_create_clients, false))
+
+    accountable = Preference[:permanent_stock_inventory] && given?
     # For permanent stock inventory
     journal = unsuppress { Journal.used_for_permanent_stock_inventory!(currency: self.currency) }
-    list = []
-    if Preference[:permanent_stock_inventory] && given?
+    b.journal_entry(journal, printed_on: printed_on, if: (Preference[:permanent_stock_inventory] && given?)) do |entry|
       label = tc(:bookkeep, resource: self.class.model_name.human,
                             number: number, entity: entity.full_name, mode: nature.l)
       items.each do |item|
         variant = item.variant
         next unless variant && variant.storable? && item.stock_amount.nonzero?
-        list << [:add_credit, label, variant.stock_movement_account_id, item.stock_amount, resource: item, as: :stock_movement]
-        list << [:add_debit, label, variant.stock_account_id, item.stock_amount, resource: item, as: :stock]
+        if incoming?
+          entry.add_credit(label, variant.stock_movement_account_id, item.stock_amount, resource: item, as: :stock_movement)
+          entry.add_debit(label, variant.stock_account_id, item.stock_amount, resource: item, as: :stock)
+        elsif outgoing?
+          entry.add_debit(label, variant.stock_movement_account_id, item.stock_amount, resource: item, as: :stock_movement)
+          entry.add_credit(label, variant.stock_account_id, item.stock_amount, resource: item, as: :stock)
+        end
       end
     end
-    b.journal_entry(journal, printed_on: printed_on, list: list)
   end
 
   def entity
@@ -231,12 +246,8 @@ class Parcel < Ekylibre::Record::Base
     printed_at.to_date
   end
 
-  def content_sentence(limit = 30)
+  def content_sentence
     sentence = items.map(&:name).compact.to_sentence
-    to_keep = limit || sentence.size
-    limited = sentence[0...to_keep - 3]
-    limited << '...' unless limited == sentence
-    limited
   end
 
   def separated_stock?
@@ -260,7 +271,7 @@ class Parcel < Ekylibre::Record::Base
   end
 
   def shippable?
-    with_delivery && !delivery.present?
+    with_delivery && delivery.blank?
   end
 
   def allow_items_update?
@@ -337,6 +348,7 @@ class Parcel < Ekylibre::Record::Base
   end
 
   def check
+    state = true
     order if can_order?
     prepare if can_prepare?
     return false unless can_check?
@@ -345,18 +357,27 @@ class Parcel < Ekylibre::Record::Base
     # values[:ordered_at] = now unless ordered_at
     # values[:in_preparation_at] = now unless in_preparation_at
     update_columns(values)
-    items.each(&:check)
+    state = items.collect(&:check)
+    return false, state.collect(&:second) unless (state == true) || (state.is_a?(Array) && state.all? { |s| s.is_a?(Array) ? s.first : s })
     super
+    true
   end
 
   def give
+    state = true
     order if can_order?
     prepare if can_prepare?
-    check if can_check?
+    state, msg = check if can_check?
+    return false, msg unless state
     return false unless can_give?
     update_column(:given_at, Time.zone.now) if given_at.blank?
     items.each(&:give)
+    reload
     super
+  end
+
+  def first_available_date
+    given_at || planned_at || prepared_at || in_preparation_at || ordered_at
   end
 
   class << self
@@ -412,11 +433,11 @@ class Parcel < Ekylibre::Record::Base
       transaction do
         parcels = parcels.collect do |d|
           (d.is_a?(self) ? d : find(d))
-        end.sort_by(&:given_at)
+        end.sort_by(&:first_available_date)
         third = detect_third(parcels)
-        planned_at = parcels.map(&:given_at).last || Time.zone.now
+        planned_at = parcels.last.first_available_date || Time.zone.now
         unless nature = SaleNature.actives.first
-          unless journal = Journal.sales.opened_at(planned_at).first
+          unless journal = Journal.sales.opened_on(planned_at).first
             raise 'No sale journal'
           end
           nature = SaleNature.create!(
@@ -467,11 +488,11 @@ class Parcel < Ekylibre::Record::Base
       transaction do
         parcels = parcels.collect do |d|
           (d.is_a?(self) ? d : find(d))
-        end.sort_by(&:given_at)
+        end.sort_by(&:first_available_date)
         third = detect_third(parcels)
-        planned_at = parcels.map(&:given_at).last
+        planned_at = parcels.last.first_available_date || Time.zone.now
         unless nature = PurchaseNature.actives.first
-          unless journal = Journal.purchases.opened_at(planned_at).first
+          unless journal = Journal.purchases.opened_on(planned_at).first
             raise 'No purchase journal'
           end
           nature = PurchaseNature.create!(

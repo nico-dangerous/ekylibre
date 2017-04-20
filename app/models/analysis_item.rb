@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -74,7 +74,7 @@ class AnalysisItem < Ekylibre::Record::Base
   end
 
   after_save do
-    if product
+    if product && product.born_at <= sampled_at
       if reading = product_reading
         reading.read_at = sampled_at
         reading.value = value

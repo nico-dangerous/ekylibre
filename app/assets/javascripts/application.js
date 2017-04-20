@@ -14,8 +14,8 @@
 //= require jquery
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/i18n/datepicker-fr
-//= require jquery-ui/i18n/datepicker-ar
-//= require jquery-ui/i18n/datepicker-ja
+// require jquery-ui/i18n/datepicker-ar
+// require jquery-ui/i18n/datepicker-ja
 //= require jquery-ui/widgets/dialog
 //= require jquery-ui/widgets/slider
 //= require jquery-ui/widgets/accordion
@@ -50,6 +50,7 @@
 //= require form/dependents
 //= require form/toggle
 //= require form/dates
+//= require form/links
 //= require cocoon
 //= require jquery/ext
 //= require selector

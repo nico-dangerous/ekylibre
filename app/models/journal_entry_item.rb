@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -106,15 +106,13 @@ class JournalEntryItem < Ekylibre::Record::Base
 
   delegate :balanced?, to: :entry, prefix: true
   delegate :name, :number, to: :account, prefix: true
+  delegate :entity_country, :expected_financial_year, to: :entry
 
   acts_as_list scope: :entry
 
-  before_update :uncumulate
+  before_update  :uncumulate
   before_destroy :uncumulate
-  after_create :update_entry
-  after_destroy :update_entry
-  after_destroy :unmark
-  after_update :update_entry
+  after_destroy  :unmark
 
   scope :between, lambda { |started_at, stopped_at|
     where(printed_on: started_at..stopped_at)
@@ -141,50 +139,20 @@ class JournalEntryItem < Ekylibre::Record::Base
     self.bank_statement_letter = nil if bank_statement_letter.blank?
     # computes the values depending on currency rate
     # for debit and credit.
-    self.debit ||= 0
-    self.credit ||= 0
-    self.real_debit ||= 0
-    self.real_credit ||= 0
-    if entry
-      self.entry_number = entry.number
-      [:financial_year_id, :printed_on, :journal_id, :state, :currency,
-       :absolute_currency, :real_currency, :real_currency_rate].each do |replicated|
-        send("#{replicated}=", entry.send(replicated))
-      end
-      unless closed?
-        self.debit  = entry.currency.to_currency.round(self.real_debit * real_currency_rate)
-        self.credit = entry.currency.to_currency.round(self.real_credit * real_currency_rate)
-        self.pretax_amount = entry.currency.to_currency.round(real_pretax_amount * real_currency_rate)
-      end
-    end
-
-    self.absolute_currency = Preference[:currency]
-    if absolute_currency == currency
-      self.absolute_debit = debit
-      self.absolute_credit = credit
-      self.absolute_pretax_amount = pretax_amount
-    elsif absolute_currency == real_currency
-      self.absolute_debit = self.real_debit
-      self.absolute_credit = self.real_credit
-      self.absolute_pretax_amount = real_pretax_amount
-    else
-      # FIXME: We need to do something better when currencies don't match
-      raise "You create an entry where the absolute currency (#{absolute_currency.inspect}) is not the real (#{real_currency.inspect}) or current one (#{currency.inspect})"
-    end
-    self.cumulated_absolute_debit  = absolute_debit
-    self.cumulated_absolute_credit = absolute_credit
-    if previous
-      self.cumulated_absolute_debit += previous.cumulated_absolute_debit
-      self.cumulated_absolute_credit += previous.cumulated_absolute_credit
-    end
-
-    self.balance = debit - credit
-    self.real_balance = self.real_debit - self.real_credit
+    compute
+    self.state = entry.state if entry
   end
 
   validate(on: :update) do
     old = old_record
-    errors.add(:account_id, :entry_has_been_already_validated) if old.closed?
+    list = changed - %w[printed_on cumulated_absolute_debit cumulated_absolute_credit]
+    if old.closed? && list.any?
+      list.each do |attribute|
+        if !entry.respond_to?(attribute) || (entry.send(attribute) != send(attribute))
+          errors.add(attribute, :entry_has_been_already_validated)
+        end
+      end
+    end
     # Forbids to change "manually" the letter. Use Account#mark/unmark.
     # if old.letter != self.letter and not (old.balanced_letter? and self.balanced_letter?)
     #   errors.add(:letter, :invalid)
@@ -208,13 +176,92 @@ class JournalEntryItem < Ekylibre::Record::Base
 
   before_destroy :clear_bank_statement_reconciliation
 
+  protect do
+    closed? || (entry && entry.protected_on_update?)
+  end
+
+  def compute
+    self.debit       ||= 0
+    self.credit      ||= 0
+    self.real_debit  ||= 0
+    self.real_credit ||= 0
+
+    if entry
+      self.entry_number = entry.number
+      %i[financial_year_id printed_on journal_id currency
+         absolute_currency real_currency real_currency_rate].each do |replicated|
+        send("#{replicated}=", entry.send(replicated))
+      end
+      unless closed?
+        self.debit  = real_debit * real_currency_rate
+        self.credit = real_credit * real_currency_rate
+        self.pretax_amount = real_pretax_amount * real_currency_rate
+        if currency && Nomen::Currency.find(currency)
+          precision = Nomen::Currency.find(currency).precision
+          self.debit  = debit.round(precision)
+          self.credit = credit.round(precision)
+          self.pretax_amount = pretax_amount.round(precision)
+        end
+      end
+    end
+    self.absolute_currency = Preference[:currency]
+    if absolute_currency == currency
+      self.absolute_debit = debit
+      self.absolute_credit = credit
+      self.absolute_pretax_amount = pretax_amount
+    elsif absolute_currency == real_currency
+      self.absolute_debit = real_debit
+      self.absolute_credit = real_credit
+      self.absolute_pretax_amount = real_pretax_amount
+    else
+      # FIXME: We need to do something better when currencies don't match
+      if currency.present? && (absolute_currency.present? || real_currency.present?)
+        raise JournalEntry::IncompatibleCurrencies, "You cannot create an entry where the absolute currency (#{absolute_currency.inspect}) is not the real (#{real_currency.inspect}) or current one (#{currency.inspect})"
+      end
+    end
+    self.cumulated_absolute_debit  = absolute_debit
+    self.cumulated_absolute_credit = absolute_credit
+    if previous
+      self.cumulated_absolute_debit += previous.cumulated_absolute_debit
+      self.cumulated_absolute_credit += previous.cumulated_absolute_credit
+    end
+    self.balance = debit - credit
+    self.real_balance = real_debit - real_credit
+  end
+
   def clear_bank_statement_reconciliation
     return unless bank_statement && bank_statement_letter
     bank_statement.items.where(letter: bank_statement_letter).update_all(letter: nil)
   end
 
-  protect do
-    closed? || (entry && entry.protected_on_update?)
+  # Computes attribute for adding an item
+  def self.attributes_for(name, account, amount, options = {})
+    if name.size > 255
+      omission = (options.delete(:omission) || '...').to_s
+      name = name[0..254 - omission.size] + omission
+    end
+    credit = options.delete(:credit) ? true : false
+    credit = !credit if amount < 0
+    attributes = options.merge(name: name)
+    attributes[:account_id] = account.is_a?(Integer) ? account : account.id
+    attributes[:activity_budget_id] = options[:activity_budget].id if options[:activity_budget]
+    attributes[:team_id] = options[:team].id if options[:team]
+    attributes[:tax_id] = options[:tax].id if options[:tax]
+    attributes[:real_pretax_amount] = attributes.delete(:pretax_amount) if attributes[:pretax_amount]
+    attributes[:resource_prism] = attributes.delete(:as) if options[:as]
+    attributes[:letter] = attributes.delete(:letter) if options[:letter]
+    if credit
+      attributes[:real_credit] = amount.abs
+      attributes[:real_debit]  = 0.0
+    else
+      attributes[:real_credit] = 0.0
+      attributes[:real_debit]  = amount.abs
+    end
+    attributes
+  end
+
+  def self.new_for(name, account, amount, options = {})
+    new(attributes_for(name, account, amount, options))
   end
 
   # Prints human name of current state
@@ -240,7 +287,7 @@ class JournalEntryItem < Ekylibre::Record::Base
 
   # Unmark all the journal entry items with the same mark in the same account
   def unmark
-    account.unmark(letter) unless letter.blank?
+    account.unmark(letter) if letter.present?
   end
 
   # Returns the previous item
@@ -299,6 +346,24 @@ class JournalEntryItem < Ekylibre::Record::Base
     end
   end
 
+  # get link item corresponding to charge or product line in purchase or sale from vat item
+  def vat_item_to_product_account
+    product_journal_entry_item = entry.items.find_by(resource_id: resource_id, resource_prism: 'item_product')
+    if product_journal_entry_item
+      a = Account.where(id: product_journal_entry_item.account_id).first
+      return a.label if a
+    end
+  end
+
+  # get link item corresponding to vat line from product item
+  def product_item_to_tax_label
+    vat_journal_entry_item = entry.items.find_by(resource_id: resource_id, resource_prism: 'item_tax') # where.not(id: self.id).
+    if vat_journal_entry_item && vat_journal_entry_item.id != id
+      t = Tax.find(vat_journal_entry_item.tax_id)
+      return t.name if t
+    end
+  end
+
   # This method returns the name of journal which the entries are saved.
   def journal_name
     if entry
@@ -322,5 +387,11 @@ class JournalEntryItem < Ekylibre::Record::Base
       entry_item.real_debit = balance.abs
     end
     entry_item
+  end
+
+  def third_party
+    return unless account
+    third_parties = Entity.uniq.where('client_account_id = ? OR supplier_account_id = ? OR employee_account_id = ?', account.id, account.id, account.id)
+    third_parties.take if third_parties.count == 1
   end
 end

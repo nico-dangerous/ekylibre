@@ -35,7 +35,7 @@ module Backend
     #   :delivery_mode Choice
     #   :nature Choice
     def self.parcels_conditions
-      code = search_conditions(parcels: [:number, :reference_number], entities: [:full_name, :number]) + " ||= []\n"
+      code = search_conditions(parcels: %i[number reference_number], entities: %i[full_name number]) + " ||= []\n"
       code << "unless params[:period].blank? || params[:period].is_a?(Symbol)\n"
       code << "  if params[:period] != 'all'\n"
       code << "    interval = params[:period].split('_')\n"
@@ -67,6 +67,11 @@ module Backend
       code << "    c[0] << ' AND #{Parcel.table_name}.delivery_mode = ?'\n"
       code << "    c << params[:delivery_mode]\n"
       code << "  end\n"
+      code << "end\n"
+      code << "if params[:invoice_status] && params[:invoice_status] == 'invoiced'\n"
+      code << "  c[0] << ' AND (#{Parcel.table_name}.purchase_id IS NOT NULL OR #{Parcel.table_name}.sale_id IS NOT NULL) '\n"
+      code << "elsif params[:invoice_status] && params[:invoice_status] == 'uninvoiced'\n"
+      code << "  c[0] << ' AND (#{Parcel.table_name}.purchase_id IS NULL AND #{Parcel.table_name}.sale_id IS NULL) '\n"
       code << "end\n"
       code << "if params[:nature].present? && params[:nature] != 'all'\n"
       code << "  if Parcel.nature.values.include?(params[:nature].to_sym)\n"
@@ -116,7 +121,7 @@ module Backend
       t.column :analysis, url: true
     end
 
-    list(:incoming_items, model: :parcel_items, conditions: { parcel_id: 'params[:id]'.c }) do |t|
+    list(:incoming_items, model: :parcel_items, order: { id: :asc }, conditions: { parcel_id: 'params[:id]'.c }) do |t|
       t.column :variant, url: true
       # t.column :source_product, url: true
       t.column :product_name
@@ -142,14 +147,14 @@ module Backend
     # Displays details of one parcel selected with +params[:id]+
     def show
       return unless (@parcel = find_and_check)
-      respond_with(@parcel, methods: [:all_item_prepared, :status, :items_quantity],
+      respond_with(@parcel, methods: %i[all_item_prepared status items_quantity],
                             include: { address: { methods: [:mail_coordinate] },
                                        sale: {},
                                        purchase: {},
                                        recipient: {},
                                        sender: {},
                                        transporter: {},
-                                       items: { methods: [:status, :prepared], include: [:product, :variant] } }) do |format|
+                                       items: { methods: %i[status prepared], include: %i[product variant] } }) do |format|
         format.html do
           t3e @parcel.attributes.merge(nature: @parcel.nature.text)
         end
@@ -162,7 +167,7 @@ module Backend
 
     def new
       columns = Parcel.columns_definition.keys
-      columns = columns.delete_if { |c| [:depth, :rgt, :lft, :id, :lock_version, :updated_at, :updater_id, :creator_id, :created_at].include?(c.to_sym) }
+      columns = columns.delete_if { |c| %i[depth rgt lft id lock_version updated_at updater_id creator_id created_at].include?(c.to_sym) }
       values = columns.map(&:to_sym).uniq.each_with_object({}) do |attr, hash|
         hash[attr] = params[:"#{attr}"] unless attr.blank? || attr.to_s.match(/_attributes$/)
         hash

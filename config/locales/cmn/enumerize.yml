@@ -54,6 +54,20 @@ cmn:
         multi_polygon: "多多边形"
         point: "点"
         string: "串"
+    animal:
+      birth_date_completeness:
+        full_date: "完整的日期"
+        month_year: "月年"
+        year: "年"
+      end_of_life_reason:
+        calculated_date: "计算的日期"
+        cutting_up: "切碎"
+        death: "死亡"
+        slaughter: "屠宰"
+      filiation_status:
+        certified: "认证"
+        uncertified: "未认证"
+        unknown: "未知"
     call_message:
       nature:
         incoming: "来"
@@ -145,7 +159,13 @@ cmn:
       depreciation_method:
         graduated: "毕业" #?
         linear: "线性"
+        none: "没有"
+        regressive: "累退"
         simplified_linear: "线性简化"
+      depreciation_period:
+        monthly: "每月一次"
+        quarterly: "季刊"
+        yearly: "每年"
     gap:
       direction:
         loss: "失利"
@@ -171,7 +191,7 @@ cmn:
         failed: "失败"
         passed: "通过"
         passed_with_warnings: "有警告传递"
-      status:  #?
+      status: #?
         errored: "误码" #?
         failed: "失败" #?
         passed: "通过" #?
@@ -225,6 +245,8 @@ cmn:
       nature:
         bank: "银行"
         cash: "现金"
+        closure: "关闭"
+        fixed_assets: "固定资产"
         forward: "结转"
         purchases: "购买"
         sales: "销售"
@@ -242,15 +264,24 @@ cmn:
         root: "根"
         string: "串"
     loan:
+      insurance_repayment_method:
+        initial: "基于初始资本"
+        to_repay: "基于资本留下来偿还"
       repayment_method:
         constant_amount: "恒量"
         constant_rate: "恒定速率"
       repayment_period:
         month: "月"
+        semester: "学期"
+        trimester: "孕期"
         year: "年"
       shift_method:
         anatocism: "anatocism"
         immediate_payment: "立即付款"
+    map_layer:
+      nature:
+        background: "背景"
+        overlay: "覆盖"
     notification:
       level:
         error: "错误"
@@ -272,7 +303,7 @@ cmn:
         incoming: "来"
         internal: "内部" #?
         outgoing: "传出"
-      state:  #?
+      state: #?
         draft: "草案" #?
         given: "特定" #?
         in_preparation: "在准备" #?
@@ -316,6 +347,15 @@ cmn:
       nature:
         exterior: "外观"
         interior: "室内"
+    product_movement:
+      description:
+        birth: "分娩"
+        butchery: "屠杀"
+        consumption: "消费"
+        death: "死亡"
+        loan: "贷款"
+        purchase: "采购"
+        sale: "拍卖"
     product_nature:
       population_counting:
         decimal: "十进制"
@@ -397,10 +437,18 @@ cmn:
         multi_polygon: "多多边形"
         point: "点"
         string: "串"
+    purchase:
+      tax_payability:
+        at_invoicing: "在开票"
+        at_paying: "在支付"
     purchase_nature:
       nature:
         payslip: "工资单"
         purchase: "采购"
+    sale_item:
+      compute_from:
+        pretax_amount: "税前金额"
+        unit_pretax_amount: "单位税前金额"
     sensor:
       retrieval_mode:
         integration: "积分"
@@ -443,7 +491,7 @@ cmn:
         subscriptions: "订阅"
         tax_declarations: "纳税申报"
         transports: "运输的记数" #?
-    subscription_nature:  #?
+    subscription_nature: #?
       entity_link_direction: #?
         all: "双向" #?
         direct: "直接" #?
@@ -476,7 +524,7 @@ cmn:
         doing: "干"
         done: "做"
         todo: "去做"
-    tax:  #?
+    tax: #?
       nature: #?
         amount: "量" #?
         percentage: "百分比" #?

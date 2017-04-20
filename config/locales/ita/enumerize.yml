@@ -54,6 +54,20 @@ ita:
         multi_polygon: "Multi poligono"
         point: "Punto"
         string: "Corda"
+    animal:
+      birth_date_completeness:
+        full_date: "Data completa"
+        month_year: "Mese anno"
+        year: "Anno"
+      end_of_life_reason:
+        calculated_date: "Data calcolato"
+        cutting_up: "Taglio"
+        death: "Morte"
+        slaughter: "Macello"
+      filiation_status:
+        certified: "Certificato"
+        uncertified: "Non certificato"
+        unknown: "Sconosciuto"
     call_message:
       nature:
         incoming: "In arrivo"
@@ -145,7 +159,13 @@ ita:
       depreciation_method:
         graduated: "Laureato" #?
         linear: "Lineare"
+        none: "Nessuna"
+        regressive: "Regressivo"
         simplified_linear: "lineari semplificato"
+      depreciation_period:
+        monthly: "Mensile"
+        quarterly: "Trimestrale"
+        yearly: "Annuale"
     gap:
       direction:
         loss: "Perdita"
@@ -171,7 +191,7 @@ ita:
         failed: "Fallito"
         passed: "Passato"
         passed_with_warnings: "Superato con avvisi"
-      status:  #?
+      status: #?
         errored: "errored" #?
         failed: "fallito" #?
         passed: "Passato" #?
@@ -225,6 +245,8 @@ ita:
       nature:
         bank: "Banca"
         cash: "Contanti"
+        closure: "Chiusura"
+        fixed_assets: "Immobilizzazioni"
         forward: "Portato avanti"
         purchases: "acquisti"
         sales: "Vendite"
@@ -242,15 +264,24 @@ ita:
         root: "Radice"
         string: "Corda"
     loan:
+      insurance_repayment_method:
+        initial: "Sulla base di capitale iniziale"
+        to_repay: "Sulla base di capitale di sinistra per rimborsare"
       repayment_method:
         constant_amount: "quantità costante"
         constant_rate: "Tasso costante"
       repayment_period:
         month: "Mese"
+        semester: "Semestre"
+        trimester: "Trimestre"
         year: "Anno"
       shift_method:
         anatocism: "anatocismo"
         immediate_payment: "Pagamento immediato"
+    map_layer:
+      nature:
+        background: "Sfondo"
+        overlay: "Copertura"
     notification:
       level:
         error: "Errore"
@@ -272,7 +303,7 @@ ita:
         incoming: "in arrivo"
         internal: "Interno" #?
         outgoing: "Estroverso"
-      state:  #?
+      state: #?
         draft: "Bozza" #?
         given: "Dato" #?
         in_preparation: "In preparazione" #?
@@ -316,6 +347,15 @@ ita:
       nature:
         exterior: "Esterno"
         interior: "Interno"
+    product_movement:
+      description:
+        birth: "Nascita"
+        butchery: "La macelleria"
+        consumption: "Consumo"
+        death: "Morte"
+        loan: "Prestito"
+        purchase: "Acquista"
+        sale: "Saldi"
     product_nature:
       population_counting:
         decimal: "Decimale"
@@ -397,10 +437,18 @@ ita:
         multi_polygon: "Multi poligono"
         point: "Punto"
         string: "Corda"
+    purchase:
+      tax_payability:
+        at_invoicing: "A fatturazione"
+        at_paying: "A pagamento"
     purchase_nature:
       nature:
         payslip: "Busta paga"
         purchase: "Acquista"
+    sale_item:
+      compute_from:
+        pretax_amount: "Importo lordo delle imposte"
+        unit_pretax_amount: "Unità importo lordo delle imposte"
     sensor:
       retrieval_mode:
         integration: "Integrazione"
@@ -442,7 +490,7 @@ ita:
         sales_invoices: "Fatture di vendita"
         subscriptions: "Sottoscrizioni"
         tax_declarations: "Dichiarazioni fiscali"
-    subscription_nature:  #?
+    subscription_nature: #?
       entity_link_direction: #?
         all: "bidirezionale" #?
         direct: "Diretto" #?
@@ -475,7 +523,7 @@ ita:
         doing: "Fare"
         done: "Fatto"
         todo: "Fare"
-    tax:  #?
+    tax: #?
       nature: #?
         amount: "Quantità" #?
         percentage: "Percentuale" #?

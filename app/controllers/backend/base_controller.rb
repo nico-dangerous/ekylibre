@@ -29,6 +29,7 @@ module Backend
     before_action :set_current_campaign
     before_action :set_current_period_interval
     before_action :set_current_period
+    before_action :publish_backend_action
 
     include Userstamp
 
@@ -88,7 +89,7 @@ module Backend
     def respond_with_with_template(*resources, &block)
       resources << {} unless resources.last.is_a?(Hash)
       resources[-1][:with] = (params[:template].to_s =~ /^\d+$/ ? params[:template].to_i : params[:template].to_s) if params[:template]
-      for param in [:key, :name]
+      for param in %i[key name]
         resources[-1][param] = params[param] if params[param]
       end
       respond_with_without_template(*resources, &block)
@@ -193,7 +194,7 @@ module Backend
     def set_theme
       # TODO: Dynamic theme choosing
       if current_user
-        if %w(margarita tekyla tekyla-sunrise).include?(params[:theme])
+        if %w[margarita tekyla tekyla-sunrise].include?(params[:theme])
           current_user.prefer!('theme', params[:theme])
         end
         @current_theme = current_user.preference('theme', 'tekyla').value
@@ -212,6 +213,10 @@ module Backend
       true
     end
 
+    def publish_backend_action
+      Ekylibre::Hook.publish(:backend_action, action: action_name, controller: controller_name, user: current_user)
+    end
+
     def search_article(article = nil)
       # session[:help_history] = [] unless session[:help_history].is_a? [].class
       article ||= "#{controller_path}-#{action_name}"
@@ -220,7 +225,7 @@ module Backend
         for f, attrs in Ekylibre.helps
           next if attrs[:locale].to_s != locale.to_s
           file_name = [article, article.split('-')[0] + '-index'].detect { |name| attrs[:name] == name }
-          (file = f) && break unless file_name.blank?
+          (file = f) && break if file_name.present?
         end
         break unless file.nil?
       end
@@ -248,7 +253,10 @@ module Backend
 
     def fire_event(event)
       return unless record = find_and_check
-      record.send(event)
+      state, msg = record.send(event)
+      if state == false && msg.respond_to?(:map)
+        notify_error(map.collect(&:messages).map(&:values).flatten.join(', '))
+      end
       redirect_to params[:redirect] || { action: :show, id: record.id }
     end
 
@@ -259,7 +267,7 @@ module Backend
         options[:except] ||= []
         options[:filters] ||= {}
         variable ||= options[:variable] || 'params[:q]'
-        tables = search.keys.select { |t| !options[:except].include? t }
+        tables = search.keys.reject { |t| options[:except].include? t }
         code = "\n#{conditions} = ['1=1']\n"
         columns = search.collect do |table, filtered_columns|
           filtered_columns.collect do |column|
@@ -286,8 +294,10 @@ module Backend
           v = '[' + v.join(', ') + ']' if v.is_a? Array
           values += '+' + v
         end
-        code << "  #{conditions}[0] += \" AND (#{filters.join(' OR ')})\"\n"
-        code << "  #{conditions} += #{values}\n"
+        if filters.any?
+          code << "  #{conditions}[0] += \" AND (#{filters.join(' OR ')})\"\n"
+          code << "  #{conditions} += #{values}\n"
+        end
         code << "end\n"
         code << conditions.to_s
         code.c
@@ -306,7 +316,7 @@ module Backend
       def crit_params(hash)
         nh = {}
         keys = JournalEntry.state_machine.states.collect(&:name)
-        keys += [:period, :started_at, :stopped_at, :accounts, :centralize]
+        keys += %i[period started_at stopped_at accounts centralize]
         for k, v in hash
           nh[k] = hash[k] if k.to_s.match(/^(journal|level)_\d+$/) || keys.include?(k.to_sym)
         end

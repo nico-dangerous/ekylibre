@@ -59,8 +59,8 @@ module Ekylibre
             # Refresh after each save
             code << "validate do\n"
             code << "  if self.#{reflection_name}\n"
-            code << "    unless self.#{reflection_name}.currency == self.#{currency}\n"
-            code << "      raise 'Invalid currency in affair'\n"
+            code << "    if self.#{reflection_name}.currency? && self.#{currency}? && self.#{reflection_name}.currency != self.#{currency}\n"
+            code << "      raise \"Invalid currency in affair. Expecting: \#{self.currency}. Got: \#{self.#{reflection_name}.currency}\"\n"
             code << "      errors.add(:#{reflection_name}, :invalid_currency, got: self.#{currency}, expected: self.#{reflection_name}.currency)\n"
             code << "      errors.add(:#{foreign_key}, :invalid_currency, got: self.#{currency}, expected: self.#{reflection_name}.currency)\n"
             code << "    end\n"
@@ -68,23 +68,20 @@ module Ekylibre
             # code << "  true\n"
             code << "end\n"
 
-            # # Updates affair if already given
-            # code << "after_create do\n"
-            # code << "  if self.#{reflection_name}\n"
-            # code << "    self.#{reflection_name}.refresh!\n"
-            # code << "  end\n"
-            # code << "  true\n"
-            # code << "end\n"
-
             # Create "empty" affair if missing before every save
             code << "after_save do\n"
             code << "  if self.#{reflection_name}\n"
             code << "    self.#{reflection_name}.refresh!\n"
             code << "  else\n"
-            code << "    new_affair = #{class_name}.create!(currency: self.#{currency}, third: self.deal_third)\n"
-            code << "    self.deal_with!(new_affair)\n"
+            code << "    fetch_affair!\n"
             code << "  end\n"
-            # code << "  true\n"
+            code << "end\n"
+
+            # Update affair after destroy
+            code << "after_destroy do\n"
+            code << "  if self.#{reflection_name}\n"
+            code << "    self.#{reflection_name}.refresh!\n"
+            code << "  end\n"
             code << "end\n"
 
             # Refresh after each save
@@ -176,33 +173,53 @@ module Ekylibre
             # Define the third of the deal
             code << "alias_attribute :deal_third, :#{options[:third]}\n"
 
-            # Define debit amount
+            # # Define debit amount
+            # code << "def deal_debit_amount\n"
+            # code << "  return (self.deal_debit? ? self.deal_amount : 0)\n"
+            # code << "end\n"
+
+            # # Define credit amount
+            # code << "def deal_credit_amount\n"
+            # code << "  return (self.deal_credit? ? self.deal_amount : 0)\n"
+            # code << "end\n"
+
+            code << "def our_deal_balance\n"
+            code << "  deal_mode_amount('real_credit - real_debit')\n"
+            code << "end\n"
+
+            code << "def third_deal_balance\n"
+            code << "  deal_mode_amount('real_debit - real_credit')\n"
+            code << "end\n"
+
             code << "def deal_debit_amount\n"
-            code << "  return (self.deal_debit? ? self.deal_amount : 0)\n"
+            code << "  deal_mode_amount(:debit)\n"
             code << "end\n"
 
-            # Define credit amount
             code << "def deal_credit_amount\n"
-            code << "  return (self.deal_credit? ? self.deal_amount : 0)\n"
+            code << "  deal_mode_amount(:credit)\n"
             code << "end\n"
 
             # Define credit amount
-            code << "def deal_mode_amount(mode = :debit)\n"
-            code << "  if mode == :credit\n"
-            code << "    return (self.deal_credit? ? self.deal_amount : 0)\n"
-            code << "  else\n"
-            code << "    return (self.deal_debit?  ? self.deal_amount : 0)\n"
-            code << "  end\n"
+            code << "def deal_mode_amount(mode)\n"
+            code << "  (self.journal_entry && self.affair) ? self.journal_entry.items.where(account: self.affair.third_account).sum(mode.is_a?(Symbol) ? 'real_' + mode.to_s : mode) : 0\n"
             code << "end\n"
 
             # Returns other deals
             code << "def other_deals\n"
-            code << "  return self.#{reflection_name}.deals.delete_if{|x| x == self}\n"
+            code << "  fetch_affair!.deals.delete_if{|x| x == self}\n"
+            code << "end\n"
+
+            # Initialize linked affair
+            code << "def fetch_affair!\n"
+            code << "  return self.#{reflection_name} if self.#{reflection_name}\n"
+            code << "  new_affair = #{class_name}.create!(currency: self.#{currency}, third: self.deal_third)\n"
+            code << "  self.deal_with!(new_affair)\n"
+            code << "  new_affair\n"
             code << "end\n"
 
             # Returns other deals
             code << "def other_deals_of_same_type\n"
-            code << "  return self.#{reflection_name}.deals.delete_if{|x| x == self or !x.is_a?(self.class)}\n"
+            code << "  return fetch_affair!.deals.delete_if{|x| x == self or !x.is_a?(self.class)}\n"
             code << "end\n"
 
             code << "def self.deal_third\n"

@@ -54,6 +54,20 @@ arb:
         multi_polygon: "مضلع متعددة"
         point: "نقطة"
         string: "خيط"
+    animal:
+      birth_date_completeness:
+        full_date: "التاريخ الكامل"
+        month_year: "شهر سنة"
+        year: "عام"
+      end_of_life_reason:
+        calculated_date: "تاريخ تحسب"
+        cutting_up: "تقطيع"
+        death: "الموت"
+        slaughter: "ذبح"
+      filiation_status:
+        certified: "معتمد"
+        uncertified: "غير مصدق"
+        unknown: "غير معروف"
     call_message:
       nature:
         incoming: "الوارد"
@@ -145,7 +159,13 @@ arb:
       depreciation_method:
         graduated: "تخرج" #?
         linear: "خطي"
+        none: "لا شيء"
+        regressive: "متردي"
         simplified_linear: "الخطية المبسطة"
+      depreciation_period:
+        monthly: "شهريا"
+        quarterly: "فصليا"
+        yearly: "سنوي"
     gap:
       direction:
         loss: "خسارة"
@@ -171,7 +191,7 @@ arb:
         failed: "فشل"
         passed: "مرت"
         passed_with_warnings: "مرت مع تحذيرات"
-      status:  #?
+      status: #?
         failed: "فشل" #?
         passed: "مرت" #?
         passed_with_warnings: "مرت مع تحذيرات" #?
@@ -224,6 +244,8 @@ arb:
       nature:
         bank: "بنك"
         cash: "السيولة النقدية"
+        closure: "إغلاق"
+        fixed_assets: "أصول ثابتة"
         forward: "نفذت إلى الأمام"
         purchases: "مشتريات"
         sales: "مبيعات"
@@ -241,15 +263,24 @@ arb:
         root: "جذر"
         string: "خيط"
     loan:
+      insurance_repayment_method:
+        initial: "على أساس رأس المال الأولي"
+        to_repay: "وبناء على رأس المال من اليسار إلى سداد"
       repayment_method:
         constant_amount: "مبلغ ثابت"
         constant_rate: "معدل ثابت"
       repayment_period:
         month: "شهر"
+        semester: "نصف السنة"
+        trimester: "الثلث"
         year: "عام"
       shift_method:
         anatocism: "anatocism"
         immediate_payment: "الدفع الفوري"
+    map_layer:
+      nature:
+        background: "خلفية"
+        overlay: "غطاء"
     notification:
       level:
         error: "خطأ"
@@ -271,7 +302,7 @@ arb:
         incoming: "الوارد"
         internal: "داخلي" #?
         outgoing: "المنتهية ولايته"
-      state:  #?
+      state: #?
         draft: "مسودة" #?
         given: "معطى" #?
         in_preparation: "قيد التحضير" #?
@@ -315,6 +346,15 @@ arb:
       nature:
         exterior: "الخارج"
         interior: "داخلي"
+    product_movement:
+      description:
+        birth: "ولادة"
+        butchery: "مجزرة"
+        consumption: "استهلاك"
+        death: "الموت"
+        loan: "قرض"
+        purchase: "شراء"
+        sale: "تخفيض السعر"
     product_nature:
       population_counting:
         decimal: "عدد عشري"
@@ -396,10 +436,18 @@ arb:
         multi_polygon: "مضلع متعددة"
         point: "نقطة"
         string: "خيط"
+    purchase:
+      tax_payability:
+        at_invoicing: "في الفواتير"
+        at_paying: "في دفع"
     purchase_nature:
       nature:
         payslip: "قسيمة الدفع"
         purchase: "شراء"
+    sale_item:
+      compute_from:
+        pretax_amount: "كمية قبل خصم الضرائب"
+        unit_pretax_amount: "وحدة الكمية قبل خصم الضرائب"
     sensor:
       retrieval_mode:
         integration: "دمج"
@@ -442,7 +490,7 @@ arb:
         subscriptions: "الاشتراكات"
         tax_declarations: "الإقرارات الضريبية"
         transports: "ترقيم وسائل النقل" #?
-    subscription_nature:  #?
+    subscription_nature: #?
       entity_link_direction: #?
         all: "ثنائي الاتجاه" #?
         direct: "مباشرة" #?
@@ -475,7 +523,7 @@ arb:
         doing: "فعل"
         done: "فعله"
         todo: "لكى يفعل"
-    tax:  #?
+    tax: #?
       nature: #?
         amount: "كمية" #?
         percentage: "نسبة مئوية" #?

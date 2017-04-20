@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -69,5 +69,32 @@ class SequenceTest < ActiveSupport::TestCase
     future = Date.today >> 1
     value = sequence.next_value(future)
     assert_equal "Y#{future.year}M#{future.month}N00000001", value
+  end
+
+  test 'incrementation' do
+    sequence = Sequence.find_by(usage: 'entities')
+    sequence.update!(last_number: 99_990_000, number_format: '[number|8]', period: :none)
+    assert_equal '99990001', sequence.next_value!
+    assert_equal '99990002', sequence.next_value!
+    assert_equal '99990003', sequence.next_value!
+  end
+
+  test 'concurrent affectation' do
+    sequence = Sequence.find_by(usage: 'entities')
+    sequence.update!(last_number: 99_000_000, number_format: '[number|8]', period: :none)
+    assert_equal Entity.sequence_manager.sequence, sequence
+    assert_equal '99000001', sequence.next_value
+    assert_equal '99000001', Entity.sequence_manager.unique_predictable
+    assert_equal '99000001', sequence.next_value
+    assert_nil Entity.find_by(number: '99000001'), 'Entity 99 000 001 should not be here. Find a new number for the test.'
+    entity = Entity.create!(last_name: 'First person')
+    assert_equal '99000001', entity.number
+    entity = Entity.create!(last_name: 'Second person')
+    assert_equal '99000002', entity.number
+    entity = Entity.create!(last_name: 'Third person')
+    assert_equal '99000003', entity.number
+    Sequence.where(usage: 'entities').update_all(last_number: 99_100_000)
+    entity = Entity.create!(last_name: 'Fourth person')
+    assert_equal '99100001', entity.number
   end
 end

@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -41,7 +41,7 @@ class InterventionWorkingPeriod < Ekylibre::Record::Base
   belongs_to :intervention
   belongs_to :intervention_participation
   has_one    :intervention_participated_to, through: :intervention_participation, source: :intervention
-  enumerize :nature, in: [:preparation, :travel, :intervention]
+  enumerize :nature, in: %i[preparation travel intervention]
   # [VALIDATORS[ Do not edit these lines directly. Use `rake clean:validations`.
   validates :duration, presence: true, numericality: { only_integer: true, greater_than: -2_147_483_649, less_than: 2_147_483_648 }
   validates :started_at, presence: true, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }
@@ -65,6 +65,14 @@ class InterventionWorkingPeriod < Ekylibre::Record::Base
     where(intervention_id: InterventionParameter.of_generic_role(role).of_actor(object).select(:intervention_id))
   }
 
+  scope :of_intervention_participations, lambda { |intervention_participations|
+    where(intervention_participation: intervention_participations)
+  }
+
+  scope :of_nature, lambda { |nature|
+    where(nature: nature)
+  }
+
   delegate :update_temporality, to: :intervention
 
   before_validation do
@@ -72,13 +80,14 @@ class InterventionWorkingPeriod < Ekylibre::Record::Base
   end
 
   validate do
-    errors.add(:intervention, :empty) unless intervention || intervention_participated_to
+    errors.add(:intervention, :empty) unless intervention || intervention_participated_to || intervention_participation
     if started_at && stopped_at && stopped_at <= started_at
       errors.add(:stopped_at, :posterior, to: started_at.l)
     end
-    unless intervention_participation.blank?
-      errors.add(:started_at, :invalid) if intervention_participation.working_periods.where('started_at <= ? AND ? < stopped_at', started_at, started_at).any?
-      errors.add(:stopped_at, :invalid) if intervention_participation.working_periods.where('started_at < ? AND ? <= stopped_at', stopped_at, stopped_at).any?
+    if intervention_participation.present?
+      siblings = intervention_participation.working_periods.where.not(id: id || 0)
+      errors.add(:started_at, :overlap_sibling) if siblings.where('started_at < ? AND ? < stopped_at', started_at, started_at).any?
+      errors.add(:stopped_at, :overlap_sibling) if siblings.where('started_at < ? AND ? < stopped_at', stopped_at, stopped_at).any?
     end
   end
 

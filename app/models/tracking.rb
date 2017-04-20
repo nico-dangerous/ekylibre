@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -38,7 +38,7 @@
 #  usage_limit_on     :date
 #
 class Tracking < Ekylibre::Record::Base
-  enumerize :usage_limit_nature, in: [:no_limit, :used_by, :best_before], default: :no_limit, predicates: true
+  enumerize :usage_limit_nature, in: %i[no_limit used_by best_before], default: :no_limit, predicates: true
   belongs_to :producer, class_name: 'Entity'
   belongs_to :product
   has_many :products, class_name: 'Product', foreign_key: :tracking_id, inverse_of: :tracking
