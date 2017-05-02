@@ -35,7 +35,7 @@
 #  longitude           :float
 #  mail_auto_update    :boolean          default(FALSE), not null
 #  mail_country        :string
-#  mail_geolocation    :geometry({:srid=>4326, :type=>"point"})
+#  mail_geolocation    :geometry({:srid=>4326, :type=>"st_point"})
 #  mail_line_1         :string
 #  mail_line_2         :string
 #  mail_line_3         :string

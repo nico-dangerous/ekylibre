@@ -63,6 +63,7 @@ private/test/plugins
 /config/api.yml
 /config/tools.xml
 /config/tenants.yml
+/config/tenant_databases.yml
 /config/services.yml
 /config/unicorn.rb
 /config/application.yml
@@ -90,3 +91,6 @@ Procfile.*
 
 .byebug_history
 .gitconfig
+
+custom_plan.rb
+zeus.json

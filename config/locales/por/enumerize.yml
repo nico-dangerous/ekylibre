@@ -55,6 +55,20 @@ por:
         multi_polygon: "Polígono multi"
         point: "Ponto"
         string: "Corda"
+    animal:
+      birth_date_completeness:
+        full_date: "Data completa"
+        month_year: "Mês ano"
+        year: "Ano"
+      end_of_life_reason:
+        calculated_date: "Data calculada"
+        cutting_up: "Cortando"
+        death: "Morte"
+        slaughter: "Chacina"
+      filiation_status:
+        certified: "Certificado"
+        uncertified: "Não certificada"
+        unknown: "Desconhecido"
     call_message:
       nature:
         incoming: "Entrada"
@@ -100,6 +114,10 @@ por:
         datetime: "Data e Hora"
         decimal: "Decimal"
         text: "Texto"
+    debt_transfer:
+      nature:
+        purchase_regularization: "Regularização de compra"
+        sale_regularization: "Venda regularização"
     delivery:
       mode:
         third: "Terceiro"
@@ -147,7 +165,13 @@ por:
       depreciation_method:
         graduated: "Gradual" #?
         linear: "Linear"
+        none: "Nenhum"
+        regressive: "Regressivo"
         simplified_linear: "Linear simplificado"
+      depreciation_period:
+        monthly: "Por mês"
+        quarterly: "Trimestral"
+        yearly: "Anual"
     gap:
       direction:
         loss: "Perda"
@@ -173,7 +197,7 @@ por:
         failed: "Fracassado"
         passed: "Passado"
         passed_with_warnings: "Aprovada com avisos"
-      status:  #?
+      status: #?
         errored: "Com erros" #?
         failed: "Falhou" #?
         passed: "Passou" #?
@@ -227,8 +251,11 @@ por:
       nature:
         bank: "Banco"
         cash: "Dinheiro"
+        closure: "Fecho"
+        fixed_assets: "Ativo permanente"
         forward: "Carried-forward"
         purchases: "Compras"
+        # result: "Result"
         sales: "Vendas"
         stocks: "Estoques"
         various: "Várias operações"
@@ -244,15 +271,24 @@ por:
         root: "Raiz"
         string: "Corda"
     loan:
+      insurance_repayment_method:
+        initial: "Com base em capital inicial"
+        to_repay: "Com base no capital deixou de reembolsar"
       repayment_method:
         constant_amount: "Total constante"
         constant_rate: "Taxa constante"
       repayment_period:
         month: "Mês"
+        semester: "Semestre"
+        trimester: "Trimestre"
         year: "Ano"
       shift_method:
         anatocism: "Anatocismo"
         immediate_payment: "Pagamento imediato"
+    map_layer:
+      nature:
+        background: "Fundo"
+        # overlay: "Overlay"
     notification:
       level:
         error: "Erro"
@@ -274,7 +310,7 @@ por:
         incoming: "Entrada"
         internal: "Interno" #?
         outgoing: "Extrovertido"
-      state:  #?
+      state: #?
         draft: "Esboço" #?
         given: "Dado" #?
         in_preparation: "Em preparação" #?
@@ -318,6 +354,15 @@ por:
       nature:
         # exterior: "Exterior"
         # interior: "Interior"
+    product_movement:
+      description:
+        birth: "Nascimento"
+        butchery: "Açougue"
+        consumption: "Consumo"
+        death: "Morte"
+        loan: "Empréstimo"
+        purchase: "Compra"
+        sale: "Venda"
     product_nature:
       population_counting:
         # decimal: "Decimal"
@@ -400,7 +445,7 @@ por:
         point: "Ponto"
         string: "Corda"
     purchase:
-      computation_method:  #?
+      computation_method: #?
         adaptative: "Adaptativo" #?
         manual: "Manual" #?
         quantity_tax: "Quantidade-Imposto" #?
@@ -412,15 +457,15 @@ por:
       nature:
         payslip: "Recibo de Pagamento"
         purchase: "Compra"
-    sale:  #?
+    sale: #?
       computation_method: #?
         adaptative: "Adaptativo" #?
         quantity_tax: "Quantidade-Imposto" #?
         tax_quantity: "Imposto-Quantidade" #?
-    sale_item:
-      compute_from:
-        pretax_amount: "Montante pretax"
-        unit_pretax_amount: "Montante pretax unidade"
+    sale_item: #?
+      compute_from: #?
+        pretax_amount: "Montante pretax" #?
+        unit_pretax_amount: "Montante pretax unidade" #?
     sensor:
       retrieval_mode:
         integration: "Integração"
@@ -436,8 +481,10 @@ por:
         affairs: "Romances"
         analyses: "Análises"
         animals: "Animais"
+        campaigns: "Campanhas"
         cash_transfers: "As transferências de dinheiro"
         contracts: "Contratos"
+        debt_transfers: "Transferências de dívida"
         deliveries: "Entregas"
         deposits: "Depósitos"
         documents: "Documentos"
@@ -452,6 +499,7 @@ por:
         outgoing_payment_lists: "Listas de pagamento a efectuar"
         outgoing_payments: "Contas a pagar"
         parcels: "Parcelas"
+        plant_countings: "Contagem de plantas"
         plants: "Plantas"
         product_nature_categories: "Categorias natureza do produto"
         product_nature_variants: "Natureza do produto variantes"
@@ -463,7 +511,7 @@ por:
         subscriptions: "Assinaturas"
         tax_declarations: "Declarações fiscais"
         transports: "Numeração de transportes" #?
-    subscription_nature:  #?
+    subscription_nature: #?
       entity_link_direction: #?
         all: "Bidirecional" #?
         direct: "Direto" #?
@@ -496,10 +544,14 @@ por:
         doing: "Fazendo"
         done: "Feito"
         todo: "Façam"
-    tax:  #?
+    tax: #?
       nature: #?
         amount: "Total" #?
         percentage: "Percentagem" #?
+    tax_declaration:
+      mode:
+        debit: "Débito"
+        payment: "Forma de pagamento"
     tracking:
       usage_limit_nature:
         best_before: "Melhor antes da data"

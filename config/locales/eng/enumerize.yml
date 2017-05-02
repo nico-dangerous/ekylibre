@@ -54,6 +54,20 @@ eng:
         multi_polygon: "Multi-polygon"
         point: "Point"
         string: "String"
+    animal:
+      birth_date_completeness:
+        full_date: "Full date"
+        month_year: "Month year"
+        year: "Year"
+      end_of_life_reason:
+        calculated_date: "Calculated date"
+        cutting_up: "Cutting up"
+        death: "Death"
+        slaughter: "Slaughter"
+      filiation_status:
+        certified: "Certified"
+        uncertified: "Uncertified"
+        unknown: "Unknown"
     call_message:
       nature:
         incoming: "Incoming"
@@ -98,6 +112,10 @@ eng:
         datetime: "Date and time"
         decimal: "Decimal"
         text: "Text"
+    debt_transfer:
+      nature:
+        purchase_regularization: "Purchase regularization"
+        sale_regularization: "Sale regularization"
     delivery:
       mode:
         third: "Third"
@@ -142,7 +160,13 @@ eng:
     fixed_asset:
       depreciation_method:
         linear: "Linear"
+        none: "None"
+        regressive: "Regressive"
         simplified_linear: "Simplified linear"
+      depreciation_period:
+        monthly: "Monthly"
+        quarterly: "Quarterly"
+        yearly: "Yearly"
     gap:
       direction:
         loss: "Loss"
@@ -214,8 +238,11 @@ eng:
       nature:
         bank: "Bank"
         cash: "Cash"
+        closure: "Closure"
+        fixed_assets: "Fixed assets"
         forward: "Carried-forward"
         purchases: "Purchases"
+        result: "Result"
         sales: "Sales"
         stocks: "Stocks"
         various: "Various operations"
@@ -231,15 +258,24 @@ eng:
         root: "Root"
         string: "String"
     loan:
+      insurance_repayment_method:
+        initial: "Based on initial capital"
+        to_repay: "Based on capital left to repay"
       repayment_method:
         constant_amount: "Constant amount"
         constant_rate: "Constant rate"
       repayment_period:
         month: "Month"
+        semester: "Semester"
+        trimester: "Trimester"
         year: "Year"
       shift_method:
         anatocism: "Anatocism"
         immediate_payment: "Immediate payment"
+    map_layer:
+      nature:
+        background: "Background"
+        overlay: "Overlay"
     notification:
       level:
         error: "Error"
@@ -297,6 +333,15 @@ eng:
       nature:
         exterior: "Exterior"
         interior: "Interior"
+    product_movement:
+      description:
+        birth: "Birth"
+        butchery: "Butchery"
+        consumption: "Consumption"
+        death: "Death"
+        loan: "Loan"
+        purchase: "Purchase"
+        sale: "Sale"
     product_nature:
       population_counting:
         decimal: "Decimal"
@@ -399,8 +444,8 @@ eng:
     sale_item:
       compute_from:
         # amount: "Amount"
-        pretax_amount: "Pretax amount"
-        unit_pretax_amount: "Unit pretax amount"
+        # pretax_amount: "Pretax amount"
+        # unit_pretax_amount: "Unit pretax amount"
     sensor:
       retrieval_mode:
         integration: "Integration"
@@ -416,9 +461,10 @@ eng:
         affairs: "Affairs"
         analyses: "Analyses"
         animals: "Animals"
-        # campaigns: "Campaigns"
+        campaigns: "Campaigns"
         cash_transfers: "Cash transfers"
         contracts: "Contracts"
+        debt_transfers: "Debt transfers"
         deliveries: "Deliveries"
         deposits: "Deposits"
         documents: "Documents"
@@ -433,7 +479,7 @@ eng:
         outgoing_payment_lists: "Outgoing payment lists"
         outgoing_payments: "Outgoing payments"
         parcels: "Parcels"
-        # plant_countings: "Plant countings"
+        plant_countings: "Plant countings"
         plants: "Plants"
         product_nature_categories: "Product nature categories"
         product_nature_variants: "Product nature variants"
@@ -469,8 +515,14 @@ eng:
         todo: "Todo"
     tax_declaration:
       mode:
-        # debit: "Debit"
-        # payment: "Payment"
+        debit: "Debit"
+        payment: "Payment"
+    tax_declaration_item_part:
+      direction:
+        # collected: "Collected"
+        # deductible: "Deductible"
+        # fixed_asset_deductible: "Fixed asset deductible"
+        # intracommunity_payable: "Intracommunity payable"
     tracking:
       usage_limit_nature:
         best_before: "Best before date"

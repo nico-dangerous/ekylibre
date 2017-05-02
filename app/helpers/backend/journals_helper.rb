@@ -25,6 +25,11 @@ module Backend
       0
     end
 
+    def team_columns_count(value = 1)
+      return value if Team.any?
+      0
+    end
+
     def journals_tag
       render partial: 'backend/journals/index'
     end
@@ -135,6 +140,21 @@ module Backend
         code << ' ' << content_tag(:label, journal.name, for: id)
       end
       code.html_safe
+    end
+
+    def mask_lettered_items_button(*args)
+      options = args.extract_options!
+      list_id = args.shift || options[:list_id] || :journal_entry_items
+      mask_context = options[:context] || list_id
+      options[:controller] ||= controller_path
+      label_tag do
+        check_box_tag(:masked, 'true', current_user.mask_lettered_items?(controller: options[:controller].dup, context: mask_context),
+                      data: {
+                        mask_lettered_items: '#' + list_id.to_s,
+                        preference_url: url_for(controller: options[:controller], action: :mask_lettered_items, context: mask_context)
+                      }) +
+          :mask_lettered_items.tl
+      end
     end
   end
 end
