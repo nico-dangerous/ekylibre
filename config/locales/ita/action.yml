@@ -1491,16 +1491,16 @@ ita:
     profit_taxe: "Taxe Profit"
     profits: "I profitti"
     profits_and_losses: "Gli utili e le perdite"
-    # prospecting: "Prospecting"
     profits_taxe: "I profitti taxe" #?
+    # prospecting: "Prospecting"
     provisionnal_budget: "budget Provisionnal" #?
     provisions_revenues: "Ricavi Accantonamenti"
     purchase: "Acquista"
     purchase_items: "articoli di acquisto"
     purchase_number: "Acquisto"
     purchases: "acquisti"
-    # qualification: "Qualification"
     purchases_stocks_variation: "Scorte Acquisti variazione"
+    # qualification: "Qualification"
     quality: "Qualità"
     # quandl: "Quandl"
     quantity: "Quantità"

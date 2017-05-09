@@ -30,9 +30,9 @@
 #  deleted_at          :datetime
 #  entity_id           :integer          not null
 #  id                  :integer          not null, primary key
-#  latitude            :float
+#  latitude            :decimal(19, 15)
 #  lock_version        :integer          default(0), not null
-#  longitude           :float
+#  longitude           :decimal(19, 15)
 #  mail_auto_update    :boolean          default(FALSE), not null
 #  mail_country        :string
 #  mail_geolocation    :geometry({:srid=>4326, :type=>"st_point"})
@@ -66,7 +66,7 @@ class EntityAddress < Ekylibre::Record::Base
   validates :canal, :entity, presence: true
   validates :coordinate, presence: true, length: { maximum: 500 }
   validates :deleted_at, timeliness: { on_or_after: -> { Time.new(1, 1, 1).in_time_zone }, on_or_before: -> { Time.zone.now + 50.years } }, allow_blank: true
-  validates :latitude, :longitude, numericality: true, allow_blank: true
+  validates :latitude, :longitude, numericality: { greater_than: -10_000, less_than: 10_000 }, allow_blank: true
   validates :mail_line_1, :mail_line_2, :mail_line_3, :mail_line_4, :mail_line_5, :mail_line_6, :name, :thread, length: { maximum: 500 }, allow_blank: true
   # ]VALIDATORS]
   validates :mail_country, length: { allow_nil: true, maximum: 2 }

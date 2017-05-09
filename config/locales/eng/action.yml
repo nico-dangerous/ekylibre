@@ -1666,8 +1666,8 @@ eng:
     purchase_items: "Purchase items" #?
     purchase_number: "Purchase number" #?
     purchases: "Purchases"
-    qualification: "Qualification" #?
     purchases_stocks_variation: "Purchases stocks variation" #?!
+    qualification: "Qualification" #?
     quality: "Quality"
     quandl: "Quandl" #?
     quantity: "Quantity" #?

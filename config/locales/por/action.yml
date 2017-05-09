@@ -1430,16 +1430,16 @@ por:
     profit_taxe: "Taxe lucro"
     profits: "Lucros"
     profits_and_losses: "Os ganhos e perdas"
-    # prospecting: "Prospecting"
     profits_taxe: "Lucros taxe" #?
+    # prospecting: "Prospecting"
     provisionnal_budget: "Orçamento Provisionnal" #?
     provisions_revenues: "Receitas Provisões"
     purchase: "Compra"
     purchase_items: "Itens de compra"
     purchase_number: "Número de compra"
     purchases: "Compras"
-    # qualification: "Qualification"
     purchases_stocks_variation: "Variação Compras stocks"
+    # qualification: "Qualification"
     quality: "Qualidade"
     # quandl: "Quandl"
     quantity: "Quantidade"

@@ -1,7 +1,7 @@
-- responsibles = Entity.users.where(id: SaleOpportunity.all.pluck(:responsible_id).compact.uniq).reorder(:last_name)
+- responsibles = Entity.users.where(id: SaleOpportunity.select(:responsible_id).compact.uniq).reorder(:last_name)
 = kujaku do |k|
   - k.text
-  - entities = Entity.where(id: SaleOpportunity.all.pluck(:provider_id).compact.uniq).reorder(:full_name)
+  - entities = Entity.where(id: SaleOpportunity.select(:provider_id).compact.uniq).reorder(:full_name)
   - k.helper do
     %label= SaleOpportunity.human_attribute_name(:responsible)
     = select_tag(:responsible_id, options_for_select([[]] + responsibles.collect{|u| [u.label, u.id]}, params[:responsible_id]))
@@ -25,7 +25,7 @@
       series = []
       unit = Nomen::Currency[all_sale_opportunities.first.currency]
       # states = all_sale_opportunities.pluck(:state).uniq.delete("won").delete("lost").sort!
-      # responsibles = Entity.users.where(id: SaleOpportunity.all.pluck(:responsible_id).compact.uniq).reorder(:last_name)
+      # responsibles = Entity.users.where(id: SaleOpportunity.select(:responsible_id).compact.uniq).reorder(:last_name)
       categories = ["prospecting", "qualification", "value_proposition", "price_quote", "negociation"]
 
       responsibles.each do |responsible|
@@ -50,7 +50,7 @@
       data = SaleOpportunity.all.collect do |s|
         a = s.client.default_mail_address
         next unless a && a.mail_geolocation
-        
+
         popup_content = []
         popup_content << {label: SaleOpportunity.human_attribute_name(:pretax_amount), value: s.pretax_amount}
         popup_content << {label: SaleOpportunity.human_attribute_name(:probability_percentage), value: s.probability_percentage}
@@ -58,7 +58,7 @@
         popup_content << {value: labels_info(s.labels)} if s.labels.any?
         popup_content << {value: lights(s.status)}
         popup_content << render('popup', opportunity: s)
-        
+
         {
           name: s.client.full_name,
           shape: a.mail_geolocation,
@@ -73,8 +73,8 @@
       - v.control :scale
       - v.control :fullscreen
       - v.control :layer_selector
-      
-      
-      
-      
-      
+
+
+
+
+

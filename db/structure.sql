@@ -897,8 +897,8 @@ CREATE TABLE affairs (
     state character varying,
     probability_percentage numeric(19,4) DEFAULT 0.0,
     letter character varying,
-    nature_id integer,
-    provider_id integer
+    provider_id integer,
+    nature_id integer
 );
 
 
@@ -2695,8 +2695,8 @@ CREATE TABLE entity_addresses (
     creator_id integer,
     updater_id integer,
     lock_version integer DEFAULT 0 NOT NULL,
-    latitude double precision,
-    longitude double precision
+    latitude numeric(19,15),
+    longitude numeric(19,15)
 );
 
 
@@ -17061,6 +17061,30 @@ ALTER TABLE ONLY regularizations
 
 
 --
+-- Name: fk_rails_81d2de543a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affairs
+    ADD CONSTRAINT fk_rails_81d2de543a FOREIGN KEY (provider_id) REFERENCES entities(id);
+
+
+--
+-- Name: fk_rails_863dd93b3f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affair_labellings
+    ADD CONSTRAINT fk_rails_863dd93b3f FOREIGN KEY (label_id) REFERENCES labels(id);
+
+
+--
+-- Name: fk_rails_8b00474e25; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affair_labellings
+    ADD CONSTRAINT fk_rails_8b00474e25 FOREIGN KEY (affair_id) REFERENCES affairs(id);
+
+
+--
 -- Name: fk_rails_930f08f448; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -17138,6 +17162,14 @@ ALTER TABLE ONLY intervention_participations
 
 ALTER TABLE ONLY financial_year_exchanges
     ADD CONSTRAINT fk_rails_f0120f1957 FOREIGN KEY (financial_year_id) REFERENCES financial_years(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_f7cd9f5e00; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY affairs
+    ADD CONSTRAINT fk_rails_f7cd9f5e00 FOREIGN KEY (nature_id) REFERENCES affair_natures(id);
 
 
 --
@@ -17558,10 +17590,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170101110136');
 
 INSERT INTO schema_migrations (version) VALUES ('20170110083324');
 
-INSERT INTO schema_migrations (version) VALUES ('20170113183701');
-
-INSERT INTO schema_migrations (version) VALUES ('20170115181701');
-
 INSERT INTO schema_migrations (version) VALUES ('20170124133351');
 
 INSERT INTO schema_migrations (version) VALUES ('20170125162958');
@@ -17647,4 +17675,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170413222519');
 INSERT INTO schema_migrations (version) VALUES ('20170413222520');
 
 INSERT INTO schema_migrations (version) VALUES ('20170413222521');
+
+INSERT INTO schema_migrations (version) VALUES ('20170414183701');
+
+INSERT INTO schema_migrations (version) VALUES ('20170414191701');
 

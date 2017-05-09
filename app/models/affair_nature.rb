@@ -38,5 +38,4 @@ class AffairNature < Ekylibre::Record::Base
   validates :name, presence: true, length: { maximum: 500 }
   # ]VALIDATORS]
   validates :name, uniqueness: true
-
 end

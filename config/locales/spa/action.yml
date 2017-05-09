@@ -1605,8 +1605,8 @@ spa:
     profit_taxe: "Taxe ganancias"
     profits: "Las ganancias"
     profits_and_losses: "Las pérdidas y ganancias"
-    # prospecting: "Prospecting"
     profits_taxe: "Los beneficios taxe" #?
+    # prospecting: "Prospecting"
     provisionnal_budget: "Presupuesto Provisionnal" #?
     provisions_revenues: "Provisiones ingresos"
     purchase: "Compra"
@@ -1616,8 +1616,8 @@ spa:
       products: "Creación de la compra" #?
       summary: "Desembolsos" #?
     purchases: "Compras"
-    # qualification: "Qualification"
     purchases_stocks_variation: "Variación de existencias compras"
+    # qualification: "Qualification"
     quality: "Calidad"
     # quandl: "Quandl"
     quantity: "Quantidades"

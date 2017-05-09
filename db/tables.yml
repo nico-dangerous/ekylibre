@@ -2293,12 +2293,16 @@ entity_addresses:
     type: integer
     required: true
   latitude:
-    type: float
+    type: decimal
+    precision: 19
+    scale: 15
   lock_version:
     type: integer
     required: true
   longitude:
-    type: float
+    type: decimal
+    precision: 19
+    scale: 15
   mail_auto_update:
     type: boolean
     required: true

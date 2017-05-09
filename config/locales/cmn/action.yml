@@ -1426,16 +1426,16 @@ cmn:
     profit_taxe: "利润taxe"
     profits: "利润"
     profits_and_losses: "利润和亏损"
-    # prospecting: "Prospecting"
     profits_taxe: "利润taxe" #?
+    # prospecting: "Prospecting"
     provisionnal_budget: "Provisionnal预算" #?
     provisions_revenues: "收入的规定"
     purchase: "采购"
     purchase_items: "购买物品"
     purchase_number: "购买数量"
     purchases: "购买"
-    # qualification: "Qualification"
     purchases_stocks_variation: "采购库存变化"
+    # qualification: "Qualification"
     quality: "质量"
     # quandl: "Quandl"
     quantity: "数量"

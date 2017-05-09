@@ -236,8 +236,7 @@ Rails.application.routes.draw do
     # resources :affairs, concerns: [:affairs, :list], only: [:show, :index]
     resources :affairs, only: [:unroll]
 
-
-    resources :affair_natures, concerns: [:list, :unroll]
+    resources :affair_natures, concerns: %i[list unroll]
 
     resources :analyses, concerns: %i[list unroll] do
       member do

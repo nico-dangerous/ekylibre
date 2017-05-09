@@ -1425,16 +1425,16 @@ deu:
     # profit_taxe: "Profit taxe"
     profits: "Gewinne"
     profits_and_losses: "Gewinne und Verluste"
-    # prospecting: "Prospecting"
     profits_taxe: "Gewinne taxe" #?
+    # prospecting: "Prospecting"
     provisionnal_budget: "Provisionnal Budget" #?
     provisions_revenues: "Rückstellungen Erträge"
     purchase: "Kauf"
     purchase_items: "Kauf von Gegenständen"
     purchase_number: "Ankauf"
     purchases: "Käufe"
-    # qualification: "Qualification"
     purchases_stocks_variation: "Käufe Bestände Variation"
+    # qualification: "Qualification"
     quality: "Qualität"
     # quandl: "Quandl"
     quantity: "Menge"

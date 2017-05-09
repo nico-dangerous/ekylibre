@@ -1497,16 +1497,16 @@ jpn:
     profit_taxe: "利益taxe"
     profits: "利益"
     profits_and_losses: "利益および損失"
-    # prospecting: "Prospecting"
     profits_taxe: "利益taxe" #?
+    # prospecting: "Prospecting"
     provisionnal_budget: "Provisionnal予算" #?
     provisions_revenues: "引当金収入"
     purchase: "購入"
     purchase_items: "アイテムを購入します"
     purchase_number: "購入数"
     purchases: "購入"
-    # qualification: "Qualification"
     purchases_stocks_variation: "購入株式の変動"
+    # qualification: "Qualification"
     quality: "品質"
     # quandl: "Quandl"
     quantity: "量"

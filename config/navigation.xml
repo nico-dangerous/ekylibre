@@ -1983,13 +1983,6 @@
         <page to="backend/affair_natures#unroll"/>
         <page to="backend/affair_natures#update"/>
       </item>
-      <item name="bank_reconciliation_gaps">
-        <page to="backend/bank_reconciliation_gaps#create"/>
-      </item>
-      <item name="quick_affairs">
-        <page to="backend/quick_affairs#create"/>
-        <page to="backend/quick_affairs#new"/>
-      </item>
       <item name="sale_opportunities">
         <page to="backend/sale_opportunities#list_events"/>
       </item>

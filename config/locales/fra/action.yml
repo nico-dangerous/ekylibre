@@ -1852,8 +1852,8 @@ fra:
       invoice: "Facture" #?
       order: "Commande" #?
       refused: "Refusée" #?
-    qualification: "Qualification"
     purchases_stocks_variation: "Variation de stocks d’approvisionnements"
+    qualification: "Qualification"
     quality: "Qualité"
     quandl: "Quandl"
     quantity: "Quantité"
