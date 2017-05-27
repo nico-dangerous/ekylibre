@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -141,9 +141,20 @@ class SaleAffairTest < ActiveSupport::TestCase
         }
       }
     )
-    Regularization.create!(affair: sale.affair, journal_entry: journal_entry)
+    affair = sale.affair
 
-    check_closed_state(sale.affair)
+    debit = affair.debit
+    credit = affair.credit
+
+    regularization = Regularization.create!(affair: affair, journal_entry: journal_entry)
+
+    check_closed_state(affair)
+
+    regularization.destroy!
+
+    affair.reload
+    assert_equal debit, affair.debit, 'Debit should return to previous value'
+    assert_equal credit, affair.credit, 'Credit should return to previous value'
   end
 
   # Creates a sale and check affair informations
@@ -186,7 +197,11 @@ class SaleAffairTest < ActiveSupport::TestCase
     assert !sale.affair.multi_thirds?
     assert !sale.affair.journal_entry_items_already_lettered?
 
-    assert !sale.affair.letterable?
+    # REVIEW: This should be confirmed by someone.
+    # Test changed by @aquaj because it seems to be the desired behaviour
+    # after @lcoq's modifications in code.
+    # Can @burisu or @ionosphere confirm ?
+    assert sale.affair.letterable?
     sale
   end
 end

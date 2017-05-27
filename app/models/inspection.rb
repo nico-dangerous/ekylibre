@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -62,7 +62,7 @@ class Inspection < Ekylibre::Record::Base
   validates :implanter_rows_number, :product_net_surface_area, :implanter_application_width, :sampling_distance, presence: true
 
   composed_of :product_net_surface_area, class_name: 'Measure',
-                                         mapping: [%w(product_net_surface_area_value to_d), %w(product_net_surface_area_unit unit)]
+                                         mapping: [%w[product_net_surface_area_value to_d], %w[product_net_surface_area_unit unit]]
 
   acts_as_numbered :number
 
@@ -199,7 +199,7 @@ class Inspection < Ekylibre::Record::Base
   end
 
   def any_quantity?
-    [:net_mass, :items_count].any? { |dim| quantity_measured?(dim) }
+    %i[net_mass items_count].any? { |dim| quantity_measured?(dim) }
   end
 
   # CODE HELPERS

@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -46,8 +46,8 @@ class InspectionTest < ActiveSupport::TestCase
   test_model_actions
 
   SCALES_ATTRIBUTES = [
-    [:diameter, :millimeter],
-    [:height, :centimeter]
+    %i[diameter millimeter],
+    %i[height centimeter]
   ].freeze
 
   SCALE_NATURES_ATTRIBUTES = [
@@ -96,7 +96,7 @@ class InspectionTest < ActiveSupport::TestCase
     ]
   ].freeze
 
-  DISEASES    = %w(Fusarium Mouche Pythium Rhizoctonia Sclérotinia).freeze
+  DISEASES    = %w[Fusarium Mouche Pythium Rhizoctonia Sclérotinia].freeze
   DEFORMITIES = [
     'Gel',
     'Défaut',
@@ -223,7 +223,7 @@ class InspectionTest < ActiveSupport::TestCase
     assert_equal 2, inspection.position
   end
 
-  [:items_count, :net_mass].each do |dimension|
+  %i[items_count net_mass].each do |dimension|
     test "#{dimension} - quantity is correctly computed" do
       expected = { items_count: 84.in(:unity), net_mass: 3.625.in(:kilogram) }
 

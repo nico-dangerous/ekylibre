@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -132,12 +132,12 @@ class Subscription < Ekylibre::Record::Base
       letter_format: false
     }
     # Items
-    attrs = [
-      :variant_id, :quantity, :amount, :label, :pretax_amount, :annotation,
-      :reduction_percentage, :tax_id, :unit_amount, :unit_pretax_amount
+    attrs = %i[
+      variant_id quantity amount label pretax_amount annotation
+      reduction_percentage tax_id unit_amount unit_pretax_amount
     ].each_with_object({}) do |field, h|
       v = sale_item.send(field)
-      h[field] = v unless v.blank?
+      h[field] = v if v.present?
     end
     attrs[:subscription_attributes] = following_attributes
     hash[:items_attributes] = { '0' => attrs }

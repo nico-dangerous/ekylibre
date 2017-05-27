@@ -1,36 +1,45 @@
 # coding: utf-8
+
 class AddStockAndMovementAccountsToStorableNomenclaturelessCategories < ActiveRecord::Migration
-  ACCOUNT_LABELS = YAML.load <<-YAML
+  ACCOUNT_LABELS = (YAML.safe_load <<-YAML
     pt_snc:
-      :stock:
-        :label: Materiais diversos
-        :number: 3349
-      :stock_movement:
-        :label: Variação stocks diversos
-        :number: 603
-    fr_pcg82: &fr_pcg82
-      :stock:
-        :label: Matières diverses
-        :number: 329
-      :stock_movement:
-        :label: Variations de stocks diverses
-        :number: 6037
-    fr_pcga: *fr_pcg82
+      stock:
+        label: Materiais diversos
+        number: 3349
+      stock_movement:
+        label: Variação stocks diversos
+        number: 603
+    fr_pcg82:
+      stock:
+        label: Matières diverses
+        number: 329
+      stock_movement:
+        label: Variations de stocks diverses
+        number: 6037
+    fr_pcga:
+      stock:
+        label: Matières diverses
+        number: 329
+      stock_movement:
+        label: Variations de stocks diverses
+        number: 6037
   YAML
+                   ).deep_symbolize_keys.freeze
 
   def change
     reversible do |dir|
       dir.up do
         # Find out what accounting plan we're using
         accounting_system = select_value("SELECT string_value FROM preferences WHERE name = 'accounting_system'")
-        return unless accounting_system.present?
-        [:stock, :stock_movement].each do |account_type|
+        return if accounting_system.blank?
+        accounting_system = accounting_system.to_sym
+        %i[stock stock_movement].each do |account_type|
           @type = account_type
           account_number = ACCOUNT_LABELS[accounting_system][@type][:number]
           label = ACCOUNT_LABELS[accounting_system][@type][:label]
           if concerned_categories_count.nonzero?
             fitting_account = find_account(account_number)
-            create_account(account_number, label) unless fitting_account.present?
+            create_account(account_number, label) if fitting_account.blank?
             new_account_id = find_account(account_number)['id']
 
             # Find storable categories w/o accounts

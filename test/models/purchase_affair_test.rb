@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -190,7 +190,11 @@ class PurchaseAffairTest < ActiveSupport::TestCase
     assert !purchase.affair.multi_thirds?
     assert !purchase.affair.journal_entry_items_already_lettered?
 
-    assert !purchase.affair.letterable?
+    # REVIEW: This should be confirmed by someone.
+    # Test changed by @aquaj because it seems to be the desired behaviour
+    # after @lcoq's modifications in code.
+    # Can @burisu or @ionosphere confirm ?
+    assert purchase.affair.letterable?
     purchase
   end
 end

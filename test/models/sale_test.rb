@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -72,6 +72,10 @@ require 'test_helper'
 
 class SaleTest < ActiveSupport::TestCase
   test_model_actions
+
+  setup do
+    @variant = ProductNatureVariant.import_from_nomenclature(:carrot)
+  end
 
   test 'rounds' do
     nature = SaleNature.find_or_create_by(with_accounting: true)
@@ -260,5 +264,54 @@ class SaleTest < ActiveSupport::TestCase
       #   assert_equal data[0], data[2], "The template doesn't seem to be archived or understand Integers"
       # end
     end
+  end
+
+  test 'default_currency is nature\'s currency if currency is not specified' do
+    Catalog.delete_all
+    SaleNature.delete_all
+    Entity.delete_all
+    Sale.delete_all
+
+    catalog    = Catalog.create!(code: 'food', name: 'Noncontaminated produce')
+    nature     = SaleNature.create!(currency: 'EUR', name: 'Perishables', catalog: catalog)
+    max        = Entity.create!(first_name: 'Max', last_name: 'Rockatansky', nature: :contact)
+    with       = Sale.create!(client: max, nature: nature, currency: 'USD')
+    without    = Sale.create!(client: max, nature: nature)
+
+    assert_equal 'USD', with.default_currency
+    assert_equal 'EUR', without.default_currency
+  end
+
+  test 'affair_class points to correct class' do
+    assert_equal SaleAffair, Sale.affair_class
+  end
+
+  test 'Test variant specified when bookkeep' do
+    nature = SaleNature.first
+    standard_vat = Tax.create!(
+      name: 'Standard',
+      amount: 20,
+      nature: :normal_vat,
+      collect_account: Account.find_or_create_by_number('45661'),
+      deduction_account: Account.find_or_create_by_number('45671'),
+
+      country: :fr
+    )
+
+    sale = Sale.create!(nature: nature, client: Entity.normal.first, state: :order)
+    sale.items.create!(variant: @variant, quantity: 4, unit_pretax_amount: 100, tax: standard_vat)
+    sale.reload
+
+    assert sale.invoice
+
+    journal_entry_items = sale.journal_entry.items
+    account_ids = journal_entry_items.pluck(:account_id)
+
+    sale_account = Account.where(id: account_ids).where("number LIKE '7%'").first
+    jei_s = journal_entry_items.where(account_id: sale_account.id).first
+
+    # jei_s variant must be defined
+    assert_not jei_s.variant.nil?
+    assert_equal jei_s.variant, @variant
   end
 end

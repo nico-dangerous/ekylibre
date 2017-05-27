@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -61,10 +61,12 @@
 #  resource_type             :string
 #  state                     :string           not null
 #  tax_declaration_item_id   :integer
+#  tax_declaration_mode      :string
 #  tax_id                    :integer
 #  team_id                   :integer
 #  updated_at                :datetime         not null
 #  updater_id                :integer
+#  variant_id                :integer
 #
 ---
 journal_entry_items_001:
@@ -383,6 +385,7 @@ journal_entry_items_010:
   financial_year_id: 24
   id: 26
   journal_id: 1
+  letter: A*
   lock_version: 0
   name: "[Encaissement R2014000001] By check  de Toley LTD"
   position: 2
@@ -585,6 +588,7 @@ journal_entry_items_016:
   financial_year_id: 24
   id: 40
   journal_id: 1
+  letter: C*
   lock_version: 0
   name: "[Loss E000000000002] FUYUTSUKI Kōzō"
   position: 1
@@ -818,6 +822,7 @@ journal_entry_items_023:
   financial_year_id: 18
   id: 53
   journal_id: 1
+  letter: B*
   lock_version: 0
   name: "[Incoming payment IP003] In cash!  de Yuey LTD"
   position: 2
@@ -880,6 +885,7 @@ journal_entry_items_025:
   financial_year_id: 18
   id: 57
   journal_id: 1
+  letter: A
   lock_version: 0
   name: "[Incoming payment IP001] In cash!  de Busbest Andrew"
   position: 2
@@ -1210,6 +1216,7 @@ journal_entry_items_035:
   financial_year_id: 18
   id: 87
   journal_id: 1
+  letter: B
   lock_version: 0
   name: "[Incoming payment IP002] In cash!  de Busbest Andrew"
   position: 2
@@ -1242,6 +1249,7 @@ journal_entry_items_036:
   financial_year_id: 23
   id: 88
   journal_id: 2
+  letter: A
   lock_version: 0
   name: "[Décaissement OP001] Par chèque  pour Busbest Andrew"
   position: 1
@@ -1310,6 +1318,7 @@ journal_entry_items_038:
   financial_year_id: 22
   id: 90
   journal_id: 2
+  letter: B
   lock_version: 0
   name: "[Décaissement OP002] Par chèque  pour Busbest Andrew"
   position: 1
@@ -1395,6 +1404,7 @@ journal_entry_items_040:
   state: draft
   updated_at: 2014-11-07 15:58:47.198797000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_041:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -1432,6 +1442,7 @@ journal_entry_items_041:
   tax_id: 3
   updated_at: 2014-11-07 15:58:47.220632000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_042:
   absolute_credit: 1848.0
   absolute_currency: EUR
@@ -1451,6 +1462,7 @@ journal_entry_items_042:
   financial_year_id: 24
   id: 94
   journal_id: 4
+  letter: A
   lock_version: 0
   name: "[Achat A201411000003] Ammonitre 33,5%  Big Bag de Coop Ain Coop'In"
   position: 3
@@ -1636,6 +1648,7 @@ journal_entry_items_047:
   state: draft
   updated_at: 2014-11-07 16:52:57.630615000 Z
   updater_id: 1
+  variant_id: 45
 journal_entry_items_048:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -1673,6 +1686,7 @@ journal_entry_items_048:
   tax_id: 3
   updated_at: 2014-11-07 16:52:57.654541000 Z
   updater_id: 1
+  variant_id: 45
 journal_entry_items_049:
   absolute_credit: 20520.0
   absolute_currency: EUR
@@ -1692,6 +1706,7 @@ journal_entry_items_049:
   financial_year_id: 24
   id: 105
   journal_id: 4
+  letter: B
   lock_version: 0
   name: "[Achat A201411000004] Plant de vigne standard (So4) de Coop Ain Coop'In"
   position: 3
@@ -1743,6 +1758,7 @@ journal_entry_items_050:
   state: draft
   updated_at: 2015-03-19 17:18:59.959437000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_051:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -1780,6 +1796,7 @@ journal_entry_items_051:
   tax_id: 3
   updated_at: 2015-03-19 17:18:59.988683000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_052:
   absolute_credit: 1736.57
   absolute_currency: EUR
@@ -1799,6 +1816,7 @@ journal_entry_items_052:
   financial_year_id: 24
   id: 108
   journal_id: 5
+  letter: C
   lock_version: 0
   name: "[Achat A201503000001] Ammonitre 33,5%  Big Bag de Taurus Plus"
   position: 3
@@ -1837,7 +1855,7 @@ journal_entry_items_053:
   name: "[Emprunt Vélo] Réception des fonds"
   position: 1
   pretax_amount: 0.0
-  printed_on: 2009-06-01
+  printed_on: 2015-05-01
   real_balance: 2000.0
   real_credit: 0.0
   real_currency: EUR
@@ -1870,7 +1888,7 @@ journal_entry_items_054:
   name: "[Emprunt Vélo] Réception des fonds"
   position: 2
   pretax_amount: 0.0
-  printed_on: 2009-06-01
+  printed_on: 2015-05-01
   real_balance: -2000.0
   real_credit: 2000.0
   real_currency: EUR
@@ -1903,7 +1921,7 @@ journal_entry_items_055:
   name: "[Remboursement d’emprunt Vélo] Remboursement n°1"
   position: 1
   pretax_amount: 0.0
-  printed_on: 2009-07-10
+  printed_on: 2015-06-01
   real_balance: 2.07
   real_credit: 0.0
   real_currency: EUR
@@ -1936,7 +1954,7 @@ journal_entry_items_056:
   name: "[Remboursement d’emprunt Vélo] Remboursement n°1"
   position: 2
   pretax_amount: 0.0
-  printed_on: 2009-07-10
+  printed_on: 2015-06-01
   real_balance: -2.07
   real_credit: 2.07
   real_currency: EUR
@@ -1969,7 +1987,7 @@ journal_entry_items_057:
   name: "[Remboursement d’emprunt Vélo] Remboursement n°2"
   position: 1
   pretax_amount: 0.0
-  printed_on: 2009-07-31
+  printed_on: 2016-06-01
   real_balance: 1016.22
   real_credit: 0.0
   real_currency: EUR
@@ -2002,7 +2020,7 @@ journal_entry_items_058:
   name: "[Remboursement d’emprunt Vélo] Remboursement n°2"
   position: 2
   pretax_amount: 0.0
-  printed_on: 2009-07-31
+  printed_on: 2016-06-01
   real_balance: 70.31
   real_credit: 0.0
   real_currency: EUR
@@ -2035,7 +2053,7 @@ journal_entry_items_059:
   name: "[Remboursement d’emprunt Vélo] Remboursement n°2"
   position: 3
   pretax_amount: 0.0
-  printed_on: 2009-07-31
+  printed_on: 2016-06-01
   real_balance: 2.07
   real_credit: 0.0
   real_currency: EUR
@@ -2068,7 +2086,7 @@ journal_entry_items_060:
   name: "[Remboursement d’emprunt Vélo] Remboursement n°2"
   position: 4
   pretax_amount: 0.0
-  printed_on: 2009-07-31
+  printed_on: 2016-06-01
   real_balance: -1088.6
   real_credit: 1088.6
   real_currency: EUR
@@ -2114,6 +2132,7 @@ journal_entry_items_061:
   state: draft
   updated_at: 2016-07-01 20:22:55.336640000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_062:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -2151,6 +2170,7 @@ journal_entry_items_062:
   tax_id: 8
   updated_at: 2016-07-01 20:22:55.359090000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_063:
   absolute_credit: 15556.8
   absolute_currency: EUR
@@ -2170,6 +2190,7 @@ journal_entry_items_063:
   financial_year_id: 25
   id: 277
   journal_id: 5
+  letter: A
   lock_version: 0
   name: "[Achat A201607000001] Ammonitre 33,5%  Big Bag de Yuey LTD"
   position: 3
@@ -7297,7 +7318,7 @@ journal_entry_items_218:
   real_currency_rate: 0.8977
   real_debit: 714.22
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:32.631241000 Z
   updater_id: 1
 journal_entry_items_219:
@@ -7330,7 +7351,7 @@ journal_entry_items_219:
   real_currency_rate: 0.8977
   real_debit: 41.52
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:32.650616000 Z
   updater_id: 1
 journal_entry_items_220:
@@ -7363,7 +7384,7 @@ journal_entry_items_220:
   real_currency_rate: 0.8977
   real_debit: 15.42
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:32.668566000 Z
   updater_id: 1
 journal_entry_items_221:
@@ -7396,7 +7417,7 @@ journal_entry_items_221:
   real_currency_rate: 0.8977
   real_debit: 0.0
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:32.686170000 Z
   updater_id: 1
 journal_entry_items_222:
@@ -8617,7 +8638,7 @@ journal_entry_items_258:
   real_currency_rate: 0.8977
   real_debit: 731.54
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:42.924693000 Z
   updater_id: 1
 journal_entry_items_259:
@@ -8650,7 +8671,7 @@ journal_entry_items_259:
   real_currency_rate: 0.8977
   real_debit: 28.89
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:42.944404000 Z
   updater_id: 1
 journal_entry_items_260:
@@ -8683,7 +8704,7 @@ journal_entry_items_260:
   real_currency_rate: 0.8977
   real_debit: 10.73
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:42.964142000 Z
   updater_id: 1
 journal_entry_items_261:
@@ -8716,7 +8737,7 @@ journal_entry_items_261:
   real_currency_rate: 0.8977
   real_debit: 0.0
   real_pretax_amount: 0.0
-  state: draft
+  state: confirmed
   updated_at: 2016-07-01 20:34:42.983292000 Z
   updater_id: 1
 journal_entry_items_262:
@@ -8858,15 +8879,16 @@ journal_entry_items_266:
   currency: EUR
   debit: 20520.0
   entry_id: 88
-  entry_number: CUN000003
-  financial_year_id: 26
+  entry_number: BNK000012
+  financial_year_id: 25
   id: 484
-  journal_id: 6
+  journal_id: 10
+  letter: B
   lock_version: 0
   name: "[Décaissement D20160002] En espèce  pour Coop Ain Coop'In"
   position: 1
   pretax_amount: 0.0
-  printed_on: 2016-10-26
+  printed_on: 2015-08-28
   real_balance: 20520.0
   real_credit: 0.0
   real_currency: EUR
@@ -8891,15 +8913,15 @@ journal_entry_items_267:
   currency: EUR
   debit: 0.0
   entry_id: 88
-  entry_number: CUN000003
-  financial_year_id: 26
+  entry_number: BNK000012
+  financial_year_id: 25
   id: 485
-  journal_id: 6
+  journal_id: 10
   lock_version: 0
   name: "[Décaissement D20160002] En espèce  pour Coop Ain Coop'In"
   position: 2
   pretax_amount: 0.0
-  printed_on: 2016-10-26
+  printed_on: 2015-08-28
   real_balance: -20520.0
   real_credit: 20520.0
   real_currency: EUR
@@ -8980,6 +9002,7 @@ journal_entry_items_269:
   state: draft
   updated_at: 2016-11-20 22:09:03.015012000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_270:
   absolute_credit: 65.52
   absolute_currency: EUR
@@ -9017,6 +9040,7 @@ journal_entry_items_270:
   tax_id: 3
   updated_at: 2016-11-20 22:09:03.036303000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_271:
   absolute_credit: 45.0
   absolute_currency: EUR
@@ -9053,6 +9077,7 @@ journal_entry_items_271:
   state: draft
   updated_at: 2016-11-20 22:09:03.058777000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_272:
   absolute_credit: 9.0
   absolute_currency: EUR
@@ -9090,6 +9115,7 @@ journal_entry_items_272:
   tax_id: 3
   updated_at: 2016-11-20 22:09:03.081393000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_273:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -9228,6 +9254,7 @@ journal_entry_items_276:
   state: draft
   updated_at: 2016-11-20 22:10:43.210834000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_277:
   absolute_credit: 6.24
   absolute_currency: EUR
@@ -9265,6 +9292,7 @@ journal_entry_items_277:
   tax_id: 3
   updated_at: 2016-11-20 22:10:43.231298000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_278:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -9403,6 +9431,7 @@ journal_entry_items_281:
   state: draft
   updated_at: 2016-11-20 22:11:28.770490000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_282:
   absolute_credit: 0.62
   absolute_currency: EUR
@@ -9440,6 +9469,7 @@ journal_entry_items_282:
   tax_id: 3
   updated_at: 2016-11-20 22:11:28.830255000 Z
   updater_id: 1
+  variant_id: 18
 journal_entry_items_283:
   absolute_credit: 3.74
   absolute_currency: EUR
@@ -9614,6 +9644,7 @@ journal_entry_items_287:
   state: draft
   updated_at: 2016-11-20 22:12:19.151058000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_288:
   absolute_credit: 446.0
   absolute_currency: EUR
@@ -9652,6 +9683,7 @@ journal_entry_items_288:
   tax_id: 3
   updated_at: 2016-11-20 22:12:19.171004000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_289:
   absolute_credit: 2676.0
   absolute_currency: EUR
@@ -9725,6 +9757,7 @@ journal_entry_items_290:
   state: draft
   updated_at: 2016-11-20 22:12:46.261368000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_291:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -9763,6 +9796,7 @@ journal_entry_items_291:
   tax_id: 3
   updated_at: 2016-11-20 22:12:46.281731000 Z
   updater_id: 1
+  variant_id: 39
 journal_entry_items_292:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -9799,6 +9833,7 @@ journal_entry_items_292:
   state: draft
   updated_at: 2016-11-20 22:14:42.366131000 Z
   updater_id: 1
+  variant_id: 42
 journal_entry_items_293:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -9836,6 +9871,7 @@ journal_entry_items_293:
   tax_id: 3
   updated_at: 2016-11-20 22:14:42.388681000 Z
   updater_id: 1
+  variant_id: 42
 journal_entry_items_294:
   absolute_credit: 717.12
   absolute_currency: EUR
@@ -9974,6 +10010,7 @@ journal_entry_items_297:
   state: draft
   updated_at: 2016-11-20 22:15:24.370236000 Z
   updater_id: 1
+  variant_id: 57
 journal_entry_items_298:
   absolute_credit: 0.0
   absolute_currency: EUR
@@ -10011,6 +10048,7 @@ journal_entry_items_298:
   tax_id: 3
   updated_at: 2016-11-20 22:15:24.389889000 Z
   updater_id: 1
+  variant_id: 57
 journal_entry_items_299:
   absolute_credit: 1200.0
   absolute_currency: EUR
@@ -10030,6 +10068,7 @@ journal_entry_items_299:
   financial_year_id: 26
   id: 517
   journal_id: 4
+  letter: B
   lock_version: 0
   name: "[Achat A201611000003] Acide lactique ‒ 25kg de BAKTOUBI Inc."
   position: 3
@@ -10064,6 +10103,7 @@ journal_entry_items_300:
   financial_year_id: 26
   id: 518
   journal_id: 1
+  letter: B
   lock_version: 0
   name: "[Perte E000000000005] BAKTOUBI Inc."
   position: 1
@@ -10181,4 +10221,1720 @@ journal_entry_items_303:
   state: draft
   tax_id: 2
   updated_at: 2014-11-05 13:36:51.433690000 Z
+  updater_id: 1
+journal_entry_items_304:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 12.0
+  absolute_pretax_amount: 0.0
+  account_id: 572
+  balance: 12.0
+  created_at: 2016-12-20 08:52:57.291186000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 447.12
+  cumulated_absolute_debit: 459.12
+  currency: EUR
+  debit: 12.0
+  entry_id: 108
+  entry_number: XYZ0017
+  financial_year_id: 26
+  id: 522
+  journal_id: 1
+  letter: B
+  lock_version: 0
+  name: Test OD
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 12.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 12.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2016-12-20 08:52:57.291186000 Z
+  updater_id: 1
+journal_entry_items_305:
+  absolute_credit: 12.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 543
+  balance: -12.0
+  created_at: 2016-12-20 08:52:57.312576000 Z
+  creator_id: 1
+  credit: 12.0
+  cumulated_absolute_credit: 12.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 108
+  entry_number: XYZ0017
+  financial_year_id: 26
+  id: 523
+  journal_id: 1
+  lock_version: 0
+  name: Test OD
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -12.0
+  real_credit: 12.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2016-12-20 08:52:57.312576000 Z
+  updater_id: 1
+journal_entry_items_306:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 400.0
+  absolute_pretax_amount: 0.0
+  account_id: 671
+  balance: 400.0
+  created_at: 2016-12-20 08:54:01.486754000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 41.18
+  cumulated_absolute_debit: 441.18
+  currency: EUR
+  debit: 400.0
+  entry_id: 109
+  entry_number: SAL000006
+  financial_year_id: 26
+  id: 524
+  journal_id: 3
+  letter: C
+  lock_version: 0
+  name: "[Facture F2016000009] Semence de Blé tendre Rubisko (r1 gau red) sac de 25kg
+    pour M. Gendo IKARI (SO000000000020)"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 400.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 400.0
+  real_pretax_amount: 0.0
+  resource_prism: client
+  state: draft
+  updated_at: 2016-12-20 08:54:01.486754000 Z
+  updater_id: 1
+journal_entry_items_307:
+  absolute_credit: 363.64
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 152
+  balance: -363.64
+  created_at: 2016-12-20 08:54:01.509524000 Z
+  creator_id: 1
+  credit: 363.64
+  cumulated_absolute_credit: 2593.64
+  cumulated_absolute_debit: 2230.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 109
+  entry_number: SAL000006
+  financial_year_id: 26
+  id: 525
+  journal_id: 3
+  lock_version: 0
+  name: "[Facture F2016000009] Semence de Blé tendre Rubisko (r1 gau red) sac de 25kg
+    pour M. Gendo IKARI (SO000000000020)"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -363.64
+  real_credit: 363.64
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_id: 29
+  resource_prism: item_product
+  resource_type: SaleItem
+  state: draft
+  updated_at: 2016-12-20 08:54:01.509524000 Z
+  updater_id: 1
+  variant_id: 10
+journal_entry_items_308:
+  absolute_credit: 36.36
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 363.64
+  account_id: 578
+  balance: -36.36
+  created_at: 2016-12-20 08:54:01.529690000 Z
+  creator_id: 1
+  credit: 36.36
+  cumulated_absolute_credit: 36.36
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 109
+  entry_number: SAL000006
+  financial_year_id: 26
+  id: 526
+  journal_id: 3
+  lock_version: 0
+  name: "[Facture F2016000009] Semence de Blé tendre Rubisko (r1 gau red) sac de 25kg
+    pour M. Gendo IKARI (SO000000000020)"
+  position: 3
+  pretax_amount: 363.64
+  printed_on: 2016-12-20
+  real_balance: -36.36
+  real_credit: 36.36
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 363.64
+  resource_id: 29
+  resource_prism: item_tax
+  resource_type: SaleItem
+  state: draft
+  tax_id: 8
+  updated_at: 2016-12-20 08:54:01.529690000 Z
+  updater_id: 1
+  variant_id: 10
+journal_entry_items_309:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 63.25
+  absolute_pretax_amount: 0.0
+  account_id: 671
+  balance: 63.25
+  created_at: 2016-12-20 08:55:32.998473000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 41.18
+  cumulated_absolute_debit: 504.43
+  currency: EUR
+  debit: 63.25
+  entry_id: 110
+  entry_number: XYZ0018
+  financial_year_id: 26
+  id: 527
+  journal_id: 1
+  letter: C
+  lock_version: 0
+  name: ncncncncncn
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 63.25
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 63.25
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2016-12-20 08:55:32.998473000 Z
+  updater_id: 1
+journal_entry_items_310:
+  absolute_credit: 63.25
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 17
+  balance: -63.25
+  created_at: 2016-12-20 08:55:33.019462000 Z
+  creator_id: 1
+  credit: 63.25
+  cumulated_absolute_credit: 63.25
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 110
+  entry_number: XYZ0018
+  financial_year_id: 26
+  id: 528
+  journal_id: 1
+  lock_version: 0
+  name: ncncncncncn
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -63.25
+  real_credit: 63.25
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2016-12-20 08:55:33.019462000 Z
+  updater_id: 1
+journal_entry_items_311:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 463.25
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 463.25
+  created_at: 2016-12-20 08:58:53.086260000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 373.0
+  cumulated_absolute_debit: 3146.25
+  currency: EUR
+  debit: 463.25
+  entry_id: 111
+  entry_number: XYZ0019
+  financial_year_id: 26
+  id: 529
+  journal_id: 1
+  lock_version: 0
+  name: "[Encaissement R2016000003] In cash!  de M. Gendo IKARI"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 463.25
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 463.25
+  real_pretax_amount: 0.0
+  resource_prism: deposited
+  state: draft
+  updated_at: 2016-12-20 08:58:53.086260000 Z
+  updater_id: 1
+journal_entry_items_312:
+  absolute_credit: 463.25
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 671
+  balance: -463.25
+  created_at: 2016-12-20 08:58:53.110658000 Z
+  creator_id: 1
+  credit: 463.25
+  cumulated_absolute_credit: 504.43
+  cumulated_absolute_debit: 504.43
+  currency: EUR
+  debit: 0.0
+  entry_id: 111
+  entry_number: XYZ0019
+  financial_year_id: 26
+  id: 530
+  journal_id: 1
+  letter: C
+  lock_version: 0
+  name: "[Encaissement R2016000003] In cash!  de M. Gendo IKARI"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -463.25
+  real_credit: 463.25
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_id: 9
+  resource_prism: payer
+  resource_type: Entity
+  state: draft
+  updated_at: 2016-12-20 08:58:53.110658000 Z
+  updater_id: 1
+journal_entry_items_313:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 4435.2
+  absolute_pretax_amount: 0.0
+  account_id: 54
+  balance: 4435.2
+  created_at: 2016-12-20 18:16:13.233540000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 21564.89
+  currency: EUR
+  debit: 4435.2
+  entry_id: 112
+  entry_number: PUR000006
+  financial_year_id: 26
+  id: 531
+  journal_id: 4
+  lock_version: 0
+  name: "[Achat A201612000004] Ammonitre 33,5%  Big Bag de Taurus Plus"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 4435.2
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 4435.2
+  real_pretax_amount: 0.0
+  resource_id: 17
+  resource_prism: item_product
+  resource_type: PurchaseItem
+  state: draft
+  updated_at: 2016-12-20 18:16:13.233540000 Z
+  updater_id: 1
+  variant_id: 39
+journal_entry_items_314:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 443.52
+  absolute_pretax_amount: 4435.2
+  account_id: 577
+  balance: 443.52
+  created_at: 2016-12-20 18:16:13.255217000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 1857.77
+  currency: EUR
+  debit: 443.52
+  entry_id: 112
+  entry_number: PUR000006
+  financial_year_id: 26
+  id: 532
+  journal_id: 4
+  lock_version: 0
+  name: "[Achat A201612000004] Ammonitre 33,5%  Big Bag de Taurus Plus"
+  position: 2
+  pretax_amount: 4435.2
+  printed_on: 2016-12-20
+  real_balance: 443.52
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 443.52
+  real_pretax_amount: 4435.2
+  resource_id: 17
+  resource_prism: item_tax
+  resource_type: PurchaseItem
+  state: draft
+  tax_id: 8
+  updated_at: 2016-12-20 18:16:13.255217000 Z
+  updater_id: 1
+  variant_id: 39
+journal_entry_items_315:
+  absolute_credit: 4878.72
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 203
+  balance: -4878.72
+  created_at: 2016-12-20 18:16:13.275068000 Z
+  creator_id: 1
+  credit: 4878.72
+  cumulated_absolute_credit: 7332.41
+  cumulated_absolute_debit: 717.12
+  currency: EUR
+  debit: 0.0
+  entry_id: 112
+  entry_number: PUR000006
+  financial_year_id: 26
+  id: 533
+  journal_id: 4
+  letter: B
+  lock_version: 0
+  name: "[Achat A201612000004] Ammonitre 33,5%  Big Bag de Taurus Plus"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -4878.72
+  real_credit: 4878.72
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_prism: supplier
+  state: draft
+  updated_at: 2016-12-20 18:16:13.275068000 Z
+  updater_id: 1
+journal_entry_items_316:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 4878.72
+  absolute_pretax_amount: 0.0
+  account_id: 203
+  balance: 4878.72
+  created_at: 2016-12-20 18:16:17.973066000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 7332.41
+  cumulated_absolute_debit: 5595.84
+  currency: EUR
+  debit: 4878.72
+  entry_id: 113
+  entry_number: XYZ0020
+  financial_year_id: 26
+  id: 534
+  journal_id: 1
+  letter: B
+  lock_version: 0
+  name: "[Profit E000000000006] Taurus Plus"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 4878.72
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 4878.72
+  real_pretax_amount: 0.0
+  resource_prism: supplier
+  state: draft
+  updated_at: 2016-12-20 18:16:17.973066000 Z
+  updater_id: 1
+journal_entry_items_317:
+  absolute_credit: 4435.2
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 132
+  balance: -4435.2
+  created_at: 2016-12-20 18:16:17.997737000 Z
+  creator_id: 1
+  credit: 4435.2
+  cumulated_absolute_credit: 4548.92
+  cumulated_absolute_debit: 3.12
+  currency: EUR
+  debit: 0.0
+  entry_id: 113
+  entry_number: XYZ0020
+  financial_year_id: 26
+  id: 535
+  journal_id: 1
+  lock_version: 0
+  name: "[Profit E000000000006] Taurus Plus"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -4435.2
+  real_credit: 4435.2
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_id: 5
+  resource_prism: item_product
+  resource_type: GapItem
+  state: draft
+  updated_at: 2016-12-20 18:16:17.997737000 Z
+  updater_id: 1
+journal_entry_items_318:
+  absolute_credit: 443.52
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 4435.2
+  account_id: 578
+  balance: -443.52
+  created_at: 2016-12-20 18:16:18.018494000 Z
+  creator_id: 1
+  credit: 443.52
+  cumulated_absolute_credit: 479.88
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 113
+  entry_number: XYZ0020
+  financial_year_id: 26
+  id: 536
+  journal_id: 1
+  lock_version: 0
+  name: "[Profit E000000000006] Taurus Plus"
+  position: 3
+  pretax_amount: 4435.2
+  printed_on: 2016-12-20
+  real_balance: -443.52
+  real_credit: 443.52
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 4435.2
+  resource_id: 5
+  resource_prism: item_tax
+  resource_type: GapItem
+  state: draft
+  tax_id: 8
+  updated_at: 2016-12-20 18:16:18.018494000 Z
+  updater_id: 1
+journal_entry_items_319:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 445.23
+  absolute_pretax_amount: 0.0
+  account_id: 115
+  balance: 445.23
+  created_at: 2016-12-20 18:17:05.068703000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 445.23
+  currency: EUR
+  debit: 445.23
+  entry_id: 114
+  entry_number: PUR000007
+  financial_year_id: 26
+  id: 537
+  journal_id: 4
+  lock_version: 0
+  name: "[Achat A201612000005] Bouteille Bordelaise 75cl de BAKTOUBI Inc."
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 445.23
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 445.23
+  real_pretax_amount: 0.0
+  resource_id: 18
+  resource_prism: item_product
+  resource_type: PurchaseItem
+  state: draft
+  updated_at: 2016-12-20 18:17:05.068703000 Z
+  updater_id: 1
+  variant_id: 63
+journal_entry_items_320:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 44.52
+  absolute_pretax_amount: 445.23
+  account_id: 577
+  balance: 44.52
+  created_at: 2016-12-20 18:17:05.089739000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 1902.29
+  currency: EUR
+  debit: 44.52
+  entry_id: 114
+  entry_number: PUR000007
+  financial_year_id: 26
+  id: 538
+  journal_id: 4
+  lock_version: 0
+  name: "[Achat A201612000005] Bouteille Bordelaise 75cl de BAKTOUBI Inc."
+  position: 2
+  pretax_amount: 445.23
+  printed_on: 2016-12-20
+  real_balance: 44.52
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 44.52
+  real_pretax_amount: 445.23
+  resource_id: 18
+  resource_prism: item_tax
+  resource_type: PurchaseItem
+  state: draft
+  tax_id: 8
+  updated_at: 2016-12-20 18:17:05.089739000 Z
+  updater_id: 1
+  variant_id: 63
+journal_entry_items_321:
+  absolute_credit: 489.75
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 204
+  balance: -489.75
+  created_at: 2016-12-20 18:17:05.110912000 Z
+  creator_id: 1
+  credit: 489.75
+  cumulated_absolute_credit: 2889.75
+  cumulated_absolute_debit: 1850.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 114
+  entry_number: PUR000007
+  financial_year_id: 26
+  id: 539
+  journal_id: 4
+  letter: A
+  lock_version: 0
+  name: "[Achat A201612000005] Bouteille Bordelaise 75cl de BAKTOUBI Inc."
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -489.75
+  real_credit: 489.75
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_prism: supplier
+  state: draft
+  updated_at: 2016-12-20 18:17:05.110912000 Z
+  updater_id: 1
+journal_entry_items_322:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 500.0
+  absolute_pretax_amount: 0.0
+  account_id: 204
+  balance: 500.0
+  created_at: 2016-12-20 18:17:18.719246000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 2889.75
+  cumulated_absolute_debit: 2350.0
+  currency: EUR
+  debit: 500.0
+  entry_id: 115
+  entry_number: BNK000014
+  financial_year_id: 26
+  id: 540
+  journal_id: 2
+  letter: A
+  lock_version: 0
+  name: "[Décaissement D20160006] Par chèque  pour BAKTOUBI Inc."
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 500.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 500.0
+  real_pretax_amount: 0.0
+  resource_id: 4
+  resource_prism: payee
+  resource_type: Entity
+  state: draft
+  updated_at: 2016-12-20 18:17:18.719246000 Z
+  updater_id: 1
+journal_entry_items_323:
+  absolute_credit: 500.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 212
+  balance: -500.0
+  created_at: 2016-12-20 18:17:18.739874000 Z
+  creator_id: 1
+  credit: 500.0
+  cumulated_absolute_credit: 32850.46
+  cumulated_absolute_debit: 969.63
+  currency: EUR
+  debit: 0.0
+  entry_id: 115
+  entry_number: BNK000014
+  financial_year_id: 26
+  id: 541
+  journal_id: 2
+  lock_version: 0
+  name: "[Décaissement D20160006] Par chèque  pour BAKTOUBI Inc."
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -500.0
+  real_credit: 500.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_prism: bank
+  state: draft
+  updated_at: 2016-12-20 18:17:18.739874000 Z
+  updater_id: 1
+journal_entry_items_324:
+  absolute_credit: 10.25
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 204
+  balance: -10.25
+  created_at: 2016-12-20 18:17:24.089219000 Z
+  creator_id: 1
+  credit: 10.25
+  cumulated_absolute_credit: 2900.0
+  cumulated_absolute_debit: 2350.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 116
+  entry_number: XYZ0021
+  financial_year_id: 26
+  id: 542
+  journal_id: 1
+  letter: A
+  lock_version: 0
+  name: "[Perte E000000000007] BAKTOUBI Inc."
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: -10.25
+  real_credit: 10.25
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  resource_prism: supplier
+  state: draft
+  updated_at: 2016-12-20 18:17:24.089219000 Z
+  updater_id: 1
+journal_entry_items_325:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 10.25
+  absolute_pretax_amount: 0.0
+  account_id: 131
+  balance: 10.25
+  created_at: 2016-12-20 18:17:24.113449000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 9.36
+  cumulated_absolute_debit: 1010.25
+  currency: EUR
+  debit: 10.25
+  entry_id: 116
+  entry_number: XYZ0021
+  financial_year_id: 26
+  id: 543
+  journal_id: 1
+  lock_version: 0
+  name: "[Perte E000000000007] BAKTOUBI Inc."
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-12-20
+  real_balance: 10.25
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 10.25
+  real_pretax_amount: 0.0
+  resource_id: 6
+  resource_prism: item_product
+  resource_type: GapItem
+  state: draft
+  updated_at: 2016-12-20 18:17:24.113449000 Z
+  updater_id: 1
+journal_entry_items_326:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: -10.25
+  account_id: 39
+  balance: 0.0
+  created_at: 2016-12-20 18:17:24.136900000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 1.87
+  cumulated_absolute_debit: 4536.95
+  currency: EUR
+  debit: 0.0
+  entry_id: 116
+  entry_number: XYZ0021
+  financial_year_id: 26
+  id: 544
+  journal_id: 1
+  lock_version: 0
+  name: "[Perte E000000000007] BAKTOUBI Inc."
+  position: 3
+  pretax_amount: -10.25
+  printed_on: 2016-12-20
+  real_balance: 0.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: -10.25
+  resource_id: 6
+  resource_prism: item_tax
+  resource_type: GapItem
+  state: draft
+  tax_id: 2
+  updated_at: 2016-12-20 18:17:24.136900000 Z
+  updater_id: 1
+journal_entry_items_327:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 9
+  entry_number: PUR000001
+  financial_year_id: 24
+  id: 545
+  journal_id: 4
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2014-10-31
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_328:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 9
+  entry_number: PUR000001
+  financial_year_id: 24
+  id: 546
+  journal_id: 4
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2014-10-31
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_329:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 9
+  entry_number: PUR000001
+  financial_year_id: 24
+  id: 547
+  journal_id: 4
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2014-10-31
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_330:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 12
+  entry_number: XYZ0009
+  financial_year_id: 24
+  id: 548
+  journal_id: 1
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2014-11-01
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_331:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 12
+  entry_number: XYZ0009
+  financial_year_id: 24
+  id: 549
+  journal_id: 1
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2014-11-01
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_332:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 12
+  entry_number: XYZ0009
+  financial_year_id: 24
+  id: 550
+  journal_id: 1
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2014-11-01
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_333:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 90
+  entry_number: RESE000001
+  financial_year_id: 26
+  id: 551
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_334:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 90
+  entry_number: RESE000001
+  financial_year_id: 26
+  id: 552
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_335:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 90
+  entry_number: RESE000001
+  financial_year_id: 26
+  id: 553
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_336:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 93
+  entry_number: RESE000002
+  financial_year_id: 26
+  id: 554
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_337:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 93
+  entry_number: RESE000002
+  financial_year_id: 26
+  id: 555
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_338:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 93
+  entry_number: RESE000002
+  financial_year_id: 26
+  id: 556
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_339:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 96
+  entry_number: RESE000003
+  financial_year_id: 26
+  id: 557
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_340:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 96
+  entry_number: RESE000003
+  financial_year_id: 26
+  id: 558
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_341:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 96
+  entry_number: RESE000003
+  financial_year_id: 26
+  id: 559
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_342:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 99
+  entry_number: RESE000004
+  financial_year_id: 26
+  id: 560
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_343:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 99
+  entry_number: RESE000004
+  financial_year_id: 26
+  id: 561
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_344:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 99
+  entry_number: RESE000004
+  financial_year_id: 26
+  id: 562
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_345:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 101
+  entry_number: RESE000005
+  financial_year_id: 26
+  id: 563
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_346:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 101
+  entry_number: RESE000005
+  financial_year_id: 26
+  id: 564
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_347:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 101
+  entry_number: RESE000005
+  financial_year_id: 26
+  id: 565
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_348:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 103
+  entry_number: RESE000006
+  financial_year_id: 26
+  id: 566
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_349:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 103
+  entry_number: RESE000006
+  financial_year_id: 26
+  id: 567
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_350:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 103
+  entry_number: RESE000006
+  financial_year_id: 26
+  id: 568
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
+  updater_id: 1
+journal_entry_items_351:
+  absolute_credit: 85.0
+  absolute_currency: EUR
+  absolute_debit: 0.0
+  absolute_pretax_amount: 0.0
+  account_id: 206
+  balance: -85.0
+  created_at: 2014-11-01 19:52:01.256895000 Z
+  creator_id: 1
+  credit: 85.0
+  cumulated_absolute_credit: 1129.0
+  cumulated_absolute_debit: 0.0
+  currency: EUR
+  debit: 0.0
+  entry_id: 106
+  entry_number: RESE000007
+  financial_year_id: 26
+  id: 569
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 2
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: -85.0
+  real_credit: 85.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 0.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.256895000 Z
+  updater_id: 1
+journal_entry_items_352:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 70.0
+  absolute_pretax_amount: 0.0
+  account_id: 207
+  balance: 70.0
+  created_at: 2014-11-01 19:52:01.272084000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 90.82
+  cumulated_absolute_debit: 27.0
+  currency: EUR
+  debit: 70.0
+  entry_id: 106
+  entry_number: RESE000007
+  financial_year_id: 26
+  id: 570
+  journal_id: 8
+  lock_version: 0
+  name: "[Affaire A000003] De Busbest Andrew"
+  position: 3
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 70.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 70.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-01 19:52:01.272084000 Z
+  updater_id: 1
+journal_entry_items_353:
+  absolute_credit: 0.0
+  absolute_currency: EUR
+  absolute_debit: 15.0
+  absolute_pretax_amount: 0.0
+  account_id: 1
+  balance: 15.0
+  created_at: 2014-11-05 09:58:15.849777000 Z
+  creator_id: 1
+  credit: 0.0
+  cumulated_absolute_credit: 0.0
+  cumulated_absolute_debit: 2683.0
+  currency: EUR
+  debit: 15.0
+  entry_id: 106
+  entry_number: RESE000007
+  financial_year_id: 26
+  id: 571
+  journal_id: 8
+  lock_version: 0
+  name: "[Encaissement R2014000001] By check  de Toley LTD"
+  position: 1
+  pretax_amount: 0.0
+  printed_on: 2016-11-20
+  real_balance: 15.0
+  real_credit: 0.0
+  real_currency: EUR
+  real_currency_rate: 1.0
+  real_debit: 15.0
+  real_pretax_amount: 0.0
+  state: draft
+  updated_at: 2014-11-05 09:58:15.849777000 Z
   updater_id: 1

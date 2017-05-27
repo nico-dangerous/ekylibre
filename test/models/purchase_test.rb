@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -58,6 +58,10 @@ require 'test_helper'
 
 class PurchaseTest < ActiveSupport::TestCase
   test_model_actions
+
+  setup do
+    @variant = ProductNatureVariant.import_from_nomenclature(:carrot)
+  end
 
   test 'rounds' do
     nature = PurchaseNature.first
@@ -154,5 +158,58 @@ class PurchaseTest < ActiveSupport::TestCase
     assert_equal 2, purchase.items.count
     assert_equal 1000, purchase.pretax_amount
     assert_equal 1020, purchase.amount
+
+    purchase.propose!
+    purchase.confirm!
+    purchase.invoice!
+  end
+
+  test 'default_currency is nature\'s currency if currency is not specified' do
+    PurchaseNature.delete_all
+    Entity.delete_all
+    Purchase.delete_all
+
+    nature     = PurchaseNature.create!(currency: 'EUR', name: 'Perishables')
+    max        = Entity.create!(first_name: 'Max', last_name: 'Rockatansky', nature: :contact)
+    with       = Purchase.create!(supplier: max, nature: nature, currency: 'USD')
+    without    = Purchase.create!(supplier: max, nature: nature)
+
+    assert_equal 'USD', with.default_currency
+    assert_equal 'EUR', without.default_currency
+  end
+
+  test 'affair_class points to correct class' do
+    assert_equal PurchaseAffair, Purchase.affair_class
+  end
+
+  test 'payment date computation' do
+    purchase = Purchase.create!(
+      nature: PurchaseNature.first,
+      planned_at: Date.civil(2015, 1, 1),
+      supplier: Entity.where(supplier: true).first,
+      items_attributes: {
+        '0' => {
+          tax: Tax.find_by!(amount: 20),
+          variant: ProductNatureVariant.first,
+          unit_pretax_amount: 100,
+          quantity: 1
+        },
+        '1' => {
+          tax: Tax.find_by!(amount: 0),
+          variant_id: ProductNatureVariant.first.id,
+          unit_pretax_amount: 450,
+          quantity: 2
+        }
+      }
+    )
+    assert_equal Date.civil(2015, 1, 1), purchase.payment_at
+
+    purchase.payment_delay = '1 year'
+    purchase.save!
+    assert_equal Date.civil(2016, 1, 1), purchase.payment_at
+
+    purchase.payment_delay = '2 months'
+    purchase.save!
+    assert_equal Date.civil(2015, 3, 1), purchase.payment_at
   end
 end
