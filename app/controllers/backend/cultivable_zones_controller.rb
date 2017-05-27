@@ -28,7 +28,7 @@ module Backend
     #   :farmer_id
     def self.cultivable_zones_conditions
       code = ''
-      code = search_conditions(cultivable_zones: [:name, :work_number]) + " ||= []\n"
+      code = search_conditions(cultivable_zones: %i[name work_number]) + " ||= []\n"
       code << "  if params[:farmer_id].to_i > 0\n"
       code << "    c[0] << \" AND \#{CultivableZone.table_name}.farmer_id = ?\"\n"
       code << "    c << params[:farmer_id].to_i\n"
