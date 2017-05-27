@@ -36,10 +36,6 @@ deu:
       mode:
         harvested: "Ernte Saattermin"
         sowed: "Vorläufige Saattermin"
-    affair:
-      third_role:
-        client: "Klient"
-        supplier: "Lieferant"
     analysis:
       retrieval_status:
         controller_error: "Controller-Fehler"
@@ -58,6 +54,20 @@ deu:
         multi_polygon: "Multi Polygon"
         point: "Punkt"
         string: "Schnur"
+    animal:
+      birth_date_completeness:
+        full_date: "Voll Datum"
+        month_year: "Monat Jahr"
+        year: "Jahr"
+      end_of_life_reason:
+        calculated_date: "Berechnete Datum"
+        cutting_up: "Zerlegung"
+        death: "Tod"
+        slaughter: "Schlachten"
+      filiation_status:
+        certified: "Bescheinigt"
+        # uncertified: "Uncertified"
+        unknown: "Unbekannt"
     call_message:
       nature:
         incoming: "Eingehend"
@@ -102,6 +112,10 @@ deu:
         datetime: "Datum und Uhrzeit"
         decimal: "Dezimal"
         # text: "Text"
+    debt_transfer:
+      nature:
+        purchase_regularization: "Kauf Regularisierung"
+        sale_regularization: "Verkauf Regularisierung"
     delivery:
       mode:
         third: "Dritte"
@@ -135,18 +149,31 @@ deu:
         informative: "Informativ"
         refused: "Verweigert"
         waiting: "Warten"
+    financial_year:
+      tax_declaration_frequency:
+        monthly: "Monatlich"
+        none: "Keiner"
+        quaterly: "Vierteljährlich"
+        yearly: "Jährlich"
+      tax_declaration_mode:
+        debit: "Soll"
+        none: "Keiner"
+        payment: "Zahlung"
     fixed_asset:
       depreciation_method:
         graduated: "abgestufte" #?
         # linear: "Linear"
+        none: "Keiner"
+        regressive: "Regressiv"
         simplified_linear: "vereinfachte lineare"
+      depreciation_period:
+        monthly: "Monatlich"
+        quarterly: "Vierteljährlich"
+        yearly: "Jährlich"
     gap:
       direction:
         loss: "Verlust"
         profit: "Profitieren"
-      entity_role:
-        client: "Klient"
-        supplier: "Lieferant"
     georeading:
       nature:
         line: "Linie" #?
@@ -168,7 +195,7 @@ deu:
         failed: "Gescheitert"
         passed: "Bestanden"
         passed_with_warnings: "Mit Warnungen bestanden"
-      status:  #?
+      status: #?
         errored: "Fehlerhafte" #?
         failed: "Gescheitert" #?
         passed: "Bestanden" #?
@@ -222,8 +249,11 @@ deu:
       nature:
         # bank: "Bank"
         cash: "Kasse"
+        closure: "Schließung"
+        fixed_assets: "Anlagevermögen"
         forward: "Vorwärts getragen"
         purchases: "Käufe"
+        result: "Ergebnis"
         sales: "Der Umsatz"
         stocks: "Bestände"
         various: "verschiedene Operationen"
@@ -239,15 +269,24 @@ deu:
         root: "Wurzel"
         string: "Schnur"
     loan:
+      insurance_repayment_method:
+        initial: "Basierend auf Anfangskapital"
+        to_repay: "Basierend auf Kapital links zur Rückzahlung"
       repayment_method:
         constant_amount: "konstante Menge"
         constant_rate: "Konstante Rate"
       repayment_period:
         month: "Monat"
+        # semester: "Semester"
+        # trimester: "Trimester"
         year: "Jahr"
       shift_method:
         anatocism: "anatocism"
         immediate_payment: "Sofortige Bezahlung"
+    map_layer:
+      nature:
+        background: "Hintergrund"
+        overlay: "Auflage"
     notification:
       level:
         error: "Fehler"
@@ -269,12 +308,16 @@ deu:
         incoming: "Eingehend"
         internal: "intern" #?
         outgoing: "abgehend"
-      state:  #?
+      state: #?
         draft: "Entwurf" #?
         given: "Gegeben" #?
         in_preparation: "In Vorbereitung" #?
         ordered: "bestellt" #?
         prepared: "Bereit" #?
+    plant_counting:
+      nature:
+        germination: "Bei der Keimung"
+        sowing: "Bei Aussaat"
     preference:
       nature:
         accounting_system: "Abrechnungssystem"
@@ -309,6 +352,15 @@ deu:
       nature:
         exterior: "Äußere"
         interior: "Innere"
+    product_movement:
+      description:
+        birth: "Geburt"
+        butchery: "Schlächterei"
+        consumption: "Verbrauch"
+        death: "Tod"
+        loan: "Darlehen"
+        purchase: "Kauf"
+        sale: "Verkauf"
     product_nature:
       population_counting:
         decimal: "Dezimal"
@@ -390,18 +442,18 @@ deu:
         multi_polygon: "Multi Polygon"
         point: "Punkt"
         string: "Schnur"
+    purchase:
+      tax_payability:
+        at_invoicing: "Bei Fakturierung"
+        at_paying: "Zu zahlen"
     purchase_nature:
       nature:
         # payslip: "Payslip"
         purchase: "Kauf"
-    sale_opportunity:
-      third_role:
-        client: "Klient"
-        supplier: "Lieferant"
-    sale_ticket:
-      third_role:
-        client: "Klient"
-        supplier: "Lieferant"
+    sale_item: #?
+      compute_from: #?
+        pretax_amount: "Vor Steuern in Höhe" #?
+        unit_pretax_amount: "Einheit vor Steuern Menge" #?
     sensor:
       retrieval_mode:
         # integration: "Integration"
@@ -417,8 +469,10 @@ deu:
         affairs: "Angelegenheiten"
         analyses: "Analysen"
         animals: "Tiere"
+        campaigns: "Kampagnen"
         cash_transfers: "Geldtransfers"
         contracts: "Verträge"
+        debt_transfers: "Schuldentransfers"
         deliveries: "Lieferungen"
         deposits: "Einlagen"
         documents: "Unterlagen"
@@ -433,6 +487,7 @@ deu:
         outgoing_payment_lists: "Abgehende Zahlungslisten"
         outgoing_payments: "Auszahlungen"
         # parcels: "Parcels"
+        plant_countings: "Pflanzenzählungen"
         plants: "Pflanzen"
         product_nature_categories: "Produkt Natur Kategorien"
         product_nature_variants: "Produktvarianten Natur"
@@ -442,7 +497,8 @@ deu:
         sales: "Der Umsatz"
         sales_invoices: "Verkaufsrechnungen"
         subscriptions: "Abonnements"
-    subscription_nature:  #?
+        tax_declarations: "Steuererklärungen"
+    subscription_nature: #?
       entity_link_direction: #?
         all: "bidirektionale" #?
         direct: "Direkt" #?
@@ -450,6 +506,17 @@ deu:
       nature: #?
         period: "Abonnement von Datum" #?
         quantity: "Abonnement von Nummer" #?
+    synchronization_operation:
+      operation_name:
+        authenticate: "Beglaubigung"
+        get_inventory: "Erhalten Sie Inventar"
+        get_urls: "Erhalten Sie Urls"
+      state:
+        aborted: "Abgebrochen"
+        # errored: "Errored"
+        finished: "Fertig"
+        in_progress: "In Bearbeitung"
+        undone: "Unerledigt"
     task:
       nature:
         document: "Schreiben" #?
@@ -464,10 +531,14 @@ deu:
         doing: "Tun"
         done: "Erledigt"
         todo: "Tun"
-    tax:  #?
+    tax: #?
       nature: #?
         amount: "Menge" #?
         percentage: "Prozentsatz" #?
+    tax_declaration:
+      mode:
+        debit: "Lastschrift"
+        payment: "Zahlung"
     tracking:
       usage_limit_nature:
         best_before: "Mindesthaltbarkeitsdatum"

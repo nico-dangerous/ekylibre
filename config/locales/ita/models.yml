@@ -10,10 +10,15 @@ ita:
         born_at: "creato a"
       building:
         born_at: "costruito alla"
+      cashes:
+        main_account: "Account principale"
       document:
         # filename: "File"
       document_template:
         managed: "Gestito dal sistema"
+      entity:
+        client_accounting_balance: "Saldo del conto cliente"
+        supplier_accounting_balance: "Saldo del conto del fornitore"
       equipment:
         born_at: "Mettere in servizio presso"
         dead_at: "Demolita a"
@@ -21,12 +26,19 @@ ita:
         initial_dead_at: "Demolita a"
       financial_year:
         stopped_on: "Data di chiusura"
+      fixed_asset:
+        asset_account: "Conto cespite"
+        depreciation_period: "Periodo di ammortamento"
+        started_on: "Inizia l’aggiornamento"
       fixed_asset_depreciation:
         asset_amount: "valore contabile"
       land_parcel:
         born_at: "creato a"
       land_parcel_group:
         born_at: "creato a"
+      loan:
+        ongoing_at: "La raccolta di fondi a"
+        started_on: "Prima di rimborso è iniziato il"
       outgoing_payment:
         delivered: "Dato al destinatario"
         list: "Lista pagamento in uscita"
@@ -38,6 +50,16 @@ ita:
         population: "Quantità"
       plant:
         born_at: "piantato a"
+      plant_counting:
+        plant: "Prodotto"
+        plant_activity: "Attività"
+        rows_count_value: "Contano le righe"
+        working_width_value: "Larghezza di applicazione implanter"
+      plant_counting_item:
+        value: "Contano piante"
+      plant_density_abacus_item:
+        plants_count: "Contano le piante attesi"
+        seeding_density_value: "Previsto densità di semina"
       purchase:
         affair_balance: "Equilibrio"
       sale:
@@ -46,8 +68,19 @@ ita:
         has_downpayment: "Anticipo ricevuti"
       sale_nature:
         downpayment: "richiesta acconto"
+      synchronization_operation:
+        human_message: "Messaggio di errore"
+        operation_name: "Nome dell’operazione"
+        request: "Richiesta"
+        response: "Risposta"
+        status: "Stato"
       tax:
         amount: "Valore"
+      tax_declaration_item:
+        collected: "Raccolto"
+        deductible: "Detraibile"
+        fixed_asset_deductible: "Franchigia su attività"
+        intracommunity_payable: "Intracomunitario da pagare"
     errors:
       format: "%{attribute} %{message}" #?
       messages:
@@ -71,6 +104,7 @@ ita:
         # invalid_datetime: "%{attribute} is not a valid datetime"
         # invalid_time: "%{attribute} is not a valid time"
         # invalid_token: "%{attribute} is invalid. Invalid token %{error}. Expected tokens are %{accepted}."
+        # is: "%{attribute} must be a %{thing}"
         # is_at: "%{attribute} must be at %{restriction}"
         less_than: "deve essere minore di %{count}"
         less_than_or_equal_to: "deve essere minore o uguale a %{count}"
@@ -84,21 +118,22 @@ ita:
         # on_or_after: "%{attribute} must be on or after %{restriction}"
         # on_or_before: "%{attribute} must be on or before %{restriction}"
         other_than: "devono essere di numero diverso da %{count}" #?
+        # overlap: "%{attribute} overlaps an existing record"
         # overlap_sibling: "%{attribute} overlaps sibling"
         # posterior: "%{attribute} must be posterior to %{to}"
         present: "deve essere lasciato in bianco" #?
         # record_invalid: "Validations failed: %{errors}"
         taken: "è già presente"
-        too_long:  #? String excepted (Hash:{:one=>"è troppo lungo (il massimo è 1 carattere)", :other=>"è troppo lungo (il massimo è %{count} caratteri)"})
-          one: "è troppo lungo (il massimo è 1 carattere)" #? String excepted (Hash:{:one=>"è troppo lungo (il massimo è 1 carattere)", :other=>"è troppo lungo (il massimo è %{count} caratteri)"})
-          other: "è troppo lungo (il massimo è %{count} caratteri)" #? String excepted (Hash:{:one=>"è troppo lungo (il massimo è 1 carattere)", :other=>"è troppo lungo (il massimo è %{count} caratteri)"})
-        too_short:  #? String excepted (Hash:{:one=>"è troppo corto (il minimo è 1 carattere)", :other=>"è troppo corto (il minimo è %{count} caratteri)"})
-          one: "è troppo corto (il minimo è 1 carattere)" #? String excepted (Hash:{:one=>"è troppo corto (il minimo è 1 carattere)", :other=>"è troppo corto (il minimo è %{count} caratteri)"})
-          other: "è troppo corto (il minimo è %{count} caratteri)" #? String excepted (Hash:{:one=>"è troppo corto (il minimo è 1 carattere)", :other=>"è troppo corto (il minimo è %{count} caratteri)"})
+        too_long: #? String expected ("%{attribute} is too long (maximum is %{count} characters)")
+          one: "è troppo lungo (il massimo è 1 carattere)" #?
+          other: "è troppo lungo (il massimo è %{count} caratteri)" #?
+        too_short: #? String expected ("%{attribute} is too short (minimum is %{count} characters)")
+          one: "è troppo corto (il minimo è 1 carattere)" #?
+          other: "è troppo corto (il minimo è %{count} caratteri)" #?
         unitary_in_parcel: "elementi unitari possono essere inviati solo uno per uno"
-        wrong_length:  #? String excepted (Hash:{:one=>"è della lunghezza sbagliata (deve essere di 1 carattere)", :other=>"è della lunghezza sbagliata (deve essere di %{count} caratteri)"})
-          one: "è della lunghezza sbagliata (deve essere di 1 carattere)" #? String excepted (Hash:{:one=>"è della lunghezza sbagliata (deve essere di 1 carattere)", :other=>"è della lunghezza sbagliata (deve essere di %{count} caratteri)"})
-          other: "è della lunghezza sbagliata (deve essere di %{count} caratteri)" #? String excepted (Hash:{:one=>"è della lunghezza sbagliata (deve essere di 1 carattere)", :other=>"è della lunghezza sbagliata (deve essere di %{count} caratteri)"})
+        wrong_length: #? String expected ("%{attribute} is the wrong length (should be %{count} characters)")
+          one: "è della lunghezza sbagliata (deve essere di 1 carattere)" #?
+          other: "è della lunghezza sbagliata (deve essere di %{count} caratteri)" #?
       models:
         activity:
           checked_off_with_inspections: "Le ispezioni sono già stati creati per questa attività"
@@ -111,6 +146,7 @@ ita:
           unvalid_amounts: "La voce di diario deve essere compilato o di debito o di credito, ma non allo stesso tempo."
         cash:
           # currency_does_not_match: "The currency of the %{journal} is different from that specified for the cash"
+          # different_of_main_account: "%{attribute} must be different of main account (%{account})"
           unvalid_bban: "Caduca BBAN. Uno o più elementi non sono corretti."
         deposit:
           # must_be_a_bank_account: "%{field} must be a bank account and not a cash"
@@ -119,11 +155,20 @@ ita:
           # nature_do_not_allow_a_first_name: "The selectected type “%{nature}” does not allow a first name"
         financial_year:
           attributes:
+            accountant:
+              # frozen: "%{attribute} cannot be changed while an exchange is opened"
             started_on:
               consecutive: "Gli esercizi devono essere consecutivi. Si deve iniziare dopo la fine del precedente."
+              frozen: "La data di esercizio non può essere modificato quando è stato creato uno scambio."
             stopped_on:
               # end_of_month: "%{attribute} must be an end of month"
           # overlap: "%{attribute} overlaps an existing financial year"
+        financial_year_exchange:
+          csv_file_entry_dates_invalid: "Alcune voci del CSV sono fuori dell’esercizio di date scambio"
+          # csv_file_entry_invalid: "Some entries in the CSV are invalid ('%{entry_number}')"
+          csv_file_headers_invalid: "Intestazioni CSV non sono validi"
+          csv_file_invalid: "File CSV non è valido"
+          # csv_file_journals_invalid: "Some journals are present in the CSV but not in Ekylibre : %{codes}"
         fixed_asset_depreciation:
           attributes:
             started_on:
@@ -132,10 +177,15 @@ ita:
           # greater_than_undelivered_quantity: "The quantity of product %{product} to deliver is greater than undelivered quantity (%{maximum}%{unit})"
         journal:
           attributes:
+            accountant:
+              # entity_frozen: "Booked journals of this %{attribute} cannot change while an exchange is opened for its financial years"
+              present: "Commercialista può essere impostato solo per varie riviste operazioni"
+              # previous_entity_frozen: "Booked journals of the previous %{attribute} cannot change while an exchange is opened for its financial years"
             closed_on:
               # end_of_month: "%{attribute} must be an end of month (%{closed_on})"
         journal_entry:
           # closed_journal: "The journal %{journal} is closed on %{closed_on}. No updates are possible until this date."
+          frozen_by_financial_year_exchange: "La voce del diario non può essere registrato in un periodo corrispondente ad uno scambio esercizio."
           out_of_existing_financial_year: "La voce di diario deve essere registrato in un periodo corrispondente a un esercizio esistente."
           unbalanced: "La voce di diario è sbilanciato"
         journal_entry_item:
@@ -160,7 +210,7 @@ ita:
           nothing_to_pay: "Niente da pagare. Se si desidera registrare un acconto, non dimenticate di notare che." #?
           one: "Non posso salvare questo %{model}: 1 errore"
           other: "Non posso salvare questo %{model}: %{count} errori."
-        models:  #?
+        models: #?
           cash: #?
             unvalid_bban: "Caduca BBAN. Uno o più elementi non sono corretti." #?
           financial_year: #?
@@ -179,7 +229,7 @@ ita:
             error_no_found_price: "Nessun prezzo trovato" #?
           subscription: #?
             entity_must_be_the_same_as_the_contact_entity: "Persona deve essere la stessa persona di contatto" #?
-        template:  #?
+        template: #?
           body: "Ci sono stati problemi con i seguenti campi:" #?
     models:
       account: "account"
@@ -202,6 +252,7 @@ ita:
       animal: "Animale"
       animal_group: "gruppo di animali"
       attachment: "Allegati"
+      bank_guarantee_account: "Conto Garanzia bancaria" #?
       bank_statement: "estratto conto bancario"
       bank_statement_item: "Fila estratto conto bancario"
       bioproduct: "vivere prodotto"
@@ -227,6 +278,7 @@ ita:
       custom_field: "Campo personalizzato"
       custom_field_choice: "scelta di campo personalizzato"
       dashboard: "Cruscotto"
+      debt_transfer: "Trasferimento del debito"
       delivery: "Consegna"
       delivery_tool: "strumento di consegna"
       deposit: "deposito"
@@ -234,6 +286,7 @@ ita:
       document: "Documento"
       document_template: "modello di documento"
       easement: "sollievo"
+      economic_situation: "Situazione economica"
       entity: "Entità"
       entity_address: "Indirizzo"
       entity_link: "Link Entity"
@@ -242,6 +295,7 @@ ita:
       event: "Evento"
       event_participation: "partecipazione Event"
       financial_year: "Anno finanziario"
+      financial_year_exchange: "Scambio anno finanziario"
       fixed_asset: "Assetto stabile"
       fixed_asset_depreciation: "deprezzamento capitale fisso"
       fungus: "Fungo"
@@ -258,7 +312,9 @@ ita:
       inspection: "classificazione del prodotto"
       inspection_calibration: "calibro di ispezione"
       inspection_point: "controllo di classificazione del prodotto"
+      insurance_account: "Conto assicurativo" #?
       integration: "Integrazione"
+      interest_account: "Conto interessi" #?
       intervention: "Intervento"
       intervention_agent: "agente di intervento"
       intervention_doer: "intervento agente"
@@ -285,10 +341,12 @@ ita:
       listing_node: "nodo Listing"
       listing_node_item: "Listing voce nodo"
       loan: "Prestito"
+      loan_account: "Conto di prestito"
       loan_repayment: "Rimborso del prestito"
       manure_management_plan: "piano di gestione del letame"
       manure_management_plan_zone: "Concimi zona di piano di gestione"
-      map_background: "Mappa di sfondo"
+      map_background: "Mappa di sfondo" #?
+      map_layer: "Mappa strato"
       matter: "Importa"
       net_service: "il servizio net"
       notification: "Notifica"
@@ -326,10 +384,15 @@ ita:
       product_population: "Popolazione del prodotto"
       product_reading: "lettura del prodotto"
       purchase: "Acquista"
+      purchase_affair: "Acquisto vicenda"
+      purchase_gap: "Gap Acquisto"
       purchase_item: "voce Acquisto"
       purchase_nature: "tipo di Acquisto"
+      regularization: "Regolarizzazione"
       role: "Ruolo"
       sale: "Vendita"
+      sale_affair: "Vendita vicenda"
+      sale_gap: "Vendita gap"
       sale_item: "punto vendita"
       sale_nature: "tipo di vendita"
       sale_opportunity: "vendita opportunità"
@@ -342,9 +405,13 @@ ita:
       subscription_nature: "tipo di abbonamento"
       supervision: "supervisione"
       supervision_item: "voce Supervisione"
+      synchronization_operation: "Operazione di sincronizzazione"
       target_distribution: "distribuzione target"
       task: "Compito"
       tax: "Imposta"
+      tax_declaration: "Dichiarazione dei redditi"
+      tax_declaration_item: "Voce dichiarazione dei redditi"
+      tax_declaration_item_part: "Parte dell’articolo dichiarazione fiscale"
       team: "Squadra"
       token: "Gettone"
       tracking: "puntamento"
@@ -369,7 +436,10 @@ ita:
     account_name: "Nome utente"
     account_number: "numero di conto"
     accountable: "Responsabile"
+    accountable_repayments_started_on: "Rimborsi Accountable iniziato il"
+    accountant: "Contabile"
     accounted_at: "rappresentato a"
+    accounting_balance: "Saldo contabile"
     accuracy: "Precisione"
     achieved_at: "raggiunto a"
     actions: "azioni"
@@ -418,14 +488,19 @@ ita:
     archiving: "Archiviazione"
     arguments: "Argomenti"
     assembly: "Montaggio"
+    asset_account: "Conto patrimoniale"
+    asset_exists: "Esiste Asset"
     attachments: "allegati"
     attribute_name: "Nome attributo"
+    attribution: "Attribuzione"
     authentication_token: "token di autenticazione"
     author: "Autore"
     authorized_payments_count: "contano pagamenti autorizzati"
     auto_updateable_addresses: "Auto indirizzi aggiornabili"
     average_value: "Valore medio"
     balance: "Equilibrio"
+    balance_pretax_amount: "Saldo importo lordo delle imposte"
+    balance_tax_amount: "Il saldo delle imposte"
     balances: "saldi"
     bank_account_holder_name: "Titolare dell’account"
     bank_account_key: "chiave conto bancario"
@@ -434,6 +509,9 @@ ita:
     bank_agency_code: "Banca codice agenzia"
     bank_check_number: "numero di assegno bancario"
     bank_code: "codice bancario"
+    bank_guarantee_account: "Conto Garanzia bancaria"
+    bank_guarantee_amount: "Bank importo garanzia"
+    bank_guarantees_loans: "Bank garantisce prestiti"
     bank_identifier_code: "Bank Identifier Code"
     bank_name: "nome della banca"
     bank_statement: "estratto conto bancario"
@@ -441,6 +519,8 @@ ita:
     bank_statements: "estratti conto"
     base_amount: "importo di base"
     battery_level: "Livello batteria"
+    birth_date_completeness: "Data di nascita completezza"
+    birth_farm_number: "Numero di farm di nascita"
     body: "Corpo"
     boolean_value: "valore booleano"
     born_at: "nato a"
@@ -480,15 +560,20 @@ ita:
     city_name: "Nome della città"
     client: "cliente"
     client_account: "Account cliente"
+    client_accounting_balance: "Saldo contabile client"
+    client_trade_balance: "Bilancia commerciale client"
     clients: "clienti"
     closed: "Chiuso"
     closed_at: "chiuso a"
     closed_on: "chiuso il"
+    closure_journal: "Chiusura ufficiale"
     clusters_work_number: "Cluster lavorativi Numero"
     code: "Codice"
     codes: "Codici"
     coefficient: "Coefficiente"
     collect_account: "raccogliere conto"
+    collected_pretax_amount: "Importo lordo delle imposte raccolte"
+    collected_tax_amount: "Importo delle imposte raccolte"
     collected_taxes: "tasse raccolte"
     color: "Colore"
     column_name: "nome colonna"
@@ -506,6 +591,7 @@ ita:
     components: "Componenti"
     computation_method: "metodo di calcolo"
     compute: "Calcolare"
+    compute_from: "Calcola da"
     conclusion: "Conclusione"
     condition_operator: "operatore Condizione"
     condition_value: "valore della condizione"
@@ -519,6 +605,7 @@ ita:
     content_localizations: "localizzazioni di contenuti"
     contents: "Contenuto"
     contract: "Contrarre"
+    contract_items: "Articoli di contratto"
     contracts: "Contratti"
     coordinate: "Coordinata"
     coordinate_columns: "coordinare le colonne"
@@ -564,13 +651,19 @@ ita:
     customized_type: "tipo personalizzato"
     daily_nitrogen_production: "produzione di azoto giornaliera"
     dashboards: "Dashboard"
+    dead: "Morto"
     dead_at: "Morto"
     dead_line_at: "dead line a"
     deals_count: "contano offerte"
     debit: "Addebito"
+    debt_regularizations: "Regolarizzazioni di debito"
+    debt_transfer_affair: "Vicenda trasferimento del debito"
+    debt_transfers: "Trasferimenti di debito"
     debtor: "Debitore"
     decimal_value: "valore decimale"
     declarant: "dichiarante"
+    deductible_pretax_amount: "Importo lordo delle imposte deducibili"
+    deductible_tax_amount: "Importo imposta detraibile"
     deduction_account: "conto deduzione"
     default_computation_method: "metodo di calcolo predefinito"
     default_mail_address: "indirizzo di posta elettronica predefinito"
@@ -596,9 +689,11 @@ ita:
     deposits: "depositi"
     depreciable: "ammortizzabile"
     depreciable_amount: "Il valore ammortizzabile"
+    depreciable_product: "Prodotto ammortizzabile"
     depreciated_amount: "importo ammortizzati"
     depreciation_method: "metodo di ammortamento"
     depreciation_percentage: "percentuale di ammortamento"
+    depreciation_period: "Periodo di ammortamento"
     depreciations: "Ammortamenti"
     depth: "Profondità"
     derivative_of: "Derivata di"
@@ -621,6 +716,7 @@ ita:
     due_at: "Grazie a"
     due_on: "Dovuto per"
     duration: "Durata"
+    economic_situation: "Situazione economica"
     email: "E-mail"
     emails: "Messaggi di posta elettronica"
     embedded: "inserito"
@@ -635,6 +731,7 @@ ita:
     employment: "occupazione"
     enabled: "Abilitato"
     encrypted_password: "password crittografata"
+    end_of_life_reason: "Fine della ragione di vita"
     enjoyer: "enjoyer"
     enjoyments: "godimenti"
     entity: "persona 1"
@@ -645,6 +742,8 @@ ita:
     entry: "Iscrizione"
     entry_items: "articoli di ingresso"
     entry_number: "numero di iscrizione"
+    entry_on: "L’iscrizione"
+    entry_reason: "Motivo entry"
     # euid: "EUID"
     event: "Evento"
     event_participation: "partecipazione Event"
@@ -652,6 +751,8 @@ ita:
     # evolvable: "Evolvable"
     execution_number: "numero di esecuzione"
     executor: "Esecutore"
+    exit_on: "Uscire su"
+    exit_reason: "Motivo Exit"
     expected_population: "popolazione prevista"
     expected_shape: "forma atteso"
     expected_stop_amount: "importo fermata prevista"
@@ -670,6 +771,9 @@ ita:
     farm_name: "nome Farm"
     farmer: "Contadino"
     father: "Padre"
+    father_country: "Paese Padre"
+    father_identification_number: "Numero di identificazione del padre"
+    father_variety: "Varietà Padre"
     faxes: "fax"
     fifth_producer: "Quinto produttore" #?
     # file: "File"
@@ -680,10 +784,13 @@ ita:
     file_fingerprint: "Impronte digitali di file"
     file_pages_count: "Contano pagine"
     file_updated_at: "Aggiornati alle"
+    filiation_status: "Stato filiazione"
     filtered_columns: "colonne filtrati"
     financial_year: "Anno finanziario"
     financial_year_as_last: "Esercizio (come ultima voce di diario)"
     finish: "finire"
+    finished_at: "Finito a"
+    first_calving_on: "Primo parto su"
     first_met_at: "In primo luogo si è riunito il"
     first_name: "Nome"
     first_number: "primo numero"
@@ -693,6 +800,8 @@ ita:
     fixed_asset_account: "conto capitale fisso"
     fixed_asset_allocation_account: "Fixed conto svalutazioni di asset"
     fixed_asset_collect_account: "Cespite raccogliere conto"
+    fixed_asset_deductible_pretax_amount: "Cespite importo lordo delle imposte deducibili"
+    fixed_asset_deductible_tax_amount: "Cespite importo imposta detraibile"
     fixed_asset_deduction_account: "Conto detrazione capitale fisso"
     fixed_asset_depreciation_method: "metodo di ammortamento capitale fisso"
     fixed_asset_depreciation_percentage: "percentuale di deprezzamento capitale fisso"
@@ -702,7 +811,8 @@ ita:
     following: "A seguire"
     format: "Formato"
     formats: "formati"
-    fourth_producer: "quarto produttore" #?
+    forward_journal: "Riporto ufficiale"
+    france_maaid: "Francia maaid"
     frequency: "Frequenza"
     frozen_indicators_list: "Lista indicatori congelati"
     full_name: "Nome e cognome"
@@ -725,6 +835,7 @@ ita:
     grading_sizes_unit: "unità di dimensioni di classificazione"
     grading_sizes_unit_name: "Grading dimensioni nome dell’unità"
     gradings: "classificazioni"
+    grains_yield: "Resa in granella"
     gravity: "Gravità"
     gross_items: "conteggio lordo" #?
     gross_items_count: "Contano articoli Gross"
@@ -782,6 +893,7 @@ ita:
     initial_number: "numero iniziale"
     initial_owner: "proprietario iniziale"
     initial_population: "popolazione iniziale"
+    initial_releasing_amount: "Importo rilascio iniziale"
     initial_shape: "forma iniziale"
     initialization_vectors: "Vettori di inizializzazione"
     initiated_on: "Iniziato su"
@@ -794,6 +906,7 @@ ita:
     inspections: "ispezioni"
     insurance_amount: "importo di assicurazione"
     insurance_percentage: "percentuale di assicurazione"
+    insurance_repayment_method: "Metodo di rimborso assicurazione"
     integer_value: "valore intero"
     integration_name: "Nome Integrazione"
     interest_amount: "importo interesse"
@@ -803,9 +916,13 @@ ita:
     intervention: "Intervento"
     intervention_cast: "getto di intervento"
     intervention_parameter: "parametro intervento"
+    intervention_participation: "Partecipazione intervento"
+    intervention_participations: "Partecipazioni di intervento"
     intervention_product_parameters: "calchi di intervento"
     interventions: "interventi"
     interventions_used_in: "Interventi utilizzato in"
+    intracommunity: "Intracomunitario"
+    intracommunity_payable_account: "Intracomunitario conto da pagare"
     introduction: "Introduzione"
     inventory: "Inventario"
     invitation_accepted_at: "Invito accettato a"
@@ -817,6 +934,7 @@ ita:
     invited_by: "Invitato da"
     invoice_address: "Indirizzo di fatturazione"
     invoiced_at: "fatturato su"
+    invoiced_on: "Fatturato su"
     ip_address: "Indirizzo IP"
     irrigated: "Irrigato"
     irrigation_water_nitrogen: "azoto Irrigazione"
@@ -900,6 +1018,7 @@ ita:
     mail_postal_zone: "posta postal_zone"
     mails: "mails"
     main: "Principale"
+    main_account: "Account principale"
     main_activity: "Attività principale"
     main_crop_code: "codice coltura principale"
     main_crop_commercialisation: "Principale commercializzazione delle colture"
@@ -916,6 +1035,7 @@ ita:
     marketable_quantity: "Quantità commerciabile"
     marketable_yield: "resa commerciabile"
     mass: "Massa (kg)"
+    max_inputs_count: "Contano ingressi Massimo"
     # max_zoom: "Max zoom"
     maximal_grantable_reduction_percentage: "percentuale di riduzione concedibili Maximal"
     maximal_length: "lunghezza massima"
@@ -932,9 +1052,11 @@ ita:
     measure_value_value: "valore valore di misura"
     meeting_origin: "origine Meeting"
     member: "Membro"
+    member_variant: "Variante membro"
     members: "Utenti"
     members_count: "Numero dei membri"
     memberships: "Adesioni"
+    memo: "Promemoria"
     message: "Messaggio"
     messages: "Messaggi"
     metadata: "Metadati"
@@ -949,6 +1071,9 @@ ita:
     mode_delta: "Delta Modalità"
     model_euid: "Modello"
     mother: "Madre"
+    mother_country: "Madrepatria"
+    mother_identification_number: "Il numero di identificazione della madre"
+    mother_variety: "Varietà Madre"
     movements: "movimenti"
     moves: "Si muove"
     multi_polygon_value: "valore Multi poligono"
@@ -973,6 +1098,7 @@ ita:
     nodes: "nodi"
     noticed_start_amount: "importo inizio Notato"
     noticed_stop_amount: "importo fermata Notato"
+    notification: "Notifica"
     notifications: "notifiche"
     number: "Numero"
     number_format: "formato numero"
@@ -982,12 +1108,16 @@ ita:
     observed_at: "osservata alle"
     of_company: "Della compagnia"
     old_password: "Vecchia Password"
+    opacity: "Opacità"
     opened_at: "aperto a"
     operation: "operazione"
+    operation_name: "Nome dell’operazione"
     operations: "operazioni" #?
     ordered_at: "ordinato a"
     organic_fertilizer_mineral_fraction: "frazione minerale fertilizzante organico"
     origin: "Origine"
+    origin_country: "Paese di origine"
+    origin_identification_number: "Il numero di identificazione di origine"
     originator: "originatore"
     originator_type: "tipo di originator"
     outcoming_product: "prodotto in uscita"
@@ -1059,6 +1189,7 @@ ita:
     post: "Inviare"
     postal_code: "Codice postale"
     postal_zones: "zone postali"
+    pre_harvest_interval: "Intervallo di pre-raccolta"
     preferences: "Preferenze"
     prepared_at: "preparato a"
     prescription: "Prescrizione"
@@ -1114,6 +1245,8 @@ ita:
     provisional_intervention: "intervento provvisorio"
     purchasable: "acquistabile"
     purchase: "Acquista"
+    purchase_affair: "Acquisto vicenda" #?
+    purchase_affairs: "Affari di acquisto"
     purchase_amount: "Ammontare dell'acquisto"
     purchase_invoices: "fatture di acquisto"
     purchase_item: "voce Acquisto"
@@ -1124,7 +1257,7 @@ ita:
     purchased_on: "acquistato su"
     purchases: "Ordini d'acquisto"
     quantity: "Quantità"
-    quantity_gap_on_invoice_entry: "Ingresso gap quantità di stock"
+    quantity_gap_on_invoice_journal_entry: "Ingresso gap quantità di stock"
     quantity_handler: "Quantità gestore"
     quantity_indicator: "indicatore Quantità"
     quantity_indicator_name: "Quantità nome Indicatore"
@@ -1171,6 +1304,7 @@ ita:
     reflected_at: "riflessa in"
     reflection_nodes: "nodi di riflessione"
     reflections: "Riflessi"
+    regularizations: "Regolarizzazioni"
     remain_owner: "Rimangono proprietario"
     remaining_amount: "Importo residuo"
     remaining_lifespan: "Durata della vita residua"
@@ -1193,6 +1327,7 @@ ita:
     reset_password_sent_at: "Reimpostare la password inviata a"
     reset_password_token: "Token reimpostazione della password"
     resource: "Risorsa"
+    resource_prism: "Prisma delle risorse"
     resource_type: "tipo di risorsa"
     responses: "Risposte"
     responsible: "Responsabile"
@@ -1210,6 +1345,7 @@ ita:
     root_model_name: "Root nome del modello"
     root_node: "nodo principale"
     root_parameters: "parametri Root"
+    rows_count_value: "Contano le righe"
     sale: "Vendita"
     sale_credit: "vendita di credito"
     sale_item: "punto vendita"
@@ -1232,6 +1368,8 @@ ita:
     sampling_temporal_mode: "modalità temporale di campionamento"
     scale: "Scala"
     scheduled: "In programma"
+    scrapped_journal_entry: "Voce di diario Demolita"
+    scrapped_on: "Demolita su"
     season: "stagionalità"
     seasons: "stagionalità"
     second_producer: "secondo produttore" #?
@@ -1263,6 +1401,8 @@ ita:
     size_value: "valore dimensioni"
     soil_nature: "tipo di terreno"
     soil_production: "la produzione del suolo"
+    sold_journal_entry: "Voce di diario Venduto"
+    sold_on: "Venduto"
     source: "fonte"
     source_product: "prodotto di origine"
     # spaced_iban: "Spaced IBAN"
@@ -1299,10 +1439,12 @@ ita:
     supervision: "supervisione"
     supplier: "Fornitore"
     supplier_account: "conto del fornitore"
+    supplier_accounting_balance: "Saldo contabile Fornitore"
     supplier_address: "indirizzo del fornitore"
     supplier_payment_delay: "Fornitore ritardo di pagamento"
     supplier_payment_mode: "Modalità di pagamento del fornitore"
     supplier_payment_modes: "Modalità di pagamento del fornitore"
+    supplier_trade_balance: "Bilancia commerciale Fornitore"
     suppliers: "fornitori"
     support: "Supporto"
     support_nature: "tipo di Supporto"
@@ -1312,7 +1454,10 @@ ita:
     support_variant_unit: "unità di supporto variante"
     support_variety: "varietà di sostegno"
     supports: "supporti"
+    suspend_until_reconciliation: "Sospendere fino riconciliazione"
     suspended: "Sospeso"
+    suspended_journal_entry_items: "Elementi voce di diario sospesi"
+    suspense_account: "Conto in sospeso"
     tactic: "Tecnica gestione delle colture"
     tactics: "tattica"
     target: "Bersaglio"
@@ -1322,10 +1467,18 @@ ita:
     targets: "obiettivi"
     tasks: "Compiti"
     tax: "Imposta"
+    tax_declaration: "Dichiarazione dei redditi"
+    tax_declaration_frequency: "Frequenza di dichiarazione dei redditi"
+    tax_declaration_item: "Voce dichiarazione dei redditi"
+    tax_declaration_items: "Articoli dichiarazione dei redditi"
+    tax_declaration_mode: "Modalità di dichiarazione dei redditi"
+    tax_declarations: "Dichiarazioni fiscali"
+    tax_payability: "Pagabilità fiscale"
     taxations: "tassazioni"
     team: "Squadra"
     template: "Modello"
     theme: "Tema"
+    theoretical_number: "Numero teorico"
     third: "Terzo"
     third_producer: "terzo produttore" #?
     third_role: "terzo ruolo"
@@ -1336,6 +1489,8 @@ ita:
     to: "A"
     to_bank_at: "Per bancari a"
     to_deposit: "Depositare"
+    to_pay_on_or_after: "Per pagare il o dopo il"
+    to_pay_on_or_before: "Per pagare entro il"
     token: "Gettone"
     tool: "Strumento"
     tools: "Utensili"
@@ -1345,6 +1500,7 @@ ita:
     town_number: "numero di Città"
     tracking: "puntamento"
     trackings: "tracking"
+    trade_balance: "Bilancia commerciale"
     transaction_number: "Numero di transazione"
     transfered_at: "trasferito a"
     transfered_on: "Trasferito su"
@@ -1358,7 +1514,7 @@ ita:
     type: "Digitare"
     # uid: "UID"
     unconfirmed_email: "e-mail non confermato"
-    undelivered_invoice_entry: "Ingresso fattura non consegnato"
+    undelivered_invoice_journal_entry: "Ingresso fattura non consegnato"
     undelivered_quantity: "quantità mancante"
     unit_amount: "importo unitario"
     unit_currency: "valuta Unità"
@@ -1371,6 +1527,7 @@ ita:
     unpaid_sales: "vendite non pagate"
     unpointed_journal_entry_items: "voci di entrata del diario unpointed"
     unread_notifications: "notifiche non lette"
+    untreated_zone_margin: "Margine di zona non trattata"
     updated_at: "aggiornati alle"
     # updater: "Updater"
     uploaded: "caricati"
@@ -1380,6 +1537,7 @@ ita:
     usage_limit_nature: "Usato per tipo"
     usage_limit_on: "Utilizzato da su"
     usages: "usi"
+    use_bank_guarantee: "Garanzia bancaria"
     use_countings: "Utilizzare i conteggi"
     use_grading_calibre: "Utilizzare calibro di classificazione" #?
     use_gradings: "Utilizzare classificazioni"
@@ -1387,6 +1545,9 @@ ita:
     use_tactics: "Utilizzare tecnica di gestione delle colture"
     used_for_affairs: "Usato per gli affari"
     used_for_gaps: "Usato per le lacune"
+    used_for_permanent_stock_inventory: "Usato per inventario di magazzino permanente"
+    used_for_tax_declarations: "Utilizzato per le dichiarazioni fiscali"
+    used_for_unbilled_payables: "Usato per debiti non fatturate"
     used_intervention_parameters: "Parametri di intervento utilizzato"
     useful_items: "oggetti utili"
     user: "Utente"
@@ -1422,6 +1583,7 @@ ita:
     working_duration: "durata di funzionamento"
     working_periods: "periodi di lavoro"
     working_shape: "forma di lavoro" #?
+    working_width_value: "Larghezza di applicazione implanter"
     working_zone: "zona di lavoro"
     working_zone_area: "zona zona di lavoro"
     zone_memberships: "appartenenze Zone"
@@ -1494,6 +1656,20 @@ ita:
       code:
         # double: "FY%{first_year}/%{second_year}"
         # single: "FY%{first_year}"
+    fixed_asset:
+      # bookkeep_exceptionnal_scrapped_assets: "[%{resource} %{number}] Exceptionnal depreciation of %{name}"
+      # bookkeep_exit_assets: "[%{resource} %{number}] Scrapped of %{name}"
+      # bookkeep_in_sold_assets: "[%{resource} %{number}] Sold of %{name}"
+      # bookkeep_in_use_assets: "[%{resource} %{number}] In use of %{name}"
+      state_machine:
+        states:
+          draft: "Bozza"
+          in_use: "In uso"
+          scrapped: "Demolita"
+          sold: "Venduto"
+    fixed_asset_depreciation:
+      # bookkeep: "[%{resource} %{number}] Depreciation of %{name} (%{position}/%{total})"
+      # bookkeep_partial: "[%{resource} %{number}] Partial depreciation of %{name} (%{position}/%{total})"
     gap:
       # bookkeep: "[%{resource} %{number}] %{entity}"
     incoming_payment:
@@ -1515,8 +1691,8 @@ ita:
     intervention:
       # name: "%{intervention} #%{number}"
     inventory:
-      # bookkeep: "Physical inventory - [%{resource}] %{number}"
-      # bookkeep_exchange: "Physical inventory - exchange [%{resource}] %{number}"
+      # bookkeep: "[%{resource}] %{number}"
+      # bookkeep_exchange: "[%{resource} exchange] %{number}"
     issue:
       # name_with_target: "%{nature} on %{target}"
       # name_without_target: "%{nature}"
@@ -1565,6 +1741,12 @@ ita:
       reflections: "tabelle associate"
     loan:
       # bookkeep: "[%{resource} %{name}] Fund reception"
+      # bookkeep_guarantee_payment: "[%{resource} %{name}] Guarantee payment"
+      state_machine:
+        states:
+          draft: "Bozza"
+          ongoing: "In corso"
+          repaid: "Rimborsato"
     loan_repayment:
       # bookkeep: "[%{resource} %{name}] Repayment #%{position}"
     outgoing_payment:
@@ -1630,6 +1812,8 @@ ita:
         invoice: "Fattura"
         order: "Ordine"
         refused: "ordine Refused"
+    purchase_gap:
+      # bookkeep: "[%{resource} %{number}] %{supplier}"
     purchase_item:
       # name: "%{product} (%{quantity}%{unit}), %{amount}%{currency}/%{unit}"
       # name_with_tracking: "%{product}/%{tracking} (%{quantity}%{unit}), %{amount}%{currency}/%{unit}"
@@ -1668,6 +1852,8 @@ ita:
         invoice: "Fattura"
         order: "Ordine"
         refused: "stima Refused"
+    sale_gap:
+      # bookkeep: "[%{resource} %{number}] %{client}"
     sale_item:
       # building_can_not_transfer_product: "The product %{product} can not be used with %{building}, because it contains only %{contained_product} "
       # can_not_use_this_tracking: "You can not use the tracking %{name}, the requested quantity is greater than the available quantity"
@@ -1719,6 +1905,8 @@ ita:
           doing: "fare"
           done: "Fatto"
           todo: "Fare"
+    tax_declaration:
+      # bookkeep: "[%{resource} %{number}] From %{started_on} to %{stopped_on}"
     team:
       default: "squadra principale"
     user:

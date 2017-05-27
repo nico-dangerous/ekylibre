@@ -5,7 +5,7 @@
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2009 Brice Texier, Thibaud Merigon
 # Copyright (C) 2010-2012 Brice Texier
-# Copyright (C) 2012-2016 Brice Texier, David Joulin
+# Copyright (C) 2012-2017 Brice Texier, David Joulin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -163,10 +163,10 @@ class ProductNatureCategory < Ekylibre::Record::Base
         fixed_asset_depreciation_percentage: (item.depreciation_percentage.present? ? item.depreciation_percentage : 20),
         fixed_asset_depreciation_method: :simplified_linear
       }.with_indifferent_access
-      [:fixed_asset, :fixed_asset_allocation, :fixed_asset_expenses,
-       :charge, :product, :stock, :stock_movement].each do |account|
+      %i[fixed_asset fixed_asset_allocation fixed_asset_expenses
+         charge product stock stock_movement].each do |account|
         account_name = item.send("#{account}_account")
-        unless account_name.blank?
+        if account_name.present?
           attributes["#{account}_account"] = Account.find_or_import_from_nomenclature(account_name)
         end
       end
