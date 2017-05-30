@@ -294,7 +294,8 @@ CREATE TABLE activities (
     grading_sizes_unit_name character varying,
     production_system_name character varying,
     use_seasons boolean DEFAULT false,
-    use_tactics boolean DEFAULT false
+    use_tactics boolean DEFAULT false,
+    codes jsonb
 );
 
 
@@ -5793,7 +5794,8 @@ CREATE TABLE products (
     origin_country character varying,
     origin_identification_number character varying,
     end_of_life_reason character varying,
-    originator_id integer
+    originator_id integer,
+    codes jsonb
 );
 
 
@@ -17503,4 +17505,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170413222521');
 INSERT INTO schema_migrations (version) VALUES ('20170414071529');
 
 INSERT INTO schema_migrations (version) VALUES ('20170414092904');
+
+INSERT INTO schema_migrations (version) VALUES ('20170530002312');
 
