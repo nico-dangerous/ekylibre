@@ -3,7 +3,7 @@
     .integration-picture
       = image_tag(integration_logo_path(resource.nature, size: :large))
     .integration-description
-      %h2= resource.integration_name
+      %h2= resource.integration_name.titleize
       %p= "#{resource.nature}_long_description".tl
       - url = "#{resource.nature}_url".tl(default: 'none')
       - if url != 'none'
