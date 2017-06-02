@@ -82,6 +82,7 @@ test:
 #
 production:
   <<: *default
-  database: ekylibre_production
-  username: ekylibre
-  password: <%= ENV['EKYLIBRE_DATABASE_PASSWORD'] %>
+#  database: ekylibre_production
+#  username: ekylibre
+#  password: <%= ENV['EKYLIBRE_DATABASE_PASSWORD'] %>
+	url: <%= ENV.fetch('DATABASE_URL', '').sub(/^postgres/, "postgis") %>
