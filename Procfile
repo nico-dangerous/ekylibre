@@ -1,2 +1,2 @@
-web: bundle exec unicorn_rails
+worker: bundle exec unicorn_rails
 job: bundle exec sidekiq
