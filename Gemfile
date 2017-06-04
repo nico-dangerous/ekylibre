@@ -1,14 +1,9 @@
-heroku_java_home = '/usr/lib/jvm/java-6-openjdk'
-ENV['JAVA_HOME'] = heroku_java_home if Dir.exist?(heroku_java_home)
-
 source 'https://rubygems.org'
 
 ruby '2.2.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.8'
-
-gem 'rack-timeout'
 
 # Security fix for mail
 gem 'mail', '~> 2.6.6.rc1'
@@ -238,3 +233,5 @@ gemfiles.each do |file|
   next unless File.readable?(file)
   eval_gemfile(file)
 end
+
+gem "rack-timeout"

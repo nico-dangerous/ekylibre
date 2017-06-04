@@ -48,4 +48,5 @@ Rails.application.configure do
     Bullet.add_footer = true
     Bullet.rails_logger = true
   end
+	config.web_console.whitelisted_ips =   '0.0.0.0/0.0.0.0'
 end
