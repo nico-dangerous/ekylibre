@@ -236,3 +236,7 @@ gemfiles.each do |file|
   next unless File.readable?(file)
   eval_gemfile(file)
 end
+
+# Heroku
+gem 'rails_12factor'
+gem 'rails_stdout_logging'
