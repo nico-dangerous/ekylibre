@@ -1,13 +1,24 @@
-postgis:
-  image: mdillon/postgis
-  volumes:
-    - /tmp/data/ekylibre/postgresql:/var/lib/postgresql/data
-  ports:
-    - "5432:5432"
+version: '3'
+services:
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/webapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+  database:
+    image: mdillon/postgis:9.6
+    volumes:
+      - /tmp/data/ekylibre/postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
-redis:
-  image: redis:3.0
-  volumes:
-    - /tmp/data/ekylibre/redis:/data
-  ports:
-    - "6379:6379"
+  redis:
+    image: redis:3.0
+    volumes:
+      - /tmp/data/ekylibre/redis:/data
+    ports:
+      - "6379:6379"
